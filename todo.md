@@ -28,13 +28,15 @@ todo:
 
 * [-] Add ability to normalize colors (all same shade green/blue)
 
-* [-] Add ability to filter by custom subset (perhaps as url parameters so can be sent as link? also need way to create subset, perhaps button in filters which will create custom url of all restaurants selected with "show")
+* [+] Add ability to filter by custom subset (perhaps as url parameters so can be sent as link? also need way to create subset, perhaps button in filters which will create custom url of all restaurants selected with "show")
+* [-] Add compression/encoding to sharable URL
 
 * [-] Ability to sort table?
     * [-] By name, cuisine, visited, rating?
 
 
-* [-] When closing table, reset filters to the previous save
+* [?] When closing table, reset filters to the previous save
 * [+] When selecting "any" check all boxes
 * [+] When "any" is selected, and another box is changed, unselect "any"
 
+* [-] Remove show/hide all matching

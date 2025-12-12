@@ -77,16 +77,16 @@ function applyMarkerColor(marker, visited, rating) {
  * @param {string} name The restaurant name
  * @param {string} lat The restaurant latitude
  * @param {string} long The restaurant longitude
- * @param {string} cuisineType The restaurant cuisine type
+ * @param {string} cuisine The restaurant cuisine type
  * @param {string} visited Indication if the restaurant has been visited or not
  * @param {string} rating The restaurant rating, low/medium/high (indicates the priority if not visited)
  * @param {string} notes Notes about the restaurant
  * @param {string} originalUrl Google Maps URL to the restaurant
  */
-function addMarker(name, lat, long, cuisineType, visited, rating, notes, originalUrl) {
+function addMarker(name, lat, long, cuisine, visited, rating, notes, originalUrl) {
     markers[normalizeName(name)] = L.marker([lat, long], {icon: newIcon}).addTo(map)
         .bindPopup(`<b>${name}</b><br>
-            ${cuisineType}<br>
+            ${cuisine}<br>
             <a href="${originalUrl}" target=_blank>View on Google</a><br>
             <i>${notes}</i>`);
     
@@ -96,16 +96,16 @@ function addMarker(name, lat, long, cuisineType, visited, rating, notes, origina
 /**
  * Adds a new row to the HTML restaurant list table
  * @param {string} name The restaurant name
- * @param {string} cuisineType The restaurant cuisine type
+ * @param {string} cuisine The restaurant cuisine type
  * @param {string} visited Indication if the restaurant has been visited or not
  */
-function addRow(name, cuisineType, visited) {
+function addRow(name, cuisine, visited) {
     let table = document.getElementById("sidebar-table-body");
     let newRow = table.insertRow(-1);
     newRow.insertCell().innerHTML = name;
-    newRow.insertCell().innerHTML = cuisineType;
+    newRow.insertCell().innerHTML = cuisine;
     newRow.insertCell().innerHTML = visited;
-    newRow.insertCell().innerHTML = "<input type=\"checkbox\" onclick=\"updateMarkerShown(this)\">";
+    newRow.insertCell().innerHTML = "<input type=\"checkbox\" onclick=\"updateMarkerShown(this)\" checked>";
 }
 
 /**
@@ -115,7 +115,7 @@ function loadLocationsIntoCache() {
     // Read all restaurants from CSV, then insert into map/table
     let filename = "csv/locations.csv";
     d3.csv(filename).then(async function(data) {
-        data.forEach(row => {   
+        data.forEach(row => {
             // Add data to local cache        
             restaurants[normalizeName(row["name"])] = row;
 
@@ -123,12 +123,12 @@ function loadLocationsIntoCache() {
             addMarker(row["name"],
                 row["gps"].split(",")[0],
                 row["gps"].split(",")[1],
-                row["type"],
+                row["cuisine"],
                 row["visited"],
                 row["rating"],
                 row["notes"],
                 row["originalUrl"]);
-            addRow(row["name"], row["type"], row["visited"])
+            addRow(row["name"], row["cuisine"], row["visited"])
         })
 
         // Now that map/table are set up, read in state from URL (if possible)
@@ -136,21 +136,23 @@ function loadLocationsIntoCache() {
     });
 }
 
-/********************************
-**** FILTERING FUNCTIONALITY ****
-********************************/
+/*************************
+**** APLLYING FILTERS ****
+*************************/
 window.updateMarkerShown = function(checkbox) {
     let row = checkbox.closest("tr");
     let name = row.cells[0].innerText;
-    let hide = checkbox.checked;
+    let shouldBeShown = checkbox.checked;
 
     // Check the checkbox in the "Hide?" column to see if the marker should be shown
-    if (hide) {
-        markers[normalizeName(name)]._icon.classList.add("hidden");
-    }
-    else if (markers[normalizeName(name)]._icon.classList.contains("hidden")) {
+    console.log(`shouldBeShown?: ${shouldBeShown}`);
+    if (shouldBeShown) {
         markers[normalizeName(name)]._icon.classList.remove("hidden");
     }
+    else if (!markers[normalizeName(name)]._icon.classList.contains("hidden")) {
+        markers[normalizeName(name)]._icon.classList.add("hidden");
+    }
+    console.log(`Final class list: ${markers[normalizeName(name)]._icon.classList}`);
 }
 
 function updateAllMarkersShown() {
@@ -159,12 +161,12 @@ function updateAllMarkersShown() {
     for (let row of table.rows) {
         // Check the checkbox in the "Hide?" column to see if the marker should be shown
         let name = row.cells[0].innerText;
-        let hide = row.cells[row.cells.length - 1].children[0].checked;
-        if (hide) {
-            markers[normalizeName(name)]._icon.classList.add("hidden");
-        }
-        else if (markers[normalizeName(name)]._icon.classList.contains("hidden")) {
+        let shouldBeShown = row.cells[row.cells.length - 1].children[0].checked;
+        if (shouldBeShown) {
             markers[normalizeName(name)]._icon.classList.remove("hidden");
+        }
+        else if (!markers[normalizeName(name)]._icon.classList.contains("hidden")) {
+            markers[normalizeName(name)]._icon.classList.add("hidden");
         }
     }
 }
@@ -195,9 +197,9 @@ function applyFilters(showAll) {
     for (let row of table.rows) {
         // Get values of current restaurant
         let name = row.cells[0].innerText;
-        let visited = (row.cells[2].innerHTML === "") ? "unvisited" : "visited";
-        let cuisine = row.cells[1].innerText.toLowerCase();
-        let rating = (restaurants[normalizeName(name)]["rating"]) ? restaurants[normalizeName(name)]["rating"] : "low";
+        let visited = (restaurants[normalizeName(name)]["visited"] === "") ? "unvisited" : "visited";
+        let cuisine = restaurants[normalizeName(name)]["cuisine"];
+        let rating = restaurants[normalizeName(name)]["rating"];
 
         // Check if filter criteria are met
         let passVisitedFilter = (visitedFilters[0] === "any") || (visitedFilters.includes(visited));
@@ -205,15 +207,15 @@ function applyFilters(showAll) {
         let passRatingFilter = (ratingFilters[0] === "any") || (ratingFilters.includes(rating));
 
         // Update if the marker is shown or not
-        let checkbox = row.cells[row.cells.length - 1].children[0];
+        let shownCheckbox = row.cells[row.cells.length - 1].children[0];
         if (passVisitedFilter && passCuisineFilter && passRatingFilter) {
-            checkbox.checked = (showAll) ? false : true;
+            shownCheckbox.checked = (showAll) ? true : false;
         }
         else {
-            checkbox.checked = (showAll) ? true : false;
+            shownCheckbox.checked = (showAll) ? false : true;
         }
 
-        updateMarkerShown(checkbox);
+        updateMarkerShown(shownCheckbox);
     }
 }
 
@@ -226,9 +228,9 @@ document.getElementById("hide-all-button").addEventListener("click", function() 
 });
 
 
-/*************************************
-**** FILTERING MENU FUNCTIONALITY ****
-*************************************/
+/************************************
+**** QOL FILTERING FUNCTIONALITY ****
+************************************/
 function initializeFilters() {
     let allCheckboxes = document.querySelectorAll(".multi-option input");
     allCheckboxes.forEach(checkbox => {
@@ -252,7 +254,6 @@ document.getElementById("filter-dropdown-button").addEventListener("click", func
 
 /**
  * Sets all the checkboxes within the multi-select menu to the passed in value (true/false).
- * Called w
  * @param {*} multiOptionMenu The multi-select menu HTML element, containing all the multi-select options for this filter
  */
 function setAllOptionBoxes(multiOptionMenu, value) {
@@ -300,9 +301,11 @@ anyCheckboxes.forEach(anyCheckbox => anyCheckbox.addEventListener("click", funct
 }));
 
 /**
- * Handle how to update the "any" checkbox when an option is selected
- * If the "any" checkbox is checked, and an option is unselected ==> unchecked "any"
- * If the "any" checkbox is unchecked, and all options are selected ==> check "any"
+ * Handle when a regular filter option checkbox is clicked, including:
+ *      - Handle how to update the "any" checkbox when an option is selected
+ *          If the "any" checkbox is checked, and an option is unselected ==> unchecked "any"
+ *          If the "any" checkbox is unchecked, and all options are selected ==> check "any"
+ *      - Immediately apply the new filtering rules and update markers
  */
 let allOptionCheckboxes = document.querySelectorAll(".multi-option:not(.multi-any) input");
 allOptionCheckboxes.forEach(optionCheckbox => optionCheckbox.addEventListener("click", function() {
@@ -343,8 +346,8 @@ function enumerateShownRestaurants() {
     for (let row of table.rows) {
         // Check the checkbox in the "Hide?" column to see if the marker should be shown
         let name = row.cells[0].innerText;
-        let hide = row.cells[row.cells.length - 1].children[0].checked;
-        if (!hide) {
+        let shown = row.cells[row.cells.length - 1].children[0].checked;
+        if (shown) {
             enumeration += (enumeration.length == 0) ? "" : ":";
             enumeration += normalizeName(name);
         }
@@ -382,10 +385,10 @@ function parseUrl() {
         // Check the checkbox in the "Hide?" column to see if the marker should be shown
         let name = row.cells[0].innerText;
         if (selections.includes(normalizeName(name))) {
-            row.cells[row.cells.length - 1].children[0].checked = false;
+            row.cells[row.cells.length - 1].children[0].checked = true;
         }
         else {
-            row.cells[row.cells.length - 1].children[0].checked = true;
+            row.cells[row.cells.length - 1].children[0].checked = false;
         }
     }
 
