@@ -28,8 +28,7 @@ let markers = {}
  */
 document.addEventListener("DOMContentLoaded", () => {
     initializeMap();
-    loadLocationsIntoCache();
-    initializeFilters();
+    loadLocationsIntoCache(); // async
 });
 
 /**
@@ -81,13 +80,13 @@ function applyMarkerColor(marker, visited, rating) {
  * @param {string} visited Indication if the restaurant has been visited or not
  * @param {string} rating The restaurant rating, low/medium/high (indicates the priority if not visited)
  * @param {string} notes Notes about the restaurant
- * @param {string} originalUrl Google Maps URL to the restaurant
+ * @param {string} googleUrl Google Maps URL to the restaurant
  */
-function addMarker(name, lat, long, cuisine, visited, rating, notes, originalUrl) {
+function addMarker(name, lat, long, cuisine, visited, rating, notes, googleUrl) {
     markers[normalizeName(name)] = L.marker([lat, long], {icon: newIcon}).addTo(map)
         .bindPopup(`<b>${name}</b><br>
             ${cuisine}<br>
-            <a href="${originalUrl}" target=_blank>View on Google</a><br>
+            <a href="${googleUrl}" target=_blank>View on Google</a><br>
             <i>${notes}</i>`);
     
     applyMarkerColor(markers[normalizeName(name)], visited, rating);
@@ -112,6 +111,8 @@ function addRow(name, cuisine, visited) {
  * Loads the list of restaurant information in locations.csv into the local cache and updates table/map HTML contents with that info
  */
 function loadLocationsIntoCache() {
+    let cuisineFilters = [];
+
     // Read all restaurants from CSV, then insert into map/table
     let filename = "csv/locations.csv";
     d3.csv(filename).then(async function(data) {
@@ -127,14 +128,38 @@ function loadLocationsIntoCache() {
                 row["visited"],
                 row["rating"],
                 row["notes"],
-                row["originalUrl"]);
+                row["googleUrl"]);
             addRow(row["name"], row["cuisine"], row["visited"])
+
+            // Update cuisine type filters
+            let cuisines = row["cuisine"].split(" / ");
+            for (let cuisine of cuisines) {
+                if (!cuisineFilters.includes(cuisine)) {
+                    cuisineFilters.push(cuisine);
+                }
+            }
         })
 
-        // Now that map/table are set up, read in state from URL (if possible)
+        // Sort cuisines in alphabetical order
+        cuisineFilters.sort();
+
+        // Create HTML element for each cuisine type
+        let cuisineFilterMenu = document.getElementById("cuisine-filter");
+        for (let cuisine of cuisineFilters) {
+            let filterHtml = document.createElement("div");
+            filterHtml.classList.add("multi-option");
+            filterHtml.innerHTML = `<input type="checkbox"> ${cuisine}`;
+            cuisineFilterMenu.appendChild(filterHtml);
+        }
+        addListenerToFilters();
+
+        // Set filters (all true, or to the URL parameters if they exists), then update website
+        initializeFilters();
         parseUrl();
+        applyFilters(true);
     });
 }
+
 
 /*************************
 **** APLLYING FILTERS ****
@@ -145,14 +170,12 @@ window.updateMarkerShown = function(checkbox) {
     let shouldBeShown = checkbox.checked;
 
     // Check the checkbox in the "Hide?" column to see if the marker should be shown
-    console.log(`shouldBeShown?: ${shouldBeShown}`);
     if (shouldBeShown) {
         markers[normalizeName(name)]._icon.classList.remove("hidden");
     }
     else if (!markers[normalizeName(name)]._icon.classList.contains("hidden")) {
         markers[normalizeName(name)]._icon.classList.add("hidden");
     }
-    console.log(`Final class list: ${markers[normalizeName(name)]._icon.classList}`);
 }
 
 function updateAllMarkersShown() {
@@ -186,11 +209,13 @@ function extractFilters(multiSelect) {
     return filters;
 }
 
-function applyFilters(showAll) {
+function applyFilters(showAll = true) {
     // Extract filter values from the HTML elements
     let visitedFilters = extractFilters(document.getElementById("visited-filter"));
     let cuisineFilters = extractFilters(document.getElementById("cuisine-filter"));
     let ratingFilters = extractFilters(document.getElementById("rating-filter"));
+
+    console.log(cuisineFilters);
 
     // Update state of map/table to match filter request
     let table = document.getElementById("sidebar-table-body");
@@ -198,34 +223,28 @@ function applyFilters(showAll) {
         // Get values of current restaurant
         let name = row.cells[0].innerText;
         let visited = (restaurants[normalizeName(name)]["visited"] === "") ? "unvisited" : "visited";
-        let cuisine = restaurants[normalizeName(name)]["cuisine"];
+        let cuisines = restaurants[normalizeName(name)]["cuisine"].split(" / ");
         let rating = restaurants[normalizeName(name)]["rating"];
 
         // Check if filter criteria are met
         let passVisitedFilter = (visitedFilters[0] === "any") || (visitedFilters.includes(visited));
-        let passCuisineFilter = (cuisineFilters[0] === "any") || (cuisineFilters.includes(cuisine));
+        let passCuisineFilter = (cuisineFilters[0] === "any") || (cuisines.some(cuisine => cuisineFilters.includes(cuisine.toLowerCase())));
         let passRatingFilter = (ratingFilters[0] === "any") || (ratingFilters.includes(rating));
 
         // Update if the marker is shown or not
         let shownCheckbox = row.cells[row.cells.length - 1].children[0];
         if (passVisitedFilter && passCuisineFilter && passRatingFilter) {
+            console.log("Passed");
             shownCheckbox.checked = (showAll) ? true : false;
         }
         else {
+            console.log("Failed");
             shownCheckbox.checked = (showAll) ? false : true;
         }
 
         updateMarkerShown(shownCheckbox);
     }
 }
-
-document.getElementById("show-all-button").addEventListener("click", function() {
-    applyFilters(true);
-});
-
-document.getElementById("hide-all-button").addEventListener("click", function() {
-    applyFilters(false);
-});
 
 
 /************************************
@@ -236,8 +255,6 @@ function initializeFilters() {
     allCheckboxes.forEach(checkbox => {
         checkbox.checked = true;
     });
-
-    applyFilters();
 }
 
 /**
@@ -307,20 +324,22 @@ anyCheckboxes.forEach(anyCheckbox => anyCheckbox.addEventListener("click", funct
  *          If the "any" checkbox is unchecked, and all options are selected ==> check "any"
  *      - Immediately apply the new filtering rules and update markers
  */
-let allOptionCheckboxes = document.querySelectorAll(".multi-option:not(.multi-any) input");
-allOptionCheckboxes.forEach(optionCheckbox => optionCheckbox.addEventListener("click", function() {
-    let multiOptionMenu = optionCheckbox.parentElement.parentElement;
-    let anyCheckbox = multiOptionMenu.querySelector(".multi-any input");
-    if (!optionCheckbox.checked && anyCheckbox.checked) {
-        anyCheckbox.checked = false;
-    }
-    else if (allOptionsChecked(multiOptionMenu)) {
-        anyCheckbox.checked = true;
-    }
+function addListenerToFilters() {
+    let allOptionCheckboxes = document.querySelectorAll(".multi-option:not(.multi-any) input");
+    allOptionCheckboxes.forEach(optionCheckbox => optionCheckbox.addEventListener("click", function() {
+        let multiOptionMenu = optionCheckbox.parentElement.parentElement;
+        let anyCheckbox = multiOptionMenu.querySelector(".multi-any input");
+        if (!optionCheckbox.checked && anyCheckbox.checked) {
+            anyCheckbox.checked = false;
+        }
+        else if (allOptionsChecked(multiOptionMenu)) {
+            anyCheckbox.checked = true;
+        }
 
-    applyFilters(true)
-    updateAllMarkersShown();
-}));
+        applyFilters(true)
+        updateAllMarkersShown();
+    }));
+}
 
 
 /**********************************
@@ -380,9 +399,9 @@ function parseUrl() {
         return;
     }
 
+    // Update the table checkboxes with the selected restaurants
     let table = document.getElementById("sidebar-table-body");
     for (let row of table.rows) {
-        // Check the checkbox in the "Hide?" column to see if the marker should be shown
         let name = row.cells[0].innerText;
         if (selections.includes(normalizeName(name))) {
             row.cells[row.cells.length - 1].children[0].checked = true;
@@ -392,5 +411,6 @@ function parseUrl() {
         }
     }
 
+    applyFilters();
     updateAllMarkersShown();
 }

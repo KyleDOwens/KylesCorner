@@ -136,6 +136,9 @@ html, body {
     display: grid;
     grid-template-columns: auto auto auto;
     gap: 0.5rem;
+    margin-right: 1rem;
+    margin-left: 1rem;
+    margin-bottom: 1rem;
 }
 
 #filter-options .multi-option-header {
@@ -153,10 +156,4 @@ html, body {
 
 #filter-options .multi-select .multi-any {
     border-bottom: 1px solid black;
-}
-
-#filter-button-container {
-    display: flex;
-    justify-content: center;
-    gap: 1.5rem;
 }
