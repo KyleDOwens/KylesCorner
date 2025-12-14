@@ -15,17 +15,16 @@ const newIcon = L.icon({
     // iconAnchor: []
 });
 
-// Will be list of dictionaries with keys {name, type, visited, notes, gps, googleUrl, originalUrl}
-let restaurants = {};
+const BASE62 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+const PRECISION = 5; // Precision for how many decimals to include in lat/long url parsing
 
-// Dictionary containing the map markers accessed by the restaurant name (e.g., {name : markerObj})
-let markers = {}
+let restaurants = {}; // Will be list of dictionaries with keys {name, type, visited, notes, gps, googleUrl, originalUrl}
+let markers = {} // Dictionary containing the map markers accessed by the restaurant name (e.g., {name : markerObj})
 
-// Store if the user is currently placing an isochrone on their next map click
-let placingIsochrone = false;
+let manualSelections = []; // Stores which of the current restaurants were selected manually (not with a filter menu) 
 
-// Store the isochrone object
-let isochroneFilter = null;
+let placingIsochrone = false; // Store if the user is currently placing an isochrone on their next map click
+let isochroneFilter = null; // Store the isochrone object
 
 let debug = true;
 
@@ -179,7 +178,7 @@ function addRow(name, cuisine, visited) {
     newRow.insertCell().innerHTML = name;
     newRow.insertCell().innerHTML = cuisine;
     newRow.insertCell().innerHTML = visited;
-    newRow.insertCell().innerHTML = "<input type=\"checkbox\" onclick=\"updateMarkerShown(this)\" checked>";
+    newRow.insertCell().innerHTML = "<input type=\"checkbox\" onclick=\"manuallySelectRestaurant(this)\" checked>";
 }
 
 /**
@@ -239,6 +238,14 @@ function loadCacheAndState() {
 /*************************
 **** APLLYING FILTERS ****
 *************************/
+window.manuallySelectRestaurant = function(checkbox) {
+    let row = checkbox.closest("tr");
+    let name = row.cells[0].innerText;
+    
+    manualSelections.push(normalizeName(name));
+    updateMarkerShown(checkbox);
+}
+
 /**
  * Callback function to show/hide an individual restaurant marker assocaited with the passed in checkbox, depending on if it is checked or not
  * @param {checkbox} checkbox The HTML checkbox
@@ -324,6 +331,10 @@ function passesMenuFilters(name) {
  * Apply all filters (isited, cuisine, rating, distance) and only show restaurants that pass
  */
 function applyFilters() {
+    // Clear manual selections, since they will all be overwritten when filters are applied
+    manualSelections = [];
+
+    // Check if each restaurant passes the filters
     let table = document.getElementById("sidebar-table-body");
     for (let row of table.rows) {
         let name = row.cells[0].innerText;
@@ -470,15 +481,66 @@ function enumerateShownRestaurants() {
     return enumeration;
 }
 
+function encodeFilters() {
+    // Build bit string of all menu filters
+    let bitString = "";
+    let filterCheckboxes = document.querySelectorAll(".multi-option input");
+    filterCheckboxes.forEach(filterCheckbox => {
+        bitString += (filterCheckbox.checked) ? "1" : "0";
+    });
+
+    // Add extra "1" to the front, since base62 encoding removes leading zeros
+    bitString = "1" + bitString;
+
+    // Append bit string representing isochrone
+    if (isochroneFilter) {
+        let long = mockIsochrone.features[0].properties.center[0];
+        let lat = mockIsochrone.features[0].properties.center[1];
+        let range = mockIsochrone.features[0].properties.value;
+        
+        let latLongBitLen = Math.pow(10, PRECISION + 2).toString(2).length;
+        let rangeBitLen = Math.pow(2, 3).toString(2).length;
+        let scale = Math.pow(10, PRECISION);
+
+        long = Math.round((long + 180) * scale).toString(2);
+        lat = Math.round((lat + 90) * scale).toString(2);
+        range = Math.floor(range / 60).toString(2);
+
+        bitString += "0".repeat(Math.abs(latLongBitLen - long.length)) + long;
+        bitString += "0".repeat(Math.abs(latLongBitLen - lat.length)) + lat;
+        bitString += "0".repeat(Math.abs(rangeBitLen - range.length)) + range;
+    }
+
+    // Encode into integer
+    let n = BigInt("0b" + bitString);
+    if (n === 0n) {
+        return BASE62[0];
+    }
+
+    // Encode n in base62
+    let encoding = "";
+    while (n > 0) {
+        let r = n % 62n;
+        encoding = BASE62[Number(r)] + encoding;
+        n /= 62n;
+    }
+
+    return encoding;
+}
+
 /**
  * Listener to handle when the button to create the sharable URL is clicked - will update the URL and copy sharable URL to clipboard
  */
 document.getElementById("export-button").addEventListener("click", async function() {
-    let selections = enumerateShownRestaurants();
-    let newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + 
-                 "?selections=" + selections;
-    window.history.pushState({ path: newUrl }, '', newUrl);
+    // Encode the current filters
+    let encoding = encodeFilters();
 
+    // Encode in the manual selections as exceptions
+
+    let newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + 
+                 "?s=" + encoding;
+
+    window.history.pushState({ path: newUrl }, '', newUrl);
     await navigator.clipboard.writeText(newUrl);
     alert('Sharable URL copied to clipboard!');
 });
@@ -488,26 +550,52 @@ document.getElementById("export-button").addEventListener("click", async functio
  */
 function parseUrl() {
     let urlParams = new URLSearchParams(window.location.search);
-    let selections = urlParams.get("selections");
 
-    if (!selections) {
+    let encoding = urlParams.get("s");
+    if (!encoding) {
         return;
     }
 
-    // Update the table checkboxes with the selected restaurants
-    let table = document.getElementById("sidebar-table-body");
-    for (let row of table.rows) {
-        let name = row.cells[0].innerText;
-        if (selections.includes(normalizeName(name))) {
-            row.cells[row.cells.length - 1].children[0].checked = true;
-        }
-        else {
-            row.cells[row.cells.length - 1].children[0].checked = false;
-        }
+    // Decode url parameter from base62 into integer
+    let n = 0n;
+    for (let char of encoding) {
+        n = n * 62n + BigInt(BASE62.indexOf(char));
     }
 
-    applyFilters();
-    updateAllMarkersShown();
+    // Convert integer into bit string
+    let bitString = n.toString(2);
+
+    // Remove leading 1 - was there to prevent leading 0s from being removed
+    bitString = bitString.slice(1);
+
+    // Set filter checkboxes accordingly
+    let i = 0;
+    let filterCheckboxes = document.querySelectorAll(".multi-option input");
+    for (i = 0; i < filterCheckboxes.length; i++) {
+        let filterCheckbox = filterCheckboxes[i];
+        filterCheckbox.checked = (bitString[i] == "1") ? true : false;
+    }
+
+    // If there are remaining characters, then extract isochrone information
+    if (i != bitString.length) {
+        let latLongBitLen = Math.pow(10, PRECISION + 2).toString(2).length;
+
+        let long = bitString.slice(i, i + latLongBitLen);
+        i += latLongBitLen;
+        let lat = bitString.slice(i, i + latLongBitLen);
+        i += latLongBitLen;
+        let range = bitString.slice(i);
+
+        let scale = Math.pow(10, PRECISION);
+        long = parseInt(long, 2) / scale - 180;
+        lat = parseInt(lat, 2) / scale - 90;
+        range = parseInt(range, 2);
+
+        drawAndApplyDistanceIsochrone(lat, long, range);
+    }
+    else {
+        applyFilters();
+    }
 }
 
 
@@ -585,13 +673,12 @@ function passesIsochroneFilter(name) {
  * Draw a new isochrone on the map and only shown restaurants within it
  * @param {*} lat Latitude of the isochrone center
  * @param {*} long Longitude of the isochrone center
- * @param {*} distanceInput HTML input element containing the isochrone range in minutes
+ * @param {*} range The range of the isochrone, in minutes
  */
-async function drawAndApplyDistanceIsochrone(lat, long, distanceInput) {
+async function drawAndApplyDistanceIsochrone(lat, long, range) {
     // Get isochrone polygon from ORS API call
-    let distanceInMinutes = distanceInput.value;
-    if (distanceInMinutes == "") {
-        console.log("ERROR: Input a time for draw isochrone");
+    if (range == "") {
+        console.log("ERROR: Input a range (in minutes) for draw isochrone");
         return;
     }
 
@@ -610,7 +697,7 @@ async function drawAndApplyDistanceIsochrone(lat, long, distanceInput) {
                 },
                 body: JSON.stringify({
                     locations: [[long, lat]],
-                    range: [distanceInMinutes * 60],
+                    range: [range * 60],
                     range_type: "time"
                 })
             }
@@ -632,7 +719,7 @@ async function drawAndApplyDistanceIsochrone(lat, long, distanceInput) {
         }
     })
     .bindPopup(`<b>Distance Filter</b><br>
-            Locations reachable in ${distanceInMinutes} minutes<br>
+            Locations reachable in ${range} minutes<br>
             <a onclick=removeIsochrone() href="#">Click to remove</a>`)
     .addTo(map);
 
@@ -648,6 +735,7 @@ map.on("click", (event) => {
         placingIsochrone = false;
         let lat = event["latlng"]["lat"];
         let long = event["latlng"]["lng"];
-        drawAndApplyDistanceIsochrone(lat, long, document.getElementById("distance-filter-input"));
+        let range = document.getElementById("distance-filter-input").value;
+        drawAndApplyDistanceIsochrone(lat, long, range);
     }
 })
