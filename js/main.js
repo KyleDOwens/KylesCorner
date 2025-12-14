@@ -24,7 +24,8 @@ let markers = {} // Dictionary containing the map markers accessed by the restau
 let manualSelections = []; // Stores which of the current restaurants were selected manually (not with a filter menu) 
 
 let placingIsochrone = false; // Stores if the user is currently placing an isochrone on their next map click
-let isochroneFilter = null; // Stores the isochrone object
+let isochroneObject = null; // Stores the isochrone layer added to the map (may or may not actually be shown on the map)
+let doIsochroneFiltering = true // Boolean if the isochrone layer should be used for filtering or just for display
 
 let debug = true; // Determines if API call with limits should be made
 
@@ -244,25 +245,20 @@ function loadCacheAndState() {
 }
 
 
-/*************************
-**** APLLYING FILTERS ****
-*************************/
-window.manuallySelectRestaurant = function(checkbox) {
-    let row = checkbox.closest("tr");
-    let name = row.cells[0].innerText;
-
-    // If an option is already manually selected, then selecting it again "undoes" the manual selection, so remove it
-    if (manualSelections.includes(normalizeName(name))) {
-        let index = manualSelections.indexOf(normalizeName(name));
-        manualSelections.splice(index, 1);
-    }
-    // Otherwise, add it to the manualSelections list
-    else {
-        manualSelections.push(normalizeName(name));
-    }
-
-    updateMarkerShown(checkbox);
-}
+/******************************
+**** APPLYING MENU FILTERS ****
+******************************/
+/**
+ * Open/close the filter dropdown menu when the filter button is clicked
+ */
+document.getElementById("filter-dropdown-button").addEventListener("click", function() {
+    // Change arrow direction of button
+    let button = document.getElementById("filter-dropdown-button");
+    button.innerHTML = (button.innerHTML === "▼") ? "▲" : "▼";
+    // Open/Close the dropdown menu
+    let filterDropdown = document.getElementById("filter-dropdown");
+    filterDropdown.style.display = (filterDropdown.style.display === "none") ? "block" : "none";
+});
 
 /**
  * Callback function to show/hide an individual restaurant marker assocaited with the passed in checkbox, depending on if it is checked or not
@@ -375,9 +371,9 @@ function applyFilters(skipManualSelections = false) {
 }
 
 
-/************************************
-**** QOL FILTERING FUNCTIONALITY ****
-************************************/
+/**********************************
+**** FILTER CHECKBOX LISTENERS ****
+**********************************/
 /**
  * Check every box in the filter menus, since all restaurants should be shown initially
  */
@@ -389,16 +385,25 @@ function initializeFilters() {
 }
 
 /**
- * Open/close the filter dropdown menu when the filter button is clicked
+ * Update marker when clicking the checkbox associated with an individual restaurant (not a filter)
+ * @param {*} checkbox The clicked on checkbox
  */
-document.getElementById("filter-dropdown-button").addEventListener("click", function() {
-    // Change arrow direction of button
-    let button = document.getElementById("filter-dropdown-button");
-    button.innerHTML = (button.innerHTML === "▼") ? "▲" : "▼";
-    // Open/Close the dropdown menu
-    let filterDropdown = document.getElementById("filter-dropdown");
-    filterDropdown.style.display = (filterDropdown.style.display === "none") ? "block" : "none";
-});
+window.manuallySelectRestaurant = function(checkbox) {
+    let row = checkbox.closest("tr");
+    let name = row.cells[0].innerText;
+
+    // If an option is already manually selected, then selecting it again "undoes" the manual selection, so remove it
+    if (manualSelections.includes(normalizeName(name))) {
+        let index = manualSelections.indexOf(normalizeName(name));
+        manualSelections.splice(index, 1);
+    }
+    // Otherwise, add it to the manualSelections list
+    else {
+        manualSelections.push(normalizeName(name));
+    }
+
+    updateMarkerShown(checkbox);
+}
 
 /**
  * Sets all the checkboxes within the multi-select menu to the passed in value (true/false).
@@ -473,9 +478,9 @@ function addListenerToFilters() {
 }
 
 
-/**********************************
-**** URL SHARING FUNCTIONALITY ****
-**********************************/
+/**************************************
+**** URL SHARING & FILTER ENCODING ****
+**************************************/
 /**
  * Encode a bit string as base62
  * @param {string} bitString 
@@ -522,11 +527,12 @@ function getIsochroneBitString() {
     let bitString = "";
 
     // Append bit string representing isochrone (lat, long, range)
-    if (isochroneFilter) {
+    if (isochroneObject) {
         // First bit denotes if the isochrone is shown (1) or not (0)
-        if (map.hasLayer(isochroneFilter)) {
-            bitString += "1";
-        }
+        bitString += map.hasLayer(isochroneObject) ? "1" : "0";
+
+        // Second bit denotes if the isochrone is being used for filtering (1) or not (0)
+        bitString += doIsochroneFiltering ? "1" : "0";
         
         // Remaining bits are the center lat/long and the range (in minutes) encoded as binary values
         let long = mockIsochrone.features[0].properties.center[0];
@@ -643,7 +649,10 @@ function setIsochroneFromBitString(bitString) {
     let shown = bitString.slice(0, 1);
     shown = Boolean(Number(shown));
 
-    let i = 1;
+    let usedForFiltering = bitString.slice(1, 2);
+    doIsochroneFiltering = Boolean(Number(usedForFiltering));
+
+    let i = 2;
     let long = bitString.slice(i, i + latLongBitLen);
     i += latLongBitLen;
     let lat = bitString.slice(i, i + latLongBitLen);
@@ -656,7 +665,14 @@ function setIsochroneFromBitString(bitString) {
     lat = parseInt(lat, 2) / scale - 90;
     range = parseInt(range, 2);
 
-    drawAndApplyDistanceIsochrone(lat, long, range, shown);
+    drawDistanceIsochrone(lat, long, range);
+
+    // Hide isochrone if it is only being used for filtering
+    if (!shown) {
+        map.removeLayer(isochroneObject);
+    }
+
+    applyFilters();
 }
 
 /**
@@ -744,12 +760,14 @@ document.getElementById("distance-filter-remove-button").addEventListener("click
  * Remove isochrone drawing from map and update which restaurants are shown
  */
 window.removeIsochrone = function() {
-    if (!isochroneFilter) {
+    doIsochroneFiltering = false;
+    
+    if (!isochroneObject) {
         return;
     }
 
-    map.removeLayer(isochroneFilter);
-    isochroneFilter = null;
+    map.removeLayer(isochroneObject);
+    isochroneObject = null;
     applyFilters();
 }
 
@@ -757,7 +775,23 @@ window.removeIsochrone = function() {
  * Hide isochrone drawing on the map, but keep the object in cache so the filter still applies
  */
 window.hideIsochrone = function() {
-    map.removeLayer(isochroneFilter);
+    map.removeLayer(isochroneObject);
+}
+
+/**
+ * Remove isochrone filter, but keep drawing on the map
+ */
+window.removeIsochroneFilter = function() {
+    doIsochroneFiltering = false;
+    applyFilters();
+}
+
+/**
+ * Add isochrone filter from existing drawing on the map
+ */
+window.addIsochroneFilter = function() {
+    doIsochroneFiltering = true;
+    applyFilters();
 }
 
 /**
@@ -766,12 +800,12 @@ window.hideIsochrone = function() {
  * @returns Boolean true/false
  */
 function passesIsochroneFilter(name) {
-    if (!isochroneFilter) {
+    if (!doIsochroneFiltering || !isochroneObject) {
         return true;
     }
 
-    let polygon = isochroneFilter.toGeoJSON().features[0].geometry.coordinates[0];
-    let boundingBox = isochroneFilter.getBounds();
+    let polygon = isochroneObject.toGeoJSON().features[0].geometry.coordinates[0];
+    let boundingBox = isochroneObject.getBounds();
 
     // Get restaurant info
     let long = restaurants[normalizeName(name)]["gps"].split(",")[1];
@@ -799,13 +833,12 @@ function passesIsochroneFilter(name) {
 }
 
 /**
- * Draw a new isochrone on the map and only shown restaurants within it
+ * Draw a new isochrone on the map
  * @param {*} lat Latitude of the isochrone center
  * @param {*} long Longitude of the isochrone center
  * @param {*} range The range of the isochrone, in minutes
- * @param {*} shown Boolean of if the isochrone should be shown on the map or not
  */
-async function drawAndApplyDistanceIsochrone(lat, long, range, shown = true) {
+async function drawDistanceIsochrone(lat, long, range) {
     // Get isochrone polygon from ORS API call
     if (range == "") {
         console.log("ERROR: Input a range (in minutes) for draw isochrone");
@@ -837,12 +870,12 @@ async function drawAndApplyDistanceIsochrone(lat, long, range, shown = true) {
     }
 
     // Only 1 isochrone allowed at a time, so remove old one if it exists
-    if (isochroneFilter) {
-        map.removeLayer(isochroneFilter)
+    if (isochroneObject && map.hasLayer(isochroneObject)) {
+        map.removeLayer(isochroneObject)
     }
 
     // Draw the received polygon to the map
-    isochroneFilter = L.geoJSON(data, {
+    isochroneObject = L.geoJSON(data, {
         style: {
             color: "red",
             weight: 2,
@@ -852,14 +885,10 @@ async function drawAndApplyDistanceIsochrone(lat, long, range, shown = true) {
     .bindPopup(`<b>Distance Filter</b><br>
             Locations reachable in ${range} minutes<br>
             <a onclick=removeIsochrone() href="#">Click to remove</a><br>
-            <a onclick=hideIsochrone() href="#">Click to hide (but keep filter)</a>`);
-    
-    if (shown) {
-        isochroneFilter.addTo(map);
-    }
-
-    // Apply the isochrone filter
-    applyFilters();
+            <a onclick=hideIsochrone() href="#">Click to hide</a><br>
+            <a onclick=removeIsochroneFilter() href="#">Click to remove filter only</a><br>
+            <a onclick=addIsochroneFilter() href="#">Click to add back filter back</a>`)
+    .addTo(map);
 }
 
 /**
@@ -871,6 +900,9 @@ map.on("click", (event) => {
         let lat = event["latlng"]["lat"];
         let long = event["latlng"]["lng"];
         let range = document.getElementById("distance-filter-input").value;
-        drawAndApplyDistanceIsochrone(lat, long, range);
+        
+        drawDistanceIsochrone(lat, long, range);
+        doIsochroneFiltering = true;
+        applyFilters();
     }
 })

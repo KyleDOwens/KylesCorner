@@ -28,3 +28,5 @@ todo:
 * [-] Pick random restaurant from selected restaurants
 
 * [-] Add isochrone timer (20 per minute)
+* [-] Add some indication that isochrone exists, but is hidden (maybe little note at top of filter options?)
+* [+] Add ability to display isochrone, but not filter with it
