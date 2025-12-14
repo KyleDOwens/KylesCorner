@@ -23,10 +23,10 @@ let markers = {} // Dictionary containing the map markers accessed by the restau
 
 let manualSelections = []; // Stores which of the current restaurants were selected manually (not with a filter menu) 
 
-let placingIsochrone = false; // Store if the user is currently placing an isochrone on their next map click
-let isochroneFilter = null; // Store the isochrone object
+let placingIsochrone = false; // Stores if the user is currently placing an isochrone on their next map click
+let isochroneFilter = null; // Stores the isochrone object
 
-let debug = true;
+let debug = true; // Determines if API call with limits should be made
 
 // Example isochrone for testing
 let mockIsochrone = {
@@ -103,6 +103,15 @@ document.addEventListener("DOMContentLoaded", () => {
     initializeMap();
     loadCacheAndState(); // async
 });
+
+/**
+ * Normalizes the passed in restaurant name by removing all non-alphanumeric characters
+ * @param {string} name The restaurant name to normalize
+ * @returns String of the normalized alphanumeric name
+ */
+function normalizeName(name) {
+    return name.replace(/[^a-zA-Z0-9]/g, '');
+}
 
 /**
  * Adds a tile layer to the map
@@ -230,7 +239,7 @@ function loadCacheAndState() {
         // Set filters (all true, or to the URL parameters if they exists), then update website
         initializeFilters();
         parseUrl();
-        applyFilters();
+        applyFilters(true);
     });
 }
 
@@ -241,8 +250,17 @@ function loadCacheAndState() {
 window.manuallySelectRestaurant = function(checkbox) {
     let row = checkbox.closest("tr");
     let name = row.cells[0].innerText;
-    
-    manualSelections.push(normalizeName(name));
+
+    // If an option is already manually selected, then selecting it again "undoes" the manual selection, so remove it
+    if (manualSelections.includes(normalizeName(name))) {
+        let index = manualSelections.indexOf(normalizeName(name));
+        manualSelections.splice(index, 1);
+    }
+    // Otherwise, add it to the manualSelections list
+    else {
+        manualSelections.push(normalizeName(name));
+    }
+
     updateMarkerShown(checkbox);
 }
 
@@ -330,7 +348,7 @@ function passesMenuFilters(name) {
 /**
  * Apply all filters (isited, cuisine, rating, distance) and only show restaurants that pass
  */
-function applyFilters() {
+function applyFilters(skipManualSelections = false) {
     // Clear manual selections, since they will all be overwritten when filters are applied
     manualSelections = [];
 
@@ -339,6 +357,13 @@ function applyFilters() {
     for (let row of table.rows) {
         let name = row.cells[0].innerText;
         let shownCheckbox = row.cells[row.cells.length - 1].children[0];
+
+        // Skip manually selected restaurants (only done on load in with URL parameters)
+        if (skipManualSelections || manualSelections.includes(name)) {
+            continue;
+        }
+
+        // Show restaurant if it passes the filters, else hide it
         if (passesMenuFilters(name) && passesIsochroneFilter(name)) {
             shownCheckbox.checked = true;
         }
@@ -452,65 +477,11 @@ function addListenerToFilters() {
 **** URL SHARING FUNCTIONALITY ****
 **********************************/
 /**
- * Normalizes the passed in restaurant name by removing all non-alphanumeric characters
- * @param {string} name The restaurant name to normalize
- * @returns String of the normalized alphanumeric name
+ * Encode a bit string as base62
+ * @param {string} bitString 
+ * @returns String of base62 encoding
  */
-function normalizeName(name) {
-    return name.replace(/[^a-zA-Z0-9]/g, '');
-}
-
-/**
- * Enumerates the names all shown restuarants into a single string
- * @returns String of all the normalized restaurant names currently being shown, delimited by ':'
- */
-function enumerateShownRestaurants() {
-    let enumeration = "";
-
-    let table = document.getElementById("sidebar-table-body");
-    for (let row of table.rows) {
-        // Check the checkbox in the "Hide?" column to see if the marker should be shown
-        let name = row.cells[0].innerText;
-        let shown = row.cells[row.cells.length - 1].children[0].checked;
-        if (shown) {
-            enumeration += (enumeration.length == 0) ? "" : ":";
-            enumeration += normalizeName(name);
-        }
-    }
-
-    return enumeration;
-}
-
-function encodeFilters() {
-    // Build bit string of all menu filters
-    let bitString = "";
-    let filterCheckboxes = document.querySelectorAll(".multi-option input");
-    filterCheckboxes.forEach(filterCheckbox => {
-        bitString += (filterCheckbox.checked) ? "1" : "0";
-    });
-
-    // Add extra "1" to the front, since base62 encoding removes leading zeros
-    bitString = "1" + bitString;
-
-    // Append bit string representing isochrone
-    if (isochroneFilter) {
-        let long = mockIsochrone.features[0].properties.center[0];
-        let lat = mockIsochrone.features[0].properties.center[1];
-        let range = mockIsochrone.features[0].properties.value;
-        
-        let latLongBitLen = Math.pow(10, PRECISION + 2).toString(2).length;
-        let rangeBitLen = Math.pow(2, 3).toString(2).length;
-        let scale = Math.pow(10, PRECISION);
-
-        long = Math.round((long + 180) * scale).toString(2);
-        lat = Math.round((lat + 90) * scale).toString(2);
-        range = Math.floor(range / 60).toString(2);
-
-        bitString += "0".repeat(Math.abs(latLongBitLen - long.length)) + long;
-        bitString += "0".repeat(Math.abs(latLongBitLen - lat.length)) + lat;
-        bitString += "0".repeat(Math.abs(rangeBitLen - range.length)) + range;
-    }
-
+function bitStringToBase62(bitString) {
     // Encode into integer
     let n = BigInt("0b" + bitString);
     if (n === 0n) {
@@ -529,72 +500,223 @@ function encodeFilters() {
 }
 
 /**
+ * Converts the current state of all filters into a bit string
+ * @returns A bit string representing the filter states
+ */
+function getFiltersBitString() {
+    // Build bit string of all menu filters, where filter on = "1", filter off = "0"
+    let bitString = "";
+    let filterCheckboxes = document.querySelectorAll(".multi-option input");
+    filterCheckboxes.forEach(filterCheckbox => {
+        bitString += (filterCheckbox.checked) ? "1" : "0";
+    });
+
+    return bitString;
+}
+
+/**
+ * Converts the current isochrone object into a bit string
+ * @returns A bit string representing the isochrone object
+ */
+function getIsochroneBitString() {
+    let bitString = "";
+
+    // Append bit string representing isochrone (lat, long, range)
+    if (isochroneFilter) {
+        // First bit denotes if the isochrone is shown (1) or not (0)
+        if (map.hasLayer(isochroneFilter)) {
+            bitString += "1";
+        }
+        
+        // Remaining bits are the center lat/long and the range (in minutes) encoded as binary values
+        let long = mockIsochrone.features[0].properties.center[0];
+        let lat = mockIsochrone.features[0].properties.center[1];
+        let range = mockIsochrone.features[0].properties.value;
+        
+        let latLongBitLen = Math.pow(10, PRECISION + 2).toString(2).length;
+        let rangeBitLen = Math.pow(2, 3).toString(2).length;
+        let scale = Math.pow(10, PRECISION);
+
+        long = Math.round((long + 180) * scale).toString(2);
+        lat = Math.round((lat + 90) * scale).toString(2);
+        range = Math.floor(range / 60).toString(2);
+
+        bitString += "0".repeat(Math.abs(latLongBitLen - long.length)) + long;
+        bitString += "0".repeat(Math.abs(latLongBitLen - lat.length)) + lat;
+        bitString += "0".repeat(Math.abs(rangeBitLen - range.length)) + range;
+    }
+
+    return bitString;
+}
+
+/**
+ * Converts the current manually selected restaurants into a bit string
+ * @returns A bit string representing the manually selected restaurants
+ */
+function getManualSelectionsBitString() {
+    let bitString = "";
+
+    // Append bit string representing the key indices of the manual selections
+    let selectionBitLen = parseInt(restaurants.length).toString(2).length;
+    for (let name of manualSelections) {
+        let index = Object.keys(restaurants).indexOf(name).toString(2);
+        bitString += "0".repeat(Math.abs(selectionBitLen - index.length)) + index;
+    }
+    
+    return bitString;
+}
+
+/**
  * Listener to handle when the button to create the sharable URL is clicked - will update the URL and copy sharable URL to clipboard
  */
 document.getElementById("export-button").addEventListener("click", async function() {
-    // Encode the current filters
-    let encoding = encodeFilters();
+    let newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname
 
-    // Encode in the manual selections as exceptions
-
-    let newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + 
-                 "?s=" + encoding;
-
+    // Get bit strings representing the state
+    let filtersBitString = getFiltersBitString()
+    let isochroneBitString = getIsochroneBitString()
+    let manualSelectionsBitString = getManualSelectionsBitString()
+    
+    // Encode the map state as base62 and add to URL
+    if (filtersBitString) {
+        let encodedFilters = bitStringToBase62("1" + filtersBitString);
+        let prefix = newUrl.includes("?") ? "&" : "?";
+        newUrl += prefix + "f=" + encodedFilters;
+    }
+    if (isochroneBitString) {
+        let encodedIsochrone = bitStringToBase62("1" + isochroneBitString);
+        let prefix = newUrl.includes("?") ? "&" : "?";
+        newUrl += prefix + "i=" + encodedIsochrone;
+    }
+    if (manualSelectionsBitString) {
+        let encodedManualSelections = bitStringToBase62("1" + manualSelectionsBitString);
+        let prefix = newUrl.includes("?") ? "&" : "?";
+        newUrl += prefix + "m=" + encodedManualSelections;
+    }
+    
+    // Set the encoding as the new URL and copy to clipboard
     window.history.pushState({ path: newUrl }, '', newUrl);
     await navigator.clipboard.writeText(newUrl);
     alert('Sharable URL copied to clipboard!');
 });
 
 /**
- * Parses the current URL and updates the map/table state to match the information in the URL (if applicable)
+ * Convert a base62 encoded string into a bit string
+ * @param {string} encoding The base62 string to convert
+ * @returns A bit string
  */
-function parseUrl() {
-    let urlParams = new URLSearchParams(window.location.search);
-
-    let encoding = urlParams.get("s");
-    if (!encoding) {
-        return;
-    }
-
-    // Decode url parameter from base62 into integer
+function base62ToBitString(encoding) {
+    // Decode from base62 into integer
     let n = 0n;
     for (let char of encoding) {
         n = n * 62n + BigInt(BASE62.indexOf(char));
     }
 
     // Convert integer into bit string
-    let bitString = n.toString(2);
+    return n.toString(2);
+}
 
-    // Remove leading 1 - was there to prevent leading 0s from being removed
-    bitString = bitString.slice(1);
-
-    // Set filter checkboxes accordingly
-    let i = 0;
+/**
+ * Set which filters are on/off, based on the state info within the bit string
+ * @param {string} bitString The bit string containing the state of each filter
+ */
+function setFiltersFromBitString(bitString) {
+    // Each bit represents a filter on/off
     let filterCheckboxes = document.querySelectorAll(".multi-option input");
-    for (i = 0; i < filterCheckboxes.length; i++) {
+    for (let i = 0; i < filterCheckboxes.length; i++) {
         let filterCheckbox = filterCheckboxes[i];
         filterCheckbox.checked = (bitString[i] == "1") ? true : false;
     }
 
-    // If there are remaining characters, then extract isochrone information
-    if (i != bitString.length) {
-        let latLongBitLen = Math.pow(10, PRECISION + 2).toString(2).length;
+    applyFilters();
+}
 
-        let long = bitString.slice(i, i + latLongBitLen);
-        i += latLongBitLen;
-        let lat = bitString.slice(i, i + latLongBitLen);
-        i += latLongBitLen;
-        let range = bitString.slice(i);
+/**
+ * Create an isochrone based on the info within the bit string
+ * @param {string} bitString The bit string containing the isochrone info
+ */
+function setIsochroneFromBitString(bitString) {
+    let latLongBitLen = Math.pow(10, PRECISION + 2).toString(2).length;
+    let rangeBitLen = Math.pow(2, 3).toString(2).length;
+    
+    // Extract isochrone properties (hidden on map, center lat/long, range in minutes)
+    let shown = bitString.slice(0, 1);
+    shown = Boolean(Number(shown));
 
-        let scale = Math.pow(10, PRECISION);
-        long = parseInt(long, 2) / scale - 180;
-        lat = parseInt(lat, 2) / scale - 90;
-        range = parseInt(range, 2);
+    let i = 1;
+    let long = bitString.slice(i, i + latLongBitLen);
+    i += latLongBitLen;
+    let lat = bitString.slice(i, i + latLongBitLen);
+    i += latLongBitLen;
+    let range = bitString.slice(i, i + rangeBitLen);
+    i += latLongBitLen;
+    
+    let scale = Math.pow(10, PRECISION);
+    long = parseInt(long, 2) / scale - 180;
+    lat = parseInt(lat, 2) / scale - 90;
+    range = parseInt(range, 2);
 
-        drawAndApplyDistanceIsochrone(lat, long, range);
+    drawAndApplyDistanceIsochrone(lat, long, range, shown);
+}
+
+/**
+ * Set which restaurants should be manually set shown/hidden, based on the info within the bit string
+ * @param {string} bitString The bit string containing the manually selected restaurants
+ */
+function setManualSelectionsFromBitString(bitString) {
+    let selectionBitLen = parseInt(restaurants.length).toString(2).length;
+
+    let i = 0;
+    while (i < bitString.length) {
+        let chunk = bitString.slice(i, i + selectionBitLen);
+        let keyIndex = parseInt(chunk, 2);
+        let name = Object.keys(restaurants)[keyIndex];
+
+        manualSelections.push(name);
+
+        // Flip the shown/hidden for the manually selected restaurant
+        let table = document.getElementById("sidebar-table-body");
+        for (let row of table.rows) {
+            if (name == row.cells[0].innerText) {
+                let checkbox = row.cells[row.cells.length - 1].children[0];
+                checkbox.checked = !checkbox.checked;
+                updateMarkerShown(checkbox);
+                break;
+            }
+        }
+
+        i += selectionBitLen;
     }
-    else {
-        applyFilters();
+}
+
+/**
+ * Parses the current URL and updates the map/table state to match the information in the URL
+ */
+function parseUrl() {
+    let urlParams = new URLSearchParams(window.location.search);
+
+    // Extract bit strings from base62 URL parameter
+    let encodedFilters = urlParams.get("f");
+    let encodedIsochrone = urlParams.get("i");
+    let encodedManualSelections = urlParams.get("m");
+
+    // If no parameters, nothing to do
+    if (!(encodedFilters || encodedIsochrone || encodedManualSelections)) {
+        return;
+    }
+
+    // Apply all passed in state information
+    if (encodedFilters) {
+        let filtersBitString = base62ToBitString(encodedFilters).slice(1);
+        setFiltersFromBitString(filtersBitString);
+    }
+    if (encodedIsochrone) {
+        let isochroneBitString = base62ToBitString(encodedIsochrone).slice(1);
+        setIsochroneFromBitString(isochroneBitString);
+    }
+    if (encodedManualSelections) {
+        let manualSelectionsBitString = base62ToBitString(encodedManualSelections).slice(1);
+        setManualSelectionsFromBitString(manualSelectionsBitString);
     }
 }
 
@@ -629,6 +751,13 @@ window.removeIsochrone = function() {
     map.removeLayer(isochroneFilter);
     isochroneFilter = null;
     applyFilters();
+}
+
+/**
+ * Hide isochrone drawing on the map, but keep the object in cache so the filter still applies
+ */
+window.hideIsochrone = function() {
+    map.removeLayer(isochroneFilter);
 }
 
 /**
@@ -674,8 +803,9 @@ function passesIsochroneFilter(name) {
  * @param {*} lat Latitude of the isochrone center
  * @param {*} long Longitude of the isochrone center
  * @param {*} range The range of the isochrone, in minutes
+ * @param {*} shown Boolean of if the isochrone should be shown on the map or not
  */
-async function drawAndApplyDistanceIsochrone(lat, long, range) {
+async function drawAndApplyDistanceIsochrone(lat, long, range, shown = true) {
     // Get isochrone polygon from ORS API call
     if (range == "") {
         console.log("ERROR: Input a range (in minutes) for draw isochrone");
@@ -706,11 +836,12 @@ async function drawAndApplyDistanceIsochrone(lat, long, range) {
         console.log(data);
     }
 
-    // Draw the received polygon
+    // Only 1 isochrone allowed at a time, so remove old one if it exists
     if (isochroneFilter) {
         map.removeLayer(isochroneFilter)
     }
 
+    // Draw the received polygon to the map
     isochroneFilter = L.geoJSON(data, {
         style: {
             color: "red",
@@ -720,8 +851,12 @@ async function drawAndApplyDistanceIsochrone(lat, long, range) {
     })
     .bindPopup(`<b>Distance Filter</b><br>
             Locations reachable in ${range} minutes<br>
-            <a onclick=removeIsochrone() href="#">Click to remove</a>`)
-    .addTo(map);
+            <a onclick=removeIsochrone() href="#">Click to remove</a><br>
+            <a onclick=hideIsochrone() href="#">Click to hide (but keep filter)</a>`);
+    
+    if (shown) {
+        isochroneFilter.addTo(map);
+    }
 
     // Apply the isochrone filter
     applyFilters();

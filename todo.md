@@ -19,6 +19,12 @@ todo:
 
 * [-] Add ability to normalize colors (all same shade green/blue)
 
-* [-] Add compression/encoding to sharable URL
+* [+] Add compression/encoding to sharable URL
 
 * [-] Ability to sort table?
+
+* [-] Add non-invasive alert when no time/range is listed for isochrone (maybe just highlight the time input box in red?)
+
+* [-] Pick random restaurant from selected restaurants
+
+* [-] Add isochrone timer (20 per minute)
