@@ -25,7 +25,7 @@ let manualSelections = []; // Stores which of the current restaurants were selec
 
 let placingIsochrone = false; // Stores if the user is currently placing an isochrone on their next map click
 let isochroneObject = null; // Stores the isochrone layer added to the map (may or may not actually be shown on the map)
-let doIsochroneFiltering = true // Boolean if the isochrone layer should be used for filtering or just for display
+let doIsochroneFiltering = false // Boolean if the isochrone layer should be used for filtering or just for display
 
 let timerId = null; // Stores the ID of the timer repeated highlighting/unhighlighting the randomly selected marker
 let timerMarker = null; // Stores the marker object the randomly selected marker
@@ -107,7 +107,7 @@ let mockIsochrone = {
  */
 document.addEventListener("DOMContentLoaded", () => {
     initializeMap();
-    loadCacheAndState(); // async
+    loadCacheAndInitializeState(); // async
 });
 
 /**
@@ -116,7 +116,7 @@ document.addEventListener("DOMContentLoaded", () => {
  * @returns String of the normalized alphanumeric name
  */
 function normalizeName(name) {
-    return name.replace(/[^a-zA-Z0-9]/g, '');
+    return name.toLowerCase().replace(/[^a-zA-Z0-9]/g, '');
 }
 
 /**
@@ -199,7 +199,7 @@ function addRow(name, cuisine, visited) {
 /**
  * Loads the list of restaurant information in locations.csv into the local cache and updates table/map HTML contents with that info
  */
-function loadCacheAndState() {
+function loadCacheAndInitializeState() {
     // Gross function because handling async functions in not fun
     
     let cuisineFilters = [];
@@ -248,6 +248,9 @@ function loadCacheAndState() {
         initializeFilters();
         parseUrl();
         applyFilters(true);
+
+        // Sort the table in ascending alphabetical order (by simulating a click on the table sort button)
+        document.getElementById("sort-name-button").dispatchEvent(new Event("click"));
     });
 }
 
@@ -260,8 +263,7 @@ function loadCacheAndState() {
  */
 document.getElementById("filter-dropdown-button").addEventListener("click", function() {
     // Change arrow direction of button
-    let button = document.getElementById("filter-dropdown-button");
-    button.innerHTML = (button.innerHTML === "▼") ? "▲" : "▼";
+    this.innerHTML = (this.innerHTML === "▼") ? "▲" : "▼";
 
     // Open/Close the dropdown menu
     let filterDropdown = document.getElementById("filter-dropdown");
@@ -274,7 +276,7 @@ document.getElementById("filter-dropdown-button").addEventListener("click", func
  */
 window.updateMarkerShown = function(checkbox) {
     let row = checkbox.closest("tr");
-    let name = row.cells[0].innerText;
+    let name = row.cells[tableColNameToIndex("Name")].innerText;
     let shouldBeShown = checkbox.checked;
 
     // Check the checkbox in the "Hide?" column to see if the marker should be shown
@@ -294,8 +296,8 @@ function updateAllMarkersShown() {
     let table = document.getElementById("sidebar-table-body");
     for (let row of table.rows) {
         // Check the checkbox in the "Hide?" column to see if the marker should be shown
-        let name = row.cells[0].innerText;
-        let shouldBeShown = row.cells[row.cells.length - 1].children[0].checked;
+        let name = row.cells[tableColNameToIndex("Name")].innerText;
+        let shouldBeShown = row.cells[tableColNameToIndex("Shown?")].children[0].checked;
         if (shouldBeShown) {
             markers[normalizeName(name)]._icon.classList.remove("hidden");
         }
@@ -364,8 +366,8 @@ function applyFilters(skipManualSelections = false) {
     // Check if each restaurant passes the filters
     let table = document.getElementById("sidebar-table-body");
     for (let row of table.rows) {
-        let name = row.cells[0].innerText;
-        let shownCheckbox = row.cells[row.cells.length - 1].children[0];
+        let name = row.cells[tableColNameToIndex("Name")].innerText;
+        let shownCheckbox = row.cells[tableColNameToIndex("Shown?")].children[0];
 
         // Skip manually selected restaurants (only done on load in with URL parameters)
         if (skipManualSelections || manualSelections.includes(name)) {
@@ -403,7 +405,7 @@ function initializeFilters() {
  */
 window.manuallySelectRestaurant = function(checkbox) {
     let row = checkbox.closest("tr");
-    let name = row.cells[0].innerText;
+    let name = row.cells[tableColNameToIndex("Name")].innerText;
 
     // If an option is already manually selected, then selecting it again "undoes" the manual selection, so remove it
     if (manualSelections.includes(normalizeName(name))) {
@@ -576,7 +578,7 @@ function getManualSelectionsBitString() {
     let bitString = "";
 
     // Append bit string representing the key indices of the manual selections
-    let selectionBitLen = parseInt(restaurants.length).toString(2).length;
+    let selectionBitLen = parseInt(Object.keys(restaurants).length).toString(2).length;
     for (let name of manualSelections) {
         let index = Object.keys(restaurants).indexOf(name).toString(2);
         bitString += "0".repeat(Math.abs(selectionBitLen - index.length)) + index;
@@ -658,13 +660,15 @@ function setIsochroneFromBitString(bitString) {
     let latLongBitLen = Math.pow(10, PRECISION + 2).toString(2).length;
     let rangeBitLen = Math.pow(2, 3).toString(2).length;
     
-    // Extract isochrone properties (hidden on map, center lat/long, range in minutes)
+    // Determine if we should be show the isochrone or just filter with it
     let shown = bitString.slice(0, 1);
     shown = Boolean(Number(shown));
 
+    // Determine if we should be doing filtering or not with the isochrone
     let usedForFiltering = bitString.slice(1, 2);
     doIsochroneFiltering = Boolean(Number(usedForFiltering));
 
+    // Extract isochrone properties (hidden on map, center lat/long, range in minutes)
     let i = 2;
     let long = bitString.slice(i, i + latLongBitLen);
     i += latLongBitLen;
@@ -680,6 +684,8 @@ function setIsochroneFromBitString(bitString) {
 
     drawDistanceIsochrone(lat, long, range);
 
+    
+
     // Hide isochrone if it is only being used for filtering
     if (!shown) {
         map.removeLayer(isochroneObject);
@@ -693,7 +699,7 @@ function setIsochroneFromBitString(bitString) {
  * @param {string} bitString The bit string containing the manually selected restaurants
  */
 function setManualSelectionsFromBitString(bitString) {
-    let selectionBitLen = parseInt(restaurants.length).toString(2).length;
+    let selectionBitLen = parseInt(Object.keys(restaurants).length).toString(2).length;
 
     let i = 0;
     while (i < bitString.length) {
@@ -706,8 +712,8 @@ function setManualSelectionsFromBitString(bitString) {
         // Flip the shown/hidden for the manually selected restaurant
         let table = document.getElementById("sidebar-table-body");
         for (let row of table.rows) {
-            if (name == row.cells[0].innerText) {
-                let checkbox = row.cells[row.cells.length - 1].children[0];
+            if (name == normalizeName(row.cells[tableColNameToIndex("Name")].innerText)) {
+                let checkbox = row.cells[tableColNameToIndex("Shown?")].children[0];
                 checkbox.checked = !checkbox.checked;
                 updateMarkerShown(checkbox);
                 break;
@@ -758,7 +764,7 @@ function parseUrl() {
  */
 document.getElementById("distance-filter-add-button").addEventListener("click", function() {
     placingIsochrone = true;
-    // document.body.style.cursor = "";
+    // document.body.style.cursor = ""; // TODO:
 });
 
 /**
@@ -766,7 +772,7 @@ document.getElementById("distance-filter-add-button").addEventListener("click", 
  */
 document.getElementById("distance-filter-remove-button").addEventListener("click", function() {
     removeIsochrone();
-    // document.body.style.cursor = "";
+    // document.body.style.cursor = ""; // TODO:
 });
 
 /**
@@ -846,12 +852,14 @@ function passesIsochroneFilter(name) {
 }
 
 /**
- * Draw a new isochrone on the map
+ * Draw a new isochrone on the map and optionally set the filtering option
  * @param {*} lat Latitude of the isochrone center
  * @param {*} long Longitude of the isochrone center
  * @param {*} range The range of the isochrone, in minutes
+ * @param {*} alsoApply (Optional) If set, will also immediately apply the isochrone as a filter
  */
-async function drawDistanceIsochrone(lat, long, range) {
+async function drawDistanceIsochrone(lat, long, range, alsoApply = false) {
+    console.log(doIsochroneFiltering)
     // Get isochrone polygon from ORS API call
     if (range == "") {
         console.log("ERROR: Input a range (in minutes) for draw isochrone");
@@ -895,13 +903,19 @@ async function drawDistanceIsochrone(lat, long, range) {
             fillOpacity: 0.3
         }
     })
-    .bindPopup(`<b>Distance Filter</b><br>
+    .bindPopup(`<b>Isochrone Filter</b><br>
             Locations reachable in ${range} minutes<br>
             <a onclick=removeIsochrone() href="#">Remove</a><br>
             <a onclick=hideIsochrone() href="#">Hide</a><br>
             <a onclick=removeIsochroneFilter() href="#">Remove filter only</a><br>
             <a onclick=addIsochroneFilter() href="#">Add filter</a>`)
     .addTo(map);
+
+    // Only apply the isochrone if we succeeded in drawing the isochrone AND the optional flag was set
+    if (alsoApply) {
+        doIsochroneFiltering = true;
+        applyFilters();
+    }
 }
 
 /**
@@ -914,9 +928,7 @@ map.on("click", (event) => {
         let long = event["latlng"]["lng"];
         let range = document.getElementById("distance-filter-input").value;
         
-        drawDistanceIsochrone(lat, long, range);
-        doIsochroneFiltering = true;
-        applyFilters();
+        drawDistanceIsochrone(lat, long, range, true);
     }
 })
 
@@ -954,8 +966,8 @@ document.getElementById("random-button").addEventListener("click", function() {
     let table = document.getElementById("sidebar-table-body");
     for (let row of table.rows) {
         // Check the checkbox in the "Hide?" column to see if the restaurant is selected
-        let name = row.cells[0].innerText;
-        let isSelected = row.cells[row.cells.length - 1].children[0].checked;
+        let name = row.cells[tableColNameToIndex("Name")].innerText;
+        let isSelected = row.cells[tableColNameToIndex("Shown?")].children[0].checked;
         if (isSelected) {
             selections.push(name);
         }
@@ -983,3 +995,121 @@ document.getElementById("random-button").addEventListener("click", function() {
         }
     }, 1000);
 });
+
+
+/**********************
+**** SORTING TABLE ****
+**********************/
+/**
+ * Updates the classes for each table sorting button, depending on which button is "active"
+ */
+function updateActiveSortButton(activeButton) {
+    let sortingButtons = document.querySelectorAll(".table-sort-button");
+    for (let button of sortingButtons) {
+        if (button == activeButton) {
+            button.classList.remove("inactive-button");
+        }
+        else {
+            button.classList.add("inactive-button");
+            button.innerHTML = "▼";
+        }
+    }
+}
+
+function tableColNameToIndex(colName) {
+    let tableHeader = document.getElementById("sidebar-table-header");
+    let index = 0;
+    for (let child of tableHeader.rows[0].children) {
+        if (normalizeName(child.innerText) == normalizeName(colName)) {
+            return index;
+        }
+        index++;
+    }
+
+    return -1;
+}
+
+function alphaSort(a, b) { return (normalizeName(a.innerHTML) > normalizeName(b.innerHTML)); };
+function reverseAlphaSort(a, b) { return !alphaSort(a, b) };
+
+function visitSort(a, b) { return (!a.innerHTML && b.innerHTML); };
+function reverseVisitSort(a, b) { return !visitSort(a, b); };
+
+function checkboxSort(a, b) { return (!a.children[0].checked && b.children[0].checked); };
+function reverseCheckboxSort(a, b) { return !checkboxSort(a, b); };
+
+document.getElementById("sort-name-button").addEventListener("click", function() {
+    // Update button to new sorting direction
+    this.innerHTML = (this.innerHTML === "▼") ? "▲" : "▼";
+    
+    // Sort the table to match button
+    let sortingFunc = (this.innerHTML === "▲") ? alphaSort : reverseAlphaSort;
+    sortTable(tableColNameToIndex("Name"), sortingFunc);
+
+    // Update all sorting buttons for the table
+    updateActiveSortButton(this);
+});
+
+document.getElementById("sort-cuisine-button").addEventListener("click", function() {
+    // Update button to new sorting direction
+    this.innerHTML = (this.innerHTML === "▼") ? "▲" : "▼";
+    
+    // Sort the table to match button
+    let sortingFunc = (this.innerHTML === "▲") ? alphaSort : reverseAlphaSort;
+    sortTable(tableColNameToIndex("Cuisine"), sortingFunc);
+
+    // Update all sorting buttons for the table
+    updateActiveSortButton(this);
+});
+
+document.getElementById("sort-visited-button").addEventListener("click", function() {
+    // Update button to new sorting direction
+    this.innerHTML = (this.innerHTML === "▼") ? "▲" : "▼";
+    
+    // First sort alphabetically by name
+    let sortingFunc = (this.innerHTML === "▲") ? alphaSort : reverseAlphaSort;
+    sortTable(tableColNameToIndex("Name"), sortingFunc);
+    
+    // Then sort by visited or not
+    let sortingFunc2 = (this.innerHTML === "▲") ? visitSort : reverseVisitSort;
+    sortTable(tableColNameToIndex("Visited?"), sortingFunc2);
+
+    // Update all sorting buttons for the table
+    updateActiveSortButton(this);
+});
+
+document.getElementById("sort-shown-button").addEventListener("click", function() {
+    // Update button to new sorting direction
+    this.innerHTML = (this.innerHTML === "▼") ? "▲" : "▼";
+    
+    // First sort alphabetically by name
+    let sortingFunc = (this.innerHTML === "▲") ? alphaSort : reverseAlphaSort;
+    sortTable(tableColNameToIndex("Name"), sortingFunc);
+    
+    // Then sort by visited or not
+    let sortingFunc2 = (this.innerHTML === "▲") ? checkboxSort : reverseCheckboxSort;
+    sortTable(tableColNameToIndex("Shown?"), sortingFunc2);
+
+    // Update all sorting buttons for the table
+    updateActiveSortButton(this);
+});
+
+function sortTable(sortIndex, sortFunc) {
+    let table = document.getElementById("sidebar-table-body");
+    let rows = Array.from(table.rows);
+
+    for (let i = 1; i < table.rows.length; i++) {
+        let keyRow = rows[i];
+        let keyValue = keyRow.cells[sortIndex];
+
+        let j = i - 1;
+        while (j >= 0 && sortFunc(rows[j].cells[sortIndex], keyValue)) {
+            rows[j + 1] = rows[j]
+            j--;
+        }
+
+        rows[j + 1] = keyRow;
+    }
+    
+    rows.forEach(row => table.appendChild(row));
+}

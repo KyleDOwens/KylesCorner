@@ -110,14 +110,18 @@ html, body {
     background-color: darkgreen;
 }
 
-#sidebar-table thead {
+#sidebar-table-header {
     background-color: limegreen;
     height: 1rem;
 }
 
-#sidebar-table tbody {
+#sidebar-table-body {
     background-color: green;
     height: 1rem;
+}
+
+.inactive-button {
+    background-color: gray;
 }
 
 /***********************

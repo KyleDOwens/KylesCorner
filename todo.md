@@ -19,11 +19,9 @@ todo:
 
 * [-] Update marker color palette
 
-* [-] Ability to sort table?
+* [+] Ability to sort table?
 
 * [-] Add non-invasive alert when no time/range is listed for isochrone (maybe just highlight the time input box in red?)
-
-* [+] Pick random restaurant from selected restaurants
 
 * [-] Add isochrone timer (20 per minute)
 * [-] Add some indication that isochrone exists, but is hidden (maybe little note at top of filter options?)
