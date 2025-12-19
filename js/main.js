@@ -27,9 +27,13 @@ let placingIsochrone = false; // Stores if the user is currently placing an isoc
 let isochroneObject = null; // Stores the isochrone layer added to the map (may or may not actually be shown on the map)
 let doIsochroneFiltering = false // Boolean if the isochrone layer should be used for filtering or just for display
 
-let timerId = null; // Stores the ID of the timer repeated highlighting/unhighlighting the randomly selected marker
-let timerMarker = null; // Stores the marker object the randomly selected marker
-let oldZOffset = null; // Stores the old Z-Offset the randomly selected marker
+let randomTimerId = null; // Stores the ID of the timer repeated highlighting/unhighlighting the randomly selected marker
+let randomTimerMarker = null; // Stores the marker object the randomly selected marker
+let randomOldZOffset = null; // Stores the old Z-Offset the randomly selected marker
+let randomStartTime = null; // Stores the time that the random restaurant is first displayed, used to determine when to stop flashing
+
+let errorTimerId = null; // Stores the ID of the timer used for displaying an error
+let errorStartTime = null; // Stores the time that the error is first displayed, used to determine when to stop displaying error
 
 let debug = true; // Determines if API call with limits should be made
 
@@ -359,7 +363,7 @@ function applyFilters(skipManualSelections = false) {
     manualSelections = [];
 
     // Stop displaying a random selection, since the selection is changing
-    if (timerId) {
+    if (randomTimerId) {
         stopHighlightTimer();
     }
 
@@ -764,7 +768,8 @@ function parseUrl() {
  */
 document.getElementById("distance-filter-add-button").addEventListener("click", function() {
     placingIsochrone = true;
-    // document.body.style.cursor = ""; // TODO:
+    document.getElementById("map").classList.add("blob-cursor");
+    console.log(document.getElementById("map").classList);
 });
 
 /**
@@ -784,6 +789,9 @@ window.removeIsochrone = function() {
     if (!isochroneObject) {
         return;
     }
+
+    let button = document.getElementById("distance-filter-remove-button");
+    button.disabled = true;
 
     map.removeLayer(isochroneObject);
     isochroneObject = null;
@@ -859,10 +867,28 @@ function passesIsochroneFilter(name) {
  * @param {*} alsoApply (Optional) If set, will also immediately apply the isochrone as a filter
  */
 async function drawDistanceIsochrone(lat, long, range, alsoApply = false) {
-    console.log(doIsochroneFiltering)
     // Get isochrone polygon from ORS API call
     if (range == "") {
         console.log("ERROR: Input a range (in minutes) for draw isochrone");
+        
+        // start timer to flash input cell
+        let input = document.getElementById("distance-filter-input");
+        
+        // start error timer (if not already going)
+        if (!errorTimerId) {
+            errorStartTime = Date.now();
+            errorTimerId = setInterval(() => {
+                input.classList.toggle("error-red-text");
+                if (Date.now() - errorStartTime >= 750*10) {
+                    clearInterval(errorTimerId);
+                    errorStartTime = null;
+                    errorTimerId = null;
+                    input.classList.remove("error-red-text");
+                }
+            }, 750);
+        }
+        
+
         return;
     }
 
@@ -887,7 +913,6 @@ async function drawDistanceIsochrone(lat, long, range, alsoApply = false) {
             }
         );
         data = await response.json();
-        console.log(data);
     }
 
     // Only 1 isochrone allowed at a time, so remove old one if it exists
@@ -911,6 +936,15 @@ async function drawDistanceIsochrone(lat, long, range, alsoApply = false) {
             <a onclick=addIsochroneFilter() href="#">Add filter</a>`)
     .addTo(map);
 
+    // update html objects (enable remove button, remove input value)
+    if (isochroneObject) {
+        let button = document.getElementById("distance-filter-remove-button");
+        button.disabled = false;
+
+        let input = document.getElementById("distance-filter-input");
+        input.value = "";
+    }
+
     // Only apply the isochrone if we succeeded in drawing the isochrone AND the optional flag was set
     if (alsoApply) {
         doIsochroneFiltering = true;
@@ -924,6 +958,7 @@ async function drawDistanceIsochrone(lat, long, range, alsoApply = false) {
 map.on("click", (event) => {
     if (placingIsochrone) {
         placingIsochrone = false;
+        document.getElementById("map").classList.remove("blob-cursor");
         let lat = event["latlng"]["lat"];
         let long = event["latlng"]["lng"];
         let range = document.getElementById("distance-filter-input").value;
@@ -940,16 +975,17 @@ map.on("click", (event) => {
  * Stop the highlight/unhighlight timer and reset the marker to its original state
  */
 function stopHighlightTimer() {
-    if (timerMarker._icon.classList.contains("highlight")) {
-        timerMarker._icon.classList.remove("highlight");
-    }
-    timerMarker.options.zIndexOffset = oldZOffset;
+    clearInterval(randomTimerId);
     
-    clearInterval(timerId);
-    timerId = null;
-    timerMarker = null;
-    oldZOffset = null;
-
+    if (randomTimerMarker._icon.classList.contains("highlight")) {
+        randomTimerMarker._icon.classList.remove("highlight");
+    }
+    randomTimerMarker.options.zIndexOffset = randomOldZOffset;
+    
+    randomTimerId = null;
+    randomTimerMarker = null;
+    randomOldZOffset = null;
+    randomStartTime = null;
 }
 
 /**
@@ -957,7 +993,7 @@ function stopHighlightTimer() {
  */
 document.getElementById("random-button").addEventListener("click", function() {
     // If a restaurant is already randomly selected, stop its timer and reset its values
-    if (timerId) {
+    if (randomTimerId) {
         stopHighlightTimer();
     }
     
@@ -980,20 +1016,19 @@ document.getElementById("random-button").addEventListener("click", function() {
 
     // Bring the marker to the front
     let marker = markers[normalizeName(rand)];
-    oldZOffset = marker.options.zIndexOffset;
+    randomOldZOffset = marker.options.zIndexOffset;
     marker.options.zIndexOffset = 1000;    
     
     // Add timer to alternate between original marker color and highlight
-    timerMarker = marker;
+    randomTimerMarker = marker;
+    randomStartTime = Date.now();
     marker._icon.classList.add("highlight");
-    timerId = setInterval(() => {
-        if (timerMarker._icon.classList.contains("highlight")) {
-            timerMarker._icon.classList.remove("highlight");
+    randomTimerId = setInterval(() => {
+        randomTimerMarker._icon.classList.toggle("highlight");
+        if (Date.now() - randomStartTime >= 750*16) {
+            stopHighlightTimer();
         }
-        else {
-            timerMarker._icon.classList.add("highlight");
-        }
-    }, 1000);
+    }, 750);
 });
 
 

@@ -14,32 +14,34 @@
 }
 
 /* MARKER COLORS */
-/* Rather than have different colored markers, just transform a single mark to any color I want */
+/* Rather than have different colored markers, just transform a single black marker into any color I want */
 .visited-low {
-    filter: invert(96%) sepia(10%) saturate(381%) hue-rotate(46deg) brightness(96%) contrast(91%)
+    filter: invert(90%) sepia(66%) saturate(511%) hue-rotate(18deg) brightness(88%) contrast(76%)
         drop-shadow(1px 0 0 black) drop-shadow(0 1px 0 black) drop-shadow(-1px 0 0 black) drop-shadow(0 -1px 0 black);
 }
 .visited-medium {
-    filter: invert(73%) sepia(26%) saturate(510%) hue-rotate(57deg) brightness(95%) contrast(88%)
+    filter: invert(51%) sepia(56%) saturate(363%) hue-rotate(54deg) brightness(95%) contrast(86%)
         drop-shadow(1px 0 0 black) drop-shadow(0 1px 0 black) drop-shadow(-1px 0 0 black) drop-shadow(0 -1px 0 black);
 }
 .visited-high {
-    filter: invert(59%) sepia(65%) saturate(503%) hue-rotate(84deg) brightness(82%) contrast(81%)
+    filter: invert(26%) sepia(15%) saturate(2489%) hue-rotate(83deg) brightness(98%) contrast(88%)
         drop-shadow(1px 0 0 black) drop-shadow(0 1px 0 black) drop-shadow(-1px 0 0 black) drop-shadow(0 -1px 0 black);
 }
 
 .unvisited-low {
-    filter: invert(97%) sepia(63%) saturate(6665%) hue-rotate(176deg) brightness(101%) contrast(97%)
+    filter: invert(71%) sepia(57%) saturate(490%) hue-rotate(180deg) brightness(102%) contrast(95%)
         drop-shadow(1px 0 0 black) drop-shadow(0 1px 0 black) drop-shadow(-1px 0 0 black) drop-shadow(0 -1px 0 black);
 }
 .unvisited-medium {
-    filter: invert(63%) sepia(67%) saturate(1633%) hue-rotate(190deg) brightness(94%) contrast(96%)
+    filter: invert(46%) sepia(66%) saturate(2186%) hue-rotate(184deg) brightness(99%) contrast(92%)
         drop-shadow(1px 0 0 black) drop-shadow(0 1px 0 black) drop-shadow(-1px 0 0 black) drop-shadow(0 -1px 0 black);
+        
 }
 .unvisited-high {
-    filter: invert(47%) sepia(49%) saturate(4393%) hue-rotate(202deg) brightness(90%) contrast(86%)
+    filter: invert(31%) sepia(84%) saturate(1094%) hue-rotate(186deg) brightness(91%) contrast(98%)
         drop-shadow(1px 0 0 black) drop-shadow(0 1px 0 black) drop-shadow(-1px 0 0 black) drop-shadow(0 -1px 0 black);
 }
+
 .highlight {
     filter: invert(97%) sepia(14%) saturate(4954%) hue-rotate(341deg) brightness(109%) contrast(97%)
         drop-shadow(1px 0 0 black) drop-shadow(0 1px 0 black) drop-shadow(-1px 0 0 black) drop-shadow(0 -1px 0 black);
@@ -58,6 +60,17 @@ html, body {
     display: grid;
     grid-template-areas: "map sidebar";
     grid-template-columns: auto 600px;
+}
+
+.error-red-text::placeholder {
+    color: red;
+}
+.error-red-text {
+    border-color: red;
+}
+
+.blob-cursor:hover {
+    cursor: url('../images/spots_20.png'), pointer !important;
 }
 
 /**********************
