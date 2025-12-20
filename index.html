@@ -13,38 +13,60 @@
 </head>
 
 <body>
+                                                         
+ <!--
+ ┌────────────────────────────────────────────────┐  
+ │               RESTAURANT TRACKER               │  
+ └────────────────────────────────────────────────┘  
+ ┌───────────────────────────────┐ ┌──────────────┐  
+ │                               │ │              │  
+ │                               │ │              │  
+ │                               │ │              │  
+ │              MAP              │ │    FILTER    │  
+ │                               │ │    & LIST    │  
+ │                               │ │              │  
+ │                               │ │              │  
+ │                               │ │              │  
+ └───────────────────────────────┘ └──────────────┘  
+-->
     <div id="body-container">
+        <div id="title-container">
+            <div id="title">
+                Restaurant Tracker
+            </div>
+        </div>
+
         <!-- Restaurant Map -->
         <div id="map-container">
-            <h1>Restaurant Tracker</h1>
             <div id="map"></div>
         </div>
 
         <!-- Sidebar -->
         <div id="sidebar-container">
-            <h1>Restaurant List</h1>
-
             <!-- Filtering Options -->
             <div id="filter-container">
                 <div id="filter-header">
-                    <h2>Filter Options</h2>
+                    Filter Options
                     <button id="filter-dropdown-button">▼</button>
                 </div>
 
                 <div id="filter-dropdown" style="display:none;">
                     <div id="distance-filter">
-                        <button id="distance-filter-add-button">Add Isochrone</button><br>
-                        <button id="distance-filter-remove-button" disabled>Remove Isochrone</button><br>
+                        <div id="distance-header">Distance filter!</div>
+                        <div id="distance-subheader">(Places within X minutes from clicked location)</div>
+                        <button id="distance-filter-add-button">Add Isochrone</button>
+                        <button id="distance-filter-remove-button" disabled>Remove Isochrone</button>
                         <input id="distance-filter-input" placeholder="Time (minutes)">
                     </div>
 
                     <div id="filter-menus">
+                        <div id="menu-header">Attribute filters!</div>
                         <div id="visited-filter" class="multi-select">
                             <div class="multi-option-header">Visited</div>
                             <!-- <div class="multi-default">Select visited...</div> -->
                             <div class="multi-option multi-any"><input type="checkbox"> Any</div>
-                            <div class="multi-option"><input type="checkbox"> Visited</div>
-                            <div class="multi-option"><input type="checkbox"> Unvisited</div>
+                            <div class="multi-option"><input type="checkbox"> Visited </div>
+                            <div class="multi-option"><input type="checkbox"> Unvisited </div>
                         </div>
 
                         <div id="cuisine-filter" class="multi-select">
@@ -54,38 +76,46 @@
                         </div>
 
                         <div id="rating-filter" class="multi-select">
-                            <div class="multi-option-header">Rating/Priority</div>
+                            <div class="multi-option-header">Rating</div>
                             <!-- <div class="multi-default">Select rating...</div> -->
                             <div class="multi-option multi-any"><input type="checkbox"> Any</div>
-                            <div class="multi-option"><input type="checkbox"> Low</div>
-                            <div class="multi-option"><input type="checkbox"> Medium</div>
-                            <div class="multi-option"><input type="checkbox"> High</div>
+                            <div class="multi-option"><input type="checkbox"> Low </div>
+                            <div class="multi-option"><input type="checkbox"> Medium </div>
+                            <div class="multi-option"><input type="checkbox"> High </div>
                         </div>
                     </div>
                 </div>
-            </div>            
-
-            <!-- Export Sharable URL -->
-            <button id="export-button">Share Selections</button>
+            </div>
 
             <!-- Choose random restaurant from selected -->
-            <button id="random-button">Choose Random: </button>
-            <input type="text" id="random-selection" readonly>
+            <div id="random-container">
+                <button id="random-button">Choose Random: </button>
+                <input type="text" id="random-selection" readonly>
+            </div>
+            
+            <!-- Export Sharable URL -->
+            <div id="share-container">
+                <button id="export-button">Share Selections!</button>
+            </div>
 
             <!-- Restaurant Table -->
-            <table id="sidebar-table">
-                <thead id="sidebar-table-header">
-                    <tr>
-                        <td class="name">Name<button id="sort-name-button" class="table-sort-button">▼</button></td>
-                        <td class="cuisine">Cuisine<button id="sort-cuisine-button" class="table-sort-button">▼</button></td>
-                        <td class="visited">Visited?<button id="sort-visited-button" class="table-sort-button">▼</button></td>
-                        <td class="shown">Shown?<button id="sort-shown-button" class="table-sort-button">▼</button></td>
-                    </tr>
-                </thead>
-                <tbody id="sidebar-table-body">
-                    <!-- Will be filled in by JS -->
-                </tbody>
-            </table>
+            <div id="outer-table-container">
+                <div id="inner-table-container">
+                    <table id="sidebar-table">
+                        <thead id="sidebar-table-header">
+                            <tr>
+                                <td class="name">Name <button id="sort-name-button" class="table-sort-button">▼</button></td>
+                                <td class="cuisine">Cuisine <button id="sort-cuisine-button" class="table-sort-button">▼</button></td>
+                                <td class="visited">Tried <button id="sort-visited-button" class="table-sort-button">▼</button></td>
+                                <td class="shown">Show <button id="sort-shown-button" class="table-sort-button">▼</button></td>
+                            </tr>
+                        </thead>
+                        <tbody id="sidebar-table-body">
+                            <!-- Will be filled in by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 

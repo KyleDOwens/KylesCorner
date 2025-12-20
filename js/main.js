@@ -1,13 +1,13 @@
 import { OSM_API_KEY } from "./config.js";
 import { ORS_API_KEY } from "./config.js";
 
-const SAT_TX_COORDS = [29.4246, -98.49514];
-
 const map = L.map("map", {
-    center: SAT_TX_COORDS,
-    zoom: 11,
-    zoomControl: true,
-});
+        center:
+            [29.46630060995385, 
+            -98.50546763124163],
+        zoom: 11,
+        zoomControl: true,
+    });;
 
 const newIcon = L.icon({
     iconUrl: "images/marker.png",
@@ -129,14 +129,20 @@ function normalizeName(name) {
 function initializeMap() {
     if (debug) {
         // Add free tile layer
-        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        attribution: "&copy; OpenStreetMap contributors",
-        maxZoom: 19,
+        // L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        // attribution: "&copy; OpenStreetMap contributors",
+        // maxZoom: 19,
+        // }).addTo(map);
+
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
     }
     else {
         // Add rate limited tile layer (OpenStreetMap)
         L.tileLayer("https://api.maptiler.com/maps/streets-v2/{z}/{x}/{y}.png?key=" + OSM_API_KEY, {
+            maxZoom: 18,
             attribution: "© MapTiler © OpenStreetMap contributors"
         }).addTo(map);
     }
@@ -173,13 +179,13 @@ function applyMarkerColor(marker, visited, rating) {
  * @param {string} visited Indication if the restaurant has been visited or not
  * @param {string} rating The restaurant rating, low/medium/high (indicates the priority if not visited)
  * @param {string} notes Notes about the restaurant
- * @param {string} googleUrl Google Maps URL to the restaurant
+ * @param {string} originalUrl Google Maps URL to the restaurant
  */
-function addRestaurantMarker(name, lat, long, cuisine, visited, rating, notes, googleUrl) {
+function addRestaurantMarker(name, lat, long, cuisine, visited, rating, notes, originalUrl) {
     markers[normalizeName(name)] = L.marker([lat, long], {icon: newIcon}).addTo(map)
         .bindPopup(`<b>${name}</b><br>
             ${cuisine}<br>
-            <a href="${googleUrl}" target=_blank>View on Google</a><br>
+            <a href="${originalUrl}" target=_blank>View on Google</a><br>
             <i>${notes}</i>`);
     
     applyMarkerColor(markers[normalizeName(name)], visited, rating);
@@ -194,10 +200,22 @@ function addRestaurantMarker(name, lat, long, cuisine, visited, rating, notes, g
 function addRow(name, cuisine, visited) {
     let table = document.getElementById("sidebar-table-body");
     let newRow = table.insertRow(-1);
-    newRow.insertCell().innerHTML = name;
-    newRow.insertCell().innerHTML = cuisine;
-    newRow.insertCell().innerHTML = visited;
-    newRow.insertCell().innerHTML = "<input type=\"checkbox\" onclick=\"manuallySelectRestaurant(this)\" checked>";
+
+    let nameCell = newRow.insertCell();
+    nameCell.innerHTML = name;
+    nameCell.classList.add("name");
+
+    let cuisineCell = newRow.insertCell();
+    cuisineCell.innerHTML = cuisine;
+    cuisineCell.classList.add("cuisine");
+
+    let visitedCell = newRow.insertCell();
+    visitedCell.innerHTML = visited;
+    visitedCell.classList.add("visited");
+    
+    let shownCell = newRow.insertCell();
+    shownCell.innerHTML = "<input type=\"checkbox\" onclick=\"manuallySelectRestaurant(this)\" checked>";
+    shownCell.classList.add("shown");
 }
 
 /**
@@ -223,7 +241,7 @@ function loadCacheAndInitializeState() {
                 row["visited"],
                 row["rating"],
                 row["notes"],
-                row["googleUrl"]);
+                row["originalUrl"]);
             addRow(row["name"], row["cuisine"], row["visited"])
 
             // Update cuisine type filters
@@ -255,6 +273,10 @@ function loadCacheAndInitializeState() {
 
         // Sort the table in ascending alphabetical order (by simulating a click on the table sort button)
         document.getElementById("sort-name-button").dispatchEvent(new Event("click"));
+
+        // Update map tiles since some may not load by this point
+        map.invalidateSize();
+        map.setView([29.46630060995385, -98.50546763124163], 11);
     });
 }
 
@@ -930,9 +952,9 @@ async function drawDistanceIsochrone(lat, long, range, alsoApply = false) {
     })
     .bindPopup(`<b>Isochrone Filter</b><br>
             Locations reachable in ${range} minutes<br>
-            <a onclick=removeIsochrone() href="#">Remove</a><br>
+            <a onclick=removeIsochrone() href="#">Remove filter & hide</a><br>
             <a onclick=hideIsochrone() href="#">Hide</a><br>
-            <a onclick=removeIsochroneFilter() href="#">Remove filter only</a><br>
+            <a onclick=removeIsochroneFilter() href="#">Remove filter</a><br>
             <a onclick=addIsochroneFilter() href="#">Add filter</a>`)
     .addTo(map);
 
@@ -956,6 +978,9 @@ async function drawDistanceIsochrone(lat, long, range, alsoApply = false) {
  * Check if user is applying a distance filter when the map is clicked
  */
 map.on("click", (event) => {
+    console.log(map.getCenter());
+    console.log(map.getZoom());
+    
     if (placingIsochrone) {
         placingIsochrone = false;
         document.getElementById("map").classList.remove("blob-cursor");
@@ -981,6 +1006,7 @@ function stopHighlightTimer() {
         randomTimerMarker._icon.classList.remove("highlight");
     }
     randomTimerMarker.options.zIndexOffset = randomOldZOffset;
+    randomTimerMarker.setLatLng(randomTimerMarker.getLatLng());
     
     randomTimerId = null;
     randomTimerMarker = null;
@@ -1017,7 +1043,8 @@ document.getElementById("random-button").addEventListener("click", function() {
     // Bring the marker to the front
     let marker = markers[normalizeName(rand)];
     randomOldZOffset = marker.options.zIndexOffset;
-    marker.options.zIndexOffset = 1000;    
+    marker.options.zIndexOffset = 1000;
+    marker.setLatLng(marker.getLatLng()); // redraws the marker
     
     // Add timer to alternate between original marker color and highlight
     randomTimerMarker = marker;
@@ -1054,6 +1081,10 @@ function updateActiveSortButton(activeButton) {
 function tableColNameToIndex(colName) {
     let tableHeader = document.getElementById("sidebar-table-header");
     let index = 0;
+
+    colName = (colName == "Shown?") ? "Show" : colName;
+    colName = (colName == "Visited?") ? "Tried" : colName;
+
     for (let child of tableHeader.rows[0].children) {
         if (normalizeName(child.innerText) == normalizeName(colName)) {
             return index;

@@ -14,14 +14,4 @@
         * Distance from some point!!!
 
 todo:
-* [+] Add coffee shops from google
-* [+] Add bakeries from google
-
-* [+] Update marker color palette
-
-* [+] Add non-invasive alert when no time/range is listed for isochrone (maybe just highlight the time input box in red?)
-
-* [+] Change cursor when adding isochrone
-* [x] Add isochrone timer (20 per minute)
-* [+] Add some indication that isochrone exists, but is hidden (maybe little note at top of filter options?)
-
+* [-] Update CSS

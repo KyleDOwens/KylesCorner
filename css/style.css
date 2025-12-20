@@ -8,12 +8,12 @@
 /* Apply to everything */
 * {
     box-sizing: border-box;
-    margin: 0;
-    padding: 0;
     font-family: "Binomic Medium", sans-serif;
 }
 
-/* MARKER COLORS */
+/***************************
+**** COLROS & CONSTANTS ****
+***************************/
 /* Rather than have different colored markers, just transform a single black marker into any color I want */
 .visited-low {
     filter: invert(90%) sepia(66%) saturate(511%) hue-rotate(18deg) brightness(88%) contrast(76%)
@@ -47,21 +47,39 @@
         drop-shadow(1px 0 0 black) drop-shadow(0 1px 0 black) drop-shadow(-1px 0 0 black) drop-shadow(0 -1px 0 black);
 }
 
-/*********************
-**** GENERAL BODY ****
-*********************/
+/********************
+**** BODY LAYOUT ****
+********************/
 html, body {
-    height: 100%;
+    height: 97%; /* Fill screen with no scroll - 100% makes it scroll for some reason */
+    width: 98%;
+
+    margin: 10px;
+    background-color: bisque;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
+/* Set overall grid layout of containers */
 #body-container {
-    width: 100%;
+    width: 75%;
     height: 100%;
+
     display: grid;
-    grid-template-areas: "map sidebar";
-    grid-template-columns: auto 600px;
+    grid-template-areas: 
+        "header header"
+        "map sidebar";
+    grid-template-columns: 16fr 9fr;
+    grid-template-rows: minmax(70px, auto) auto;
+    column-gap: 30px;
+    row-gap: 10px;
+
+    background-color: orange;
 }
 
+/* Misc classes for JS */
 .error-red-text::placeholder {
     color: red;
 }
@@ -73,106 +91,307 @@ html, body {
     cursor: url('../images/spots_20.png'), pointer !important;
 }
 
-/**********************
-**** MAP CONTAINER ****
-**********************/
-#map-container {
-    background-color: blue;
-    grid-area: map;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-}
-
-#map {
-    width: 80%;
-    height: 90%;
+.inactive-button {
+    background-color: gray;
 }
 
 .hidden {
     display: none !important;
 }
 
+
+/************************
+**** TITLE CONTAINER ****
+************************/
+#title-container {
+    width: 100%;
+    height: 100%;
+
+    grid-area: header;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: cyan;
+}
+
+#title {
+    width: 80%;
+    height: 50px;
+
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: x-large;
+    background-color: cornflowerblue;
+}
+
+
+/**********************
+**** MAP CONTAINER ****
+**********************/
+#map-container {
+    width: 100%;
+    height: 100%;
+
+    grid-area: map;
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    border-radius: 20px;
+    padding: 15px;
+    background-color: blue;
+}
+
+#map {
+    width: 100%;
+    height: 100%;
+}
+
+
 /****************
 **** SIDEBAR ****
 ****************/
 #sidebar-container {
     grid-area: sidebar;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
+    place-items: center;
+
+    overflow-x: hidden;
+    overflow-y: hidden;
+    border-radius: 20px;
+    padding: 10px;
     background-color: red;
-    overflow-x: scroll;
 }
 
-#sidebar-container h1 {
-    margin-top: 1.5rem;
-    margin-bottom: 0.5rem;
-    font-size: 2rem;
-}
 
 /*************************
 **** RESTAURANT TABLE ****
 *************************/
-#sidebar-table {
+#outer-table-container {
+    width: 97%;
+    height: 82.5%;
     background-color: darkgreen;
+    border-radius: 20px;
+    padding-right: 2px;
+    padding-bottom: 6px;
+
+    overflow: hidden;
 }
 
+/* Scrollbar */
+#inner-table-container {
+    height: 100%;
+
+    overflow-y: scroll;
+    overflow-x: hidden;
+    position: relative;
+    /* scrollbar-width: thin; */
+    /* scrollbar-color: brown; */
+}
+#inner-table-container::-webkit-scrollbar {
+    width: 10px;
+}
+#inner-table-container::-webkit-scrollbar-thumb {
+    height: 50px;
+    border-radius: 20px;
+    background-color: darkgray;
+}
+#inner-table-container::-webkit-scrollbar-track-piece {
+  background: transparent;
+}
+#inner-table-container::-webkit-scrollbar-thumb:hover {
+    background: #888;
+}
+#inner-table-container::-webkit-scrollbar-button:start:increment {
+  height: 47.5px;
+  display: block;
+  background: limegreen;
+  border-bottom: 1px solid green;
+}
+
+/* Table */
+#sidebar-table {
+    border-collapse: collapse;
+}
+#sidebar-table .name {
+    width: 24%;
+}
+#sidebar-table .cuisine {
+    width: 28%;
+}
+#sidebar-table .visited {
+    width: 22%;
+    text-align: center;
+}
+#sidebar-table .shown {
+    width: 22%;
+    text-align: center;
+}
+
+/* Table header */
 #sidebar-table-header {
-    background-color: limegreen;
     height: 1rem;
+
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background-color: limegreen;
+
+    padding: 0;
+    margin: 0;
+    border: 0;
+}
+#sidebar-table-header button {
+    font-size: 10pt;
+    padding: 0;
+    margin: 0;
+    border: 0;
 }
 
+/* Table body */
 #sidebar-table-body {
     background-color: green;
-    height: 1rem;
+}
+#sidebar-table td, table th {
+  border-bottom: 1px solid black;
+  font-size: 12pt;
+  padding: 5px;
+  height: 2.5rem;
 }
 
-.inactive-button {
-    background-color: gray;
+
+/**************************
+**** SHARE/RANDOM MENU ****
+**************************/
+#random-container {
+    padding-top: 10px;
 }
+#random-container button {
+    padding: 3px;
+}
+#random-container input {
+    padding: 3px;
+    text-align: center;
+}
+
+#share-container {
+    padding: 10px;
+}
+#share-container button {
+    padding: 3px;
+}
+
 
 /***********************
 **** FILTERING MENU ****
 ***********************/
 #filter-container {
     background-color: gray;
-    width: 80%;
-    margin-bottom: 1rem;
+    width: 85%;
+    padding: 4px;
+    border-radius: 20px;
 }
 
 #filter-container #filter-header {
     display: flex;
     justify-content: center;
+    font-size: 1.25rem;
     gap: 1rem;
-    font-size: 0.75rem;
+}
+#filter-container #filter-header button {
+    padding-left: 3px;
+    padding-right: 3px;
 }
 
+/* Distance filter */
+#distance-filter {
+    display: grid;
+    grid-template-areas: 
+        "header header"
+        "subheader subheader"
+        "add input"
+        "remove _";
+    grid-template-columns: auto auto;
+    column-gap: 5px;
+    row-gap: 3px;
+
+    margin-top: 0.5rem;
+    border: 1px dashed black;
+    padding: 10px;
+}
+#distance-header {
+    grid-area: header;
+    font-size: 12pt;
+}
+#distance-subheader {
+    grid-area: subheader;
+    font-size: 8pt;
+    border-bottom: 1px solid black;
+    padding-bottom: 3px;
+    margin-bottom: 3px;
+    /* color: lightgray; */
+}
+#distance-filter-add-button {
+    grid-area: add;
+}
+#distance-filter-input {
+    grid-area: input;
+}
+#distance-filter-remove-button {
+    grid-area: remove;
+}
+
+/* Filter menus */
 #filter-menus {
     display: grid;
-    grid-template-columns: auto auto auto auto;
-    gap: 0.5rem;
-    margin-right: 1rem;
-    margin-left: 1rem;
-    margin-bottom: 1rem;
+    grid-template-areas: 
+        "header header header"
+        "visited cuisine rating";
+    grid-template-columns: auto auto auto;
+    gap: 0.25rem;
+
+    margin-top: 1rem;
+
+    font-size: 14px;
+}
+#menu-header {
+    grid-area: header;
+    font-size: 12pt;
+}
+#visited-filter {
+    grid-area: visited;
+}
+#cuisine-filter {
+    grid-area: cuisine;
+
+    max-height: 300px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+#rating-filter {
+    grid-area: rating;
 }
 
 #filter-menus .multi-option-header {
     font-weight: bold;
+    background-color: slategray;
+
+    position: sticky;
+    top: 0;
+    z-index: 10;
 }
 
 #filter-menus .multi-select {
-    background-color: slategray;
     border: 1px solid black;
 }
 
 #filter-menus .multi-select .multi-option {
     background-color:darkgray;
+    white-space: pre-wrap;
 }
 
 #filter-menus .multi-select .multi-any {
