@@ -8,7 +8,8 @@
     * Any locations that errored will need to ve fixed manually
 
 * [Convert hex color into CSS filter](https://codepen.io/sosuke/pen/Pjoqqp)
-
+* [GIF tools](https://onlinegiftools.com/#tools)
+* [2000s web design inspo](https://www.cameronsworld.net/)
 
 https://www.flaticon.com/free-icon/map_3082383?term=marker&page=1&position=95&origin=tag&related_id=3082383
 https://www.flaticon.com/free-icon/spots_2260437?term=blob&page=1&position=3&origin=search&related_id=2260437

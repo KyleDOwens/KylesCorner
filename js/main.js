@@ -7,7 +7,7 @@ const map = L.map("map", {
             -98.50546763124163],
         zoom: 11,
         zoomControl: true,
-    });;
+    });
 
 const newIcon = L.icon({
     iconUrl: "images/marker.png",
@@ -323,7 +323,7 @@ function updateAllMarkersShown() {
     for (let row of table.rows) {
         // Check the checkbox in the "Hide?" column to see if the marker should be shown
         let name = row.cells[tableColNameToIndex("Name")].innerText;
-        let shouldBeShown = row.cells[tableColNameToIndex("Shown?")].children[0].checked;
+        let shouldBeShown = row.cells[tableColNameToIndex("Show?")].children[0].checked;
         if (shouldBeShown) {
             markers[normalizeName(name)]._icon.classList.remove("hidden");
         }
@@ -393,7 +393,7 @@ function applyFilters(skipManualSelections = false) {
     let table = document.getElementById("sidebar-table-body");
     for (let row of table.rows) {
         let name = row.cells[tableColNameToIndex("Name")].innerText;
-        let shownCheckbox = row.cells[tableColNameToIndex("Shown?")].children[0];
+        let shownCheckbox = row.cells[tableColNameToIndex("Show?")].children[0];
 
         // Skip manually selected restaurants (only done on load in with URL parameters)
         if (skipManualSelections || manualSelections.includes(name)) {
@@ -739,7 +739,7 @@ function setManualSelectionsFromBitString(bitString) {
         let table = document.getElementById("sidebar-table-body");
         for (let row of table.rows) {
             if (name == normalizeName(row.cells[tableColNameToIndex("Name")].innerText)) {
-                let checkbox = row.cells[tableColNameToIndex("Shown?")].children[0];
+                let checkbox = row.cells[tableColNameToIndex("Show?")].children[0];
                 checkbox.checked = !checkbox.checked;
                 updateMarkerShown(checkbox);
                 break;
@@ -901,13 +901,13 @@ async function drawDistanceIsochrone(lat, long, range, alsoApply = false) {
             errorStartTime = Date.now();
             errorTimerId = setInterval(() => {
                 input.classList.toggle("error-red-text");
-                if (Date.now() - errorStartTime >= 750*10) {
+                if (Date.now() - errorStartTime >= 500*15) {
                     clearInterval(errorTimerId);
                     errorStartTime = null;
                     errorTimerId = null;
                     input.classList.remove("error-red-text");
                 }
-            }, 750);
+            }, 500);
         }
         
 
@@ -1029,7 +1029,7 @@ document.getElementById("random-button").addEventListener("click", function() {
     for (let row of table.rows) {
         // Check the checkbox in the "Hide?" column to see if the restaurant is selected
         let name = row.cells[tableColNameToIndex("Name")].innerText;
-        let isSelected = row.cells[tableColNameToIndex("Shown?")].children[0].checked;
+        let isSelected = row.cells[tableColNameToIndex("Show?")].children[0].checked;
         if (isSelected) {
             selections.push(name);
         }
@@ -1081,9 +1081,6 @@ function updateActiveSortButton(activeButton) {
 function tableColNameToIndex(colName) {
     let tableHeader = document.getElementById("sidebar-table-header");
     let index = 0;
-
-    colName = (colName == "Shown?") ? "Show" : colName;
-    colName = (colName == "Visited?") ? "Tried" : colName;
 
     for (let child of tableHeader.rows[0].children) {
         if (normalizeName(child.innerText) == normalizeName(colName)) {
@@ -1154,7 +1151,7 @@ document.getElementById("sort-shown-button").addEventListener("click", function(
     
     // Then sort by visited or not
     let sortingFunc2 = (this.innerHTML === "▲") ? checkboxSort : reverseCheckboxSort;
-    sortTable(tableColNameToIndex("Shown?"), sortingFunc2);
+    sortTable(tableColNameToIndex("Show?"), sortingFunc2);
 
     // Update all sorting buttons for the table
     updateActiveSortButton(this);

@@ -1,0 +1,385 @@
+@font-face {
+    font-family: "fixedsys";
+    src: url("fonts/fixedsys.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* Apply to everything */
+* {
+    box-sizing: border-box;
+    font-family: "fixedsys", sans-serif;
+    
+    /* outline: 1px solid pink; */
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  background-image: url("../images/space_background.png");
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#excel-window {
+    height: 90vh;
+    width: 70vw;
+
+    aspect-ratio: 7 / 5; /* TODO */
+
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+}
+
+
+/*- ================================================ -->
+<--                    TITLE BAR                     -->
+<-- ================================================ -*/
+#title-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    height: 2rem;
+    padding: 10px;
+
+    background: linear-gradient(to bottom, green, lightgreen);
+
+    color: white;
+    font-size: 18pt;
+}
+
+/* Title & Icon */
+#title-left {
+    display: flex;
+    gap: 1rem;
+}
+
+/* Window controls */
+header #title-bar #window-controls {
+    display: flex;
+    gap: 0.5rem;
+
+    transition: filter 0.2s ease;
+}
+
+.window-button {
+    width: 20px;
+    height: 20px;
+    padding: 0;
+
+    cursor: pointer;
+    
+    border-top: 2px solid #ffffff;
+    border-left: 2px solid #ffffff;
+    border-right: 2px solid #404040;
+    border-bottom: 2px solid #404040;
+
+    background: #c0c0c0;
+
+    position: relative;
+}
+
+.window-button:active {
+    border-top: 2px solid #404040;
+    border-left: 2px solid #404040;
+    border-right: 2px solid #ffffff;
+    border-bottom: 2px solid #ffffff;
+}
+
+/* Draw minimize button */
+.window-button#minimize::after {
+    content: "";
+
+    display: block;
+    width: 70%;
+    height: 15%;
+    background: black;
+
+    margin: 50% auto 0;
+}
+
+/* Draw maximize button */
+.window-button#maximize::before,
+.window-button#maximize::after {
+    content: "";
+
+    width: 35%;
+    height: 28%;
+
+    border: 2px solid black;
+    
+    position: absolute;
+}
+.window-button#maximize::before { /* top right box*/
+    top: 15%;
+    left: 35%;
+}
+.window-button#maximize::after { /* bottom left box*/
+    background: #c0c0c0;
+    top: 35%;
+    left: 15%;
+}
+
+/* Draw close button */
+.window-button#close::before,
+.window-button#close::after {
+    content: "";
+
+    width: 70%;
+    height: 15%;
+    background: black;
+    
+    position: absolute;
+    top: 45%;
+    left: 15%;
+}
+.window-button#close::before {
+    rotate: 45deg;
+}
+.window-button#close::after {
+    rotate: -45deg;
+}
+
+
+/*- ================================================ -->
+<--                    TOOL BAR                      -->
+<-- ================================================ -*/
+#tool-bar {
+    background-color: #b0b0b0;
+}
+
+/*- ================================================ -->
+<--                    ICON BAR                      -->
+<-- ================================================ -*/
+#icon-bar {
+    background-color: #a0a0a0;
+}
+
+/*- ================================================ -->
+<--                      SHEET                       -->
+<-- ================================================ -*/
+main {
+    overflow-x: hidden;
+    overflow-y: scroll;
+    background-color: #c0c0c0;
+}
+
+#sheet {
+    max-width: 100px;
+}
+
+/* Table structure */
+table {
+    border-collapse: collapse;
+}
+table, th, td {
+  border: 1px solid black;
+}
+
+/* Headers */
+th, thead {
+    background-color: #a0a0a0;
+}
+.vertical-header {
+    padding: 0 5px;
+}
+
+/* Cells */
+td {
+    width: 64px;
+    min-width: 64px;
+    height: 20px;
+    min-height: 20px;
+}
+
+/* Scrollbar */
+main::-webkit-scrollbar {
+    width: 16px;
+}
+main::-webkit-scrollbar-button {
+    background: #c0c0c0;
+
+    border-top: 2px solid #ffffff;
+    border-left: 2px solid #ffffff;
+    border-right: 2px solid #404040;
+    border-bottom: 2px solid #404040;
+
+    cursor: pointer;
+    position: relative;
+}
+main::-webkit-scrollbar-button:active {
+    border-top: 2px solid #404040;
+    border-left: 2px solid #404040;
+    border-right: 2px solid #ffffff;
+    border-bottom: 2px solid #ffffff;
+}
+
+main::-webkit-scrollbar-button:vertical:decrement {
+    background-color: gold;
+}
+main::-webkit-scrollbar-button:vertical:increment {
+    background-color: orange;
+}
+
+main::-webkit-scrollbar-track {
+    width: 16px;
+    background: #e0e0e0;
+
+    border-top: 2px solid #808080;
+    border-left: 2px solid #808080;
+    border-right: 2px solid #ffffff;
+    border-bottom: 2px solid #ffffff;
+}
+main::-webkit-scrollbar-thumb {
+    background: #c0c0c0;
+
+    border-top: 2px solid #ffffff;
+    border-left: 2px solid #ffffff;
+    border-right: 2px solid #404040;
+    border-bottom: 2px solid #404040;
+
+    cursor: pointer;
+}
+
+
+/*- ================================================ -->
+<--                     FOOTER                       -->
+<-- ================================================ -*/
+footer {
+    background-color: lightgreen;
+}
+
+#sheets-and-scrollbar {
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    scrollbar-width: none;
+    
+    height: 26px;
+
+    border-top: 2px solid #808080;
+}
+#sheets-and-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+/* Sheet tabs */
+nav#sheet-tabs {
+    display: flex;
+    align-items: center;
+
+    white-space: nowrap;
+
+    flex: 0 0 auto;
+
+    background-color: red;
+
+    position: relative;
+}
+
+.sheet-tab {
+    padding: 0 0.5rem;
+
+    width: 80px;
+
+    font-size: 12pt;
+    cursor: pointer;
+
+    background-color: lime;
+    
+    border: 1px solid black;
+
+    clip-path: polygon(0% 0%, 100% 0%, 92.5% 100%, 7.5% 100%);
+}
+
+
+/* Custom scrollbar */
+#horizontal-scrollbar {
+    display: flex;
+    align-items: center;
+    flex: 1;
+}
+
+#scroll-track {
+    flex: 1;
+    position: relative;
+    height: 16px;
+    background: #e0e0e0;
+
+    border-top: 2px solid #808080;
+    border-left: 2px solid #808080;
+    border-right: 2px solid #ffffff;
+    border-bottom: 2px solid #ffffff;
+}
+
+#scroll-thumb {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    height: 100%;
+    width: 60px;
+
+    background: #c0c0c0;
+
+    border-top: 2px solid #ffffff;
+    border-left: 2px solid #ffffff;
+    border-right: 2px solid #404040;
+    border-bottom: 2px solid #404040;
+
+    cursor: pointer;
+}
+
+.scroll-button {
+    width: 18px;
+    height: 18px;
+    padding: 0;
+
+    background: #c0c0c0;
+
+    border-top: 2px solid #ffffff;
+    border-left: 2px solid #ffffff;
+    border-right: 2px solid #404040;
+    border-bottom: 2px solid #404040;
+
+    cursor: pointer;
+    position: relative;
+}
+.scroll-button:active {
+    border-top: 2px solid #404040;
+    border-left: 2px solid #404040;
+    border-right: 2px solid #ffffff;
+    border-bottom: 2px solid #ffffff;
+}
+#left-scroll-button::before {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 2px;
+
+    width: 0;
+    height: 0;
+
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    border-right: 8px solid black;
+}
+#right-scroll-button::before {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 4px;
+
+    width: 0;
+    height: 0;
+
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    border-left: 8px solid black;
+}

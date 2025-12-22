@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Tracker</title>
+    <link rel="stylesheet" href="css/style.css"> <!-- STYLE -->
+     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+        crossorigin=""/>
+    <script src="https://d3js.org/d3.v5.min.js"></script> <!-- D3 For CSV data manipulation -->
+</head>
+
+<body>
+                                                         
+ <!--
+ ┌────────────────────────────────────────────────┐  
+ │               RESTAURANT TRACKER               │  
+ └────────────────────────────────────────────────┘  
+ ┌───────────────────────────────┐ ┌──────────────┐  
+ │                               │ │              │  
+ │                               │ │              │  
+ │                               │ │              │  
+ │              MAP              │ │    FILTER    │  
+ │                               │ │    & LIST    │  
+ │                               │ │              │  
+ │                               │ │              │  
+ │                               │ │              │  
+ └───────────────────────────────┘ └──────────────┘  
+-->
+    <div id="body-container">
+        <div id="title-container">
+            <div id="title">
+                Restaurant Tracker
+            </div>
+        </div>
+
+        <!-- Restaurant Map -->
+        <div id="map-container">
+            <div id="map"></div>
+        </div>
+
+        <!-- Sidebar -->
+        <div id="sidebar-container">
+            <!-- Filtering Options -->
+            <div id="filter-container">
+                <div id="filter-header">
+                    Filter Options
+                    <button id="filter-dropdown-button">▼</button>
+                </div>
+
+                <div id="filter-dropdown" style="display:none;">
+                    <div id="distance-filter">
+                        <div id="distance-header">Distance filter!</div>
+                        <div id="distance-subheader">(Places within X minutes from clicked location)</div>
+                        <button id="distance-filter-add-button">Add Isochrone</button>
+                        <button id="distance-filter-remove-button" disabled>Remove Isochrone</button>
+                        <input id="distance-filter-input" placeholder="Time (minutes)">
+                    </div>
+
+                    <div id="filter-menus">
+                        <div id="menu-header">Attribute filters!</div>
+                        <div id="visited-filter" class="multi-select">
+                            <div class="multi-option-header">Visited</div>
+                            <!-- <div class="multi-default">Select visited...</div> -->
+                            <div class="multi-option multi-any"><input type="checkbox"> Any</div>
+                            <div class="multi-option"><input type="checkbox"> Visited </div>
+                            <div class="multi-option"><input type="checkbox"> Unvisited </div>
+                        </div>
+
+                        <div id="cuisine-filter" class="multi-select">
+                            <div class="multi-option-header">Cuisine</div>
+                            <!-- <div class="multi-default">Select cuisine...</div> -->
+                            <div class="multi-option multi-any"><input type="checkbox"> Any</div>
+                        </div>
+
+                        <div id="rating-filter" class="multi-select">
+                            <div class="multi-option-header">Rating</div>
+                            <!-- <div class="multi-default">Select rating...</div> -->
+                            <div class="multi-option multi-any"><input type="checkbox"> Any</div>
+                            <div class="multi-option"><input type="checkbox"> Low </div>
+                            <div class="multi-option"><input type="checkbox"> Medium </div>
+                            <div class="multi-option"><input type="checkbox"> High </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Choose random restaurant from selected -->
+            <div id="random-container">
+                <button id="random-button">Choose Random: </button>
+                <input type="text" id="random-selection" readonly>
+            </div>
+            
+            <!-- Export Sharable URL -->
+            <div id="share-container">
+                <button id="export-button">Share Selections!</button>
+            </div>
+
+            <!-- Restaurant Table -->
+            <div id="outer-table-container">
+                <div id="inner-table-container">
+                    <table id="sidebar-table">
+                        <thead id="sidebar-table-header">
+                            <tr>
+                                <td class="name">Name <button id="sort-name-button" class="table-sort-button">▼</button></td>
+                                <td class="cuisine">Cuisine <button id="sort-cuisine-button" class="table-sort-button">▼</button></td>
+                                <td class="visited">Tried <button id="sort-visited-button" class="table-sort-button">▼</button></td>
+                                <td class="shown">Show <button id="sort-shown-button" class="table-sort-button">▼</button></td>
+                            </tr>
+                        </thead>
+                        <tbody id="sidebar-table-body">
+                            <!-- Will be filled in by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+        crossorigin=""></script>
+    <script type="module" src="js/main.js"></script>
+    <!-- <a href="https://www.flaticon.com/free-icons/location" title="location icons">Location icons created by Yogi Aprelliyanto - Flaticon</a> -->
+</body>

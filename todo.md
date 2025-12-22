@@ -15,3 +15,4 @@
 
 todo:
 * [-] Update CSS
+* [-] Reduce # of markers on map

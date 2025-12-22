@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Tracker</title>
+    <link rel="stylesheet" href="css/homepage.css"> <!-- STYLE -->
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=0.4" /> -->
+</head>
+
+<body>
+    <div id="excel-window">
+
+
+        <header>
+            <div id="title-bar">
+                <!-- Window title -->
+                <div id="title-left">
+                    <span id="window-icon">∟</span>
+                    <span id="window-title">Kyle's Corner</span>
+                </div>
+                <div id="window-controls">
+                    <button class="window-button" id="minimize"></button>
+                    <button class="window-button" id="maximize"></button>
+                    <button class="window-button" id="close"></button>
+                </div>
+            </div>
+
+            <!-- Tool bar -->
+            <nav id="tool-bar"></nav>
+
+            <!-- Icon bar -->
+            <nav id="icon-bar"#></nav>
+        </header>
+
+        <main>
+            <table id="sheet"></table>
+        </main>
+
+        <footer>
+            <div id="sheets-and-scrollbar">
+                <nav id="sheet-tabs">
+                    <div class="sheet-tab" id="sheet-tab-1"><a href="#">home</a></div>
+                    <div class="sheet-tab" id="sheet-tab-2"><a href="#">music</a></div>
+                    <div class="sheet-tab" id="sheet-tab-3"><a href="#">food list</a></div>
+                    <div class="sheet-tab" id="sheet-tab-4"><a href="#">recipies</a></div>
+                    <div class="sheet-tab" id="sheet-tab-5"><a href="#">about</a></div>
+                    <!-- <div><a href="#">vinyls</a></div> -->
+                    <!-- <div><a href="#">fiber arts</a></div> -->
+                    <!-- <div><a href="#">ceramics</a></div> -->
+                    <!-- <div><a href="#">travel</a></div> -->
+                </nav>
+                <div id="horizontal-scrollbar">
+                    <button class="scroll-button" id="left-scroll-button"></button>
+                    <div id="scroll-track">
+                        <div id="scroll-thumb"></div>
+                    </div>
+                    <button class="scroll-button" id="right-scroll-button"></button>
+                </div>
+            </div>
+
+            <div id="footer-bar"></div>
+        </footer>
+
+
+    </div>
+
+    <script src="js/homepage.js"></script>
+</body>
