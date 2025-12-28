@@ -6,19 +6,26 @@ todo:
 
 # HOMEPAGE
 ## GENERAL
-* [+] Add generic window outline around everything
 
 ## TEXT BAR
-* [-] Add info box somewhere in toolbar saying "Readonly file" or something similar
 
 ## CELL BAR
-* [-] Allow user to select current page in the "current sheet" dropdown
 
 ## SHEET
 * [?] Have user be able to select/highlight cells/rows/columns (but not write)
     * [?] Includes navigation by arrow keys
+* [+] Make top left corner cell super sticky (always on top of everything - just need to give own class)
 
 ## FOOTER SHEET TABS
-* [-] Have small tab to the right/left of all tabs, indicating if there are hidden tabs in that direction
-    * [-] Always make selected tab first
-    * [-] Always keep selected tab in first position when updating display window
+
+## HOMEPAGE
+* [-] Listening to?
+* [-] 
+
+
+
+
+* Font dropdown - corresponds to zoom
+* undo/redo - page back/forward
+* x out/close window - close webpage
+* 'Help' - link to about page?

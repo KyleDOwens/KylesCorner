@@ -9,14 +9,14 @@
 * {
     box-sizing: border-box;
     font-family: "fixedsys", sans-serif;
-    
+
     /* outline: 1px solid pink; */
 }
 
 html, body {
-  height: 100%;
-  margin: 0;
-  background-image: url("../images/space_background.png");
+    height: 100%;
+    margin: 0;
+    background-image: url("../images/space_background.png");
 }
 
 body {
@@ -44,12 +44,27 @@ body {
     display: none !important;
 }
 
+.horizontal-group {
+    display: flex;
+}
 
-/*- ================================================ -->
-<--                  GENERIC BUTTONS                 -->
-<-- ================================================ -*/
+.faint-text {
+    color: #606060;
+}
+
+/* z-index */
+:root {
+    --zindex-sheet-h-header: 11;
+    --zindex-sheet-v-header: 8;
+    --zindex-sheet-cells: 9;
+    --zindex-dropdown: 20;
+}
+
+/*-- ================================================ --->
+<---                  GENERIC BUTTONS                 --->
+<--- ================================================ --*/
 .square-button {
-    width: 18px;
+    width: 18px; /* TODO: maybe make this value a constant since i use 18px measurement elsewhere in reference to this */
     height: 18px;
     padding: 0;
 
@@ -128,9 +143,9 @@ body {
 }
 
 
-/*- ================================================ -->
-<--                    TITLE BAR                     -->
-<-- ================================================ -*/
+/*-- ================================================ --->
+<---                    TITLE BAR                     --->
+<--- ================================================ --*/
 #title-bar {
     display: flex;
     justify-content: space-between;
@@ -165,14 +180,8 @@ header #title-bar #window-controls {
     transition: filter 0.2s ease;
 }
 
-.window-button {
-    width: 20px;
-    height: 20px;
-    padding: 0;
-}
-
 /* Draw minimize button */
-.window-button#minimize::after {
+#minimize::after {
     content: "";
 
     display: block;
@@ -184,8 +193,8 @@ header #title-bar #window-controls {
 }
 
 /* Draw maximize button */
-.window-button#maximize::before,
-.window-button#maximize::after {
+#maximize::before,
+#maximize::after {
     content: "";
 
     width: 35%;
@@ -195,19 +204,19 @@ header #title-bar #window-controls {
     
     position: absolute;
 }
-.window-button#maximize::before { /* top right box*/
+#maximize::before { /* top right box*/
     top: 15%;
     left: 35%;
 }
-.window-button#maximize::after { /* bottom left box*/
+#maximize::after { /* bottom left box*/
     background-color: #c0c0c0;
     top: 35%;
     left: 15%;
 }
 
 /* Draw close button */
-.window-button#close::before,
-.window-button#close::after {
+#close::before,
+#close::after {
     content: "";
 
     width: 70%;
@@ -218,21 +227,22 @@ header #title-bar #window-controls {
     top: 45%;
     left: 15%;
 }
-.window-button#close::before {
+#close::before {
     rotate: 45deg;
 }
-.window-button#close::after {
+#close::after {
     rotate: -45deg;
 }
 
 
-/*- ================================================ -->
-<--                    MENU BAR                      -->
-<-- ================================================ -*/
+/*-- ================================================ --->
+<---                    MENU BAR                      --->
+<--- ================================================ --*/
 #menu-bar {
     background-color: #c0c0c0;
     min-height: 20px;
     padding-left: 0rem;
+    user-select: none;
 }
 
 .menu-button {
@@ -247,9 +257,9 @@ header #title-bar #window-controls {
     background-color: #a0a0a0;
 }
 
-/*- ================================================ -->
-<--                    TEXT BAR                      -->
-<-- ================================================ -*/
+/*-- ================================================ --->
+<---                    TEXT BAR                      --->
+<--- ================================================ --*/
 #text-bar {
     background-color: #b0b0b0;
     min-height: 18px;
@@ -257,26 +267,217 @@ header #title-bar #window-controls {
     display: flex;
     padding-left: 0.5rem;
     gap: 1rem;
+
+    align-items: center;
+    user-select: none;
+}
+#text-bar .square-button:not(.dropdown-display button) {
+    margin-top: 2px;
 }
 
-.horizontal-group {
-    display: flex;
+#save-button::before {
+    content: "";
+
+    position: absolute;
+    top: 5%;
+    left: 9%;
+
+    width: 70%;
+    height: 72%;
+
+    background-color: #808080; /* main box*/
+
+    border: 1px solid black;
+}
+#save-button::after {
+    content: "";
+
+    position: absolute;
+    top: 5%;
+    left: 25%;
+
+    width: 40%;
+    height: 32%;
+
+    background-color: #e0e0e0; /* upper box*/
+
+    border: 1px solid black;
+
+    box-shadow: 0px 3px 0px 0 #303030; /* lower box*/
 }
 
-.dropdown-input {
-    text-align: center;
+#undo-button::before {
+    content: "";
+
+    position: absolute;
+    top: 25%;
+    left: 30%;
+
+    width: 40%;
+    height: 40%;
+
+    border-top: 2px solid black;
+    border-left: 2px solid black;
+
+    rotate: 45deg;
+}
+#undo-button::after {
+    content: "";
+
+    position: absolute;
+    top: 30%;
+    left: 5%;
+
+    border-top: 4px solid transparent;
+    border-bottom: 4px solid transparent;
+    border-right: 6px solid black;
+
+    rotate: -45deg;
+}
+
+#redo-button::before {
+    content: "";
+
+    position: absolute;
+    top: 25%;
+    left: 17%;
+
+    width: 40%;
+    height: 40%;
+
+    border-top: 2px solid black;
+    border-left: 2px solid black;
+
+    rotate: 45deg;
+}
+#redo-button::after {
+    content: "";
+
+    position: absolute;
+    top: 30%;
+    left: 55%;
+
+    border-top: 4px solid transparent;
+    border-bottom: 4px solid transparent;
+    border-left: 6px solid black;
+
+    rotate: 45deg;
+}
+
+#cut-button::before {
+    content: "o";
+    color: transparent;
+
+    position: absolute;
+    top: -10%;
+    left: 0%;
+
+    height: 80%;
     
-    border-top: 2px solid #404040;
-    border-left: 2px solid #404040;
-    border-right: 2px solid #404040;
+    border-right: 2px solid black;
+    text-shadow: 2px 1px 0 black;
+    border-top: 2px solid transparent;
+
+    rotate: 20deg;
 }
+#cut-button::after {
+    content: "o";
+    color: transparent;
+
+    position: absolute;
+    top: -10%;
+    left: 40%;
+
+    height: 80%;
+    
+    border-left: 2px solid black;
+    text-shadow: -2px 1px 0 black;
+    border-top: 2px solid transparent;
+
+    rotate: -20deg;
+}
+
+#copy-button::before {
+    content: "";
+    
+    position: absolute;
+    top: 17%;
+    left: 10%;
+
+    width: 35%;
+    height: 50%;
+    
+    border: 2px solid black;
+}
+#copy-button::after {
+    content: "";
+    
+    position: absolute;
+    top: 0%;
+    left: 30%;
+
+    width: 35%;
+    height: 50%;
+    
+    border: 2px solid black;
+    /* background-color: #c0c0c0; */
+    background:
+        linear-gradient(
+            to bottom,
+            #000 1px,
+            #c0c0c0 1px
+        ) 1px 1px/ 3px 2px repeat-y,
+        #c0c0c0;
+}
+
+#paste-button-2 {
+    position: absolute;
+    top: 10%;
+    left: 10%;
+
+    width: 60%;
+    height: 80%;
+    border: 2px solid black;
+}
+#paste-button::before {
+    content: "";
+    
+    position: absolute;
+    top: 2%;
+    left: 25%;
+
+    width: 11%;
+    height: 15%;
+    border: 1px solid black;
+    background-color: black;
+}
+#paste-button::after {
+    content: "";
+    
+    position: absolute;
+    top: 35%;
+    left: 40%;
+
+    width: 25%;
+    height: 35%;
+    
+    border: 2px solid black;
+    /* background-color: #c0c0c0; */
+    background:
+        linear-gradient(
+            to bottom,
+            #000 1px,
+            #c0c0c0 1px
+        ) 1px 1px/ 2px 2px repeat-y,
+        #c0c0c0;
+}
+
 #font-input {
     width: 12rem;
 }
 #font-size-input {
     width: 3rem;
 }
-
 
 .align-button::before {
     content: "";
@@ -292,7 +493,6 @@ header #title-bar #window-controls {
 
     box-shadow: 0 8px black;
 }
-
 #left-align-button::after {
     content: "";
 
@@ -337,9 +537,9 @@ header #title-bar #window-controls {
 }
 
 
-/*- ================================================ -->
-<--                    CELL BAR                      -->
-<-- ================================================ -*/
+/*-- ================================================ --->
+<---                    CELL BAR                      --->
+<--- ================================================ --*/
 #cell-bar {
     background-color: #a0a0a0;
     min-height: 20px;
@@ -347,24 +547,37 @@ header #title-bar #window-controls {
     display: flex;
 }
 
-#current-cell-input {
-    text-align: center;
-    pointer-events: none;
-}
 
 #blank-input {
-    width: 2rem;
+    width: 5%;
+    max-width: 2rem;
     border-left: 2px solid #ffffff;
     border-right: 2px solid #404040;
     pointer-events: none;
 }
+#formula-input {
+    width: 20%;
+    border-left: 2px solid #ffffff;
+    border-right: 2px solid #404040;
+}
+@media only screen and (max-width: 900px) {
+    #blank-input,
+    #formula-input {
+        display: none;
+    }
+}
 
 
-
+/*-- ================================================ --->
+<---                     MARQUEE                      --->
+<--- ================================================ --*/
 .marquee-container {
-    flex: 0.95;
-    border: outset;
+    flex: 1 1 auto;
     background-color: #ffffff;
+    border-bottom: 2px solid #808080;
+    border-left: 2px solid #ffffff;
+    border-right: 2px solid #404040;
+    border-top: 2px solid black;
 
     display: flex;
 
@@ -377,37 +590,35 @@ header #title-bar #window-controls {
 
     position: absolute;
     overflow: hidden;
+    margin-top: -1px;
 
-    animation: marquee calc(3s * var(--item-count) * 2) linear infinite;
+    animation: marquee calc(6s * var(--item-count) * 2) linear infinite;
 }
 .marquee-item {
     white-space: pre;
     float: left;
     width: max-content;
     padding-right: 75px;
+    user-select: none;
 }
-.marquee:hover div {
+/* .marquee-container:hover div {
     -webkit-animation-play-state: paused;
     animation-play-state: paused;
-}
+} */
 @keyframes marquee {
     from { transform: translateX(0) }
     to { transform: translateX(-50%) }
 }
 
-/* .marquee-container:hover div {
-    -webkit-animation-play-state: paused;
-    animation-play-state: paused;
-} */
 
-
-/*- ================================================ -->
-<--                      SHEET                       -->
-<-- ================================================ -*/
+/*-- ================================================ --->
+<---                      SHEET                       --->
+<--- ================================================ --*/
 main {
     overflow-x: hidden;
     overflow-y: hidden;
     display: flex;
+    position: relative;
 }
 
 #sheet-container {
@@ -423,16 +634,39 @@ main {
 
 /* Table structure */
 table {
-    border-collapse: collapse;
+    border-collapse: separate;
+    border-spacing: 0;
     width: 100%;
     height: 100%;
+}
+#sheet {
+    border: none;
 }
 table, th, td {
   border: 1px solid #d6d6d6;
 }
 
 /* Headers */
+#header-corner {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    z-index: 11;
+
+    background-color: #c0c0c0;
+    border: 1px solid #2C2C2C;
+
+    height: 20px;
+    min-height: 20px;
+
+    width:32px;
+    min-width:32px;
+}
 th, thead {
+    position: sticky;
+    top: 0;
+    z-index: 9;
+    
     background-color: #c0c0c0;
     border: 1px solid #2C2C2C;
     height: 20px;
@@ -442,7 +676,12 @@ th, thead {
     width:32px;
     min-width:32px;
     border: 1px solid #2C2C2C;
+
+    position: sticky;
+    left: 0;
+    z-index: 8;
 }
+
 
 /* Cells */
 td {
@@ -454,9 +693,9 @@ td {
 }
 
 
-/*- ================================================ -->
-<--                     FOOTER                       -->
-<-- ================================================ -*/
+/*-- ================================================ --->
+<---                     FOOTER                       --->
+<--- ================================================ --*/
 footer {
     background: linear-gradient(to bottom, blue, cornflowerblue);
 }
@@ -543,13 +782,13 @@ nav#sheet-tabs {
     margin-top: -1px;
 }
 
-nav#sheet-tabs a {
+.sheet-link {
     text-decoration: none;
 }
 
-/*- ================================================ -->
-<--                CUSTOM SCROLLBARS                 -->
-<-- ================================================ -*/
+/*-- ================================================ --->
+<---                CUSTOM SCROLLBARS                 --->
+<--- ================================================ --*/
 #horizontal-scrollbar {
     display: flex;
     flex: 1;
@@ -603,3 +842,43 @@ nav#sheet-tabs a {
     width: 100%;
 }
 
+
+/*-- ================================================ --->
+<---                 CUSTOM DROPDOWN                  --->
+<--- ================================================ --*/
+.dropdown {
+    position: relative;
+}
+.dropdown-display {
+    border-top: 2px solid #404040;
+    border-left: 2px solid #404040;
+    border-right: 2px solid #404040;
+    user-select: none;
+}
+.dropdown-input {
+    text-align: center;
+    cursor: pointer;
+}
+.dropdown-menu {
+    margin-left: 3px;
+
+    position: absolute;
+    z-index: 20;
+    width: calc(100% - 22px - 4px);
+
+    background-color: #ffffff;
+    border-left: 2px solid #9e9e9e;
+    border-right: 2px solid #404040;
+    border-bottom: 2px solid #404040;
+}
+.dropdown-item {
+    padding-left: 1.5rem;
+    color: #000;
+    border-top: 1px solid #f0f0f0;
+}
+.dropdown-item:hover {
+    background-color: #f0f0f0;
+}
+.dropdown-selected, .dropdown-selected:hover {
+    background-color: #e0e0e0;
+}

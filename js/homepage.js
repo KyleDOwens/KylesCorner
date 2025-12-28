@@ -1,10 +1,14 @@
 document.addEventListener("DOMContentLoaded", () => {
     initializeSheet();
-    resizeHorizontalScrollThumb();
-    resizeVerticalScrollThumb();
+
     shortenTabTitles();
     applyTabZIndex();
     updateTabDisplay();
+
+    resizeHorizontalScrollThumb();
+    resizeVerticalScrollThumb();
+
+    moveDivsIntoSheet();
 });
 
 function initializeSheet() {
@@ -22,9 +26,18 @@ function initializeSheet() {
         let newRow = sheet.insertRow(-1);
         newRow.insertCell().outerHTML = `<th class="vertical-header">${i+1}</th>`;
         for (let j = 0; j < colHeaders.length - 1; j++) {
-            newRow.insertCell().innerHTML = "";
+            newRow.insertCell().outerHTML = `<td id="${colHeaders[j+1]}${i+1}"></td>`;
         }
     }
+}
+
+function moveDivsIntoSheet() {
+    // console.log("Movign");
+    // let test2 = document.getElementById("test2");
+
+    // let B3 = document.getElementById("B3");
+
+    // B3.appendChild(test2);
 }
 
 
@@ -292,38 +305,11 @@ document.addEventListener("mouseup", () => {
 function shortenTabTitles() {
     let sheetTabs = document.querySelectorAll(".sheet-tab");
     for (let tab of sheetTabs) {
-        // Get width of body part of tab
-        let tabWidth = tab.clientWidth;
-
-        // Get width of title text in tab
+        // Crude way to limit overflow - limit sheet length to 8 characters (ok since using monospaced font)
         let anchor = tab.querySelector("a");
-        let titleWidth = tab.scrollWidth;
-        let pxPerChar = titleWidth / anchor.innerText.length; // ok since using monospaced font
-
-        // Remove the ellipsis in case there is more space now
-
-        // Crude way to limit overflow - limit sheet length to 8 characters
         if (anchor.innerText.length > 8) {
-            console.l
             anchor.innerText = anchor.innerText.slice(0, 7) + "…";
         }
-        
-        // If overflowing, continuously shorten and replace last char with …
-        // let ellipsisIndex = -2;
-        // while (titleWidth > tabWidth) {
-        //     anchor.innerText = anchor.innerText.slice(0, -1);
-        //     titleWidth -= pxPerChar;
-
-        //     ellipsisIndex--;
-
-        //     if (ellipsisIndex < -16) {
-        //         break;
-        //     }
-        // }
-
-        // if (ellipsisIndex != -2) {
-        //     anchor.innerText = anchor.innerText.slice(0, -3) + "…";
-        // }
     }
 }
 window.addEventListener("resize", () => {
@@ -338,6 +324,7 @@ function applyTabZIndex() {
 }
 
 function makeActiveTab(activeTab) {
+    // Apply appropraite CSS classes
     let sheetTabs = document.querySelectorAll(".sheet-tab");
     sheetTabs.forEach((tab, i) => {
         tab.classList.remove("active-tab");
@@ -354,8 +341,9 @@ document.querySelectorAll(".sheet-tab").forEach(tab => tab.addEventListener("cli
 /* Tab display buttons */
 let firstTabDisplayedIndex = 0;
 function updateTabDisplay() {
-    console.log(firstTabDisplayedIndex);
-    document.querySelectorAll(".sheet-tab").forEach((tab, i) => {
+    // Update which 5 tabs are shown
+    let sheetTabs = document.querySelectorAll(".sheet-tab")
+    sheetTabs.forEach((tab, i) => {
         if (i >= firstTabDisplayedIndex && i < firstTabDisplayedIndex + 5) {
             tab.classList.remove("hidden");
         }
@@ -363,6 +351,26 @@ function updateTabDisplay() {
             tab.classList.add("hidden");
         }
     });
+
+    // Update tab selection buttons
+    if (firstTabDisplayedIndex == 0) {
+        document.getElementById("first-sheet-button").disabled = true;
+        document.getElementById("previous-sheet-button").disabled = true;
+        document.getElementById("next-sheet-button").disabled = false;
+        document.getElementById("last-sheet-button").disabled = false;
+    }
+    else if (firstTabDisplayedIndex == (sheetTabs.length - 5)) {
+        document.getElementById("first-sheet-button").disabled = false;
+        document.getElementById("previous-sheet-button").disabled = false;
+        document.getElementById("next-sheet-button").disabled = true;
+        document.getElementById("last-sheet-button").disabled = true;
+    }
+    else {
+        document.getElementById("first-sheet-button").disabled = false;
+        document.getElementById("previous-sheet-button").disabled = false;
+        document.getElementById("next-sheet-button").disabled = false;
+        document.getElementById("last-sheet-button").disabled = false;
+    }
 }
 
 document.getElementById("first-sheet-button").addEventListener("click", () => {
@@ -381,3 +389,12 @@ document.getElementById("last-sheet-button").addEventListener("click", () => {
     firstTabDisplayedIndex = document.querySelectorAll(".sheet-tab").length - 5;
     updateTabDisplay();
 });
+
+
+function toggleSheetDropdown() {
+    this.classList.toggle("down-button");
+    this.classList.toggle("up-button");
+    document.getElementById("sheet-dropdown-menu").classList.toggle("hidden");
+}
+document.getElementById("sheet-selector-dropdown").addEventListener("click", toggleSheetDropdown);
+document.getElementById("sheet-selector-input").addEventListener("click", toggleSheetDropdown);
