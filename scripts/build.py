@@ -1,5 +1,6 @@
 from html.parser import HTMLParser
 import shutil
+import csv
 import os
 
 class MyHTMLParser(HTMLParser):
@@ -14,6 +15,8 @@ class MyHTMLParser(HTMLParser):
 
 
 #######################################################
+# Build the individual page HTML/CSS/JavaScript
+
 BUILD_DIR = "./build"
 BASE_FILE = "base"
 
@@ -68,3 +71,42 @@ for file in os.listdir(os.fsencode("./pages")):
 
     # Build JS
     shutil.copyfile(f"./js/{page_name}.js", f"./build/js/{page_name}.js")
+
+
+#######################################################
+# Load in CSV data to pages that need it
+
+# Load restaurants from CSV
+restaurant_rows = ""
+with open(f"./csv/restaurants.csv", "r") as restaurants_file:
+    reader = csv.DictReader(restaurants_file, delimiter=",")
+    next(reader, None)
+
+    for row in reader:
+        restaurant_rows += (
+        '<tr>'
+            f'<td class="name">{row["name"]}</td>'
+            f'<td class="cuisine">{row["cuisine"]}</td>'
+            f'<td class="visited">{row["visited"]}</td>'
+            '<td class="shown">'
+                '<input type="checkbox" onclick="manuallySelectRestaurant(this)" checked="">'
+            '</td>'
+            f'<td class="rating" style="display:none">{row["rating"]}</td>'
+            f'<td class="notes" style="display:none">{row["notes"]}</td>'
+            f'<td class="gps" style="display:none">{row["gps"]}</td>'
+            f'<td class="originalUrl" style="display:none">{row["originalUrl"]}</td>'
+        '</tr>\n'
+        )
+
+# Fill restaurants.html with CSV data
+unfilled_html = None
+with open(f"{BUILD_DIR}/restaurants.html", "r") as input_file:
+    unfilled_html = input_file.read()
+
+filled_html = unfilled_html.replace("REPLACEME_RESTAURANTROWS", restaurant_rows)
+
+with open(f"{BUILD_DIR}/restaurants.html", "w") as output_file:
+    output_file.write(filled_html)
+
+
+# TODO: load albums CSV data into music.html

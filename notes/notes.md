@@ -30,26 +30,23 @@ This performs a few major functions:
 1) Applies the base "excel template" to all pages
 2) Loads all CSV information into static HTML
 
-#### === Details for function 1 ===
+#### === Details for step 1 ===
 I have designed this website to have a stylistic theme of looking like 90s Excel. So, the website is intended to look as if it is running an old Excel program, where the content of the website is contained within the Excel sheets of the program.
 
 As a result, all pages share the same base design of the "Excel program". It is only the content within the program that differs. The design of that "Excel program" is refered to as the "base" or the "template". All pages share this exact same template. 
 
 However, I (obviously) do not want to repeatedly copy-paste that template into each subpages' HTML for reasons that should be obvious. Additionally, as a self-imposed rule I want my website to be static, ruling out server-side or client-side solutions. So, I have decided to create a build script that will build each page for me, combining the HTML/CSS/Javascript of the template with the content of the individual webpages. There are existing tools for this, but I have decided to create my own version for fun.
 
-Each page's individual content will be stored within a file following the naming format page-overlay.html. Within the template (base.html), each individual page's content will be inserted into the <div> with id "sheet-overlay". The result will be copied into the corresponding output file named build/page.html.
+Each page's individual content will be stored within a file following the naming format page-overlay.html. Within the template (`base.html`), each individual page's content will be inserted into the `div` with id "sheet-overlay". The result will be copied into the corresponding output file named `build/page.html`.
 
-For CSS and JavaScript, the format is simpler. I straight up concatenate the page's CSS/JavaScript file to the base's CSS/Javascript file. The output is copied into build/css/page.css and build/js/page.js.
+For CSS and JavaScript, the format is simpler. I straight up concatenate the page's CSS/JavaScript file to the base's CSS/Javascript file. The output is copied into `build/css/page.css` and `build/js/page.js`.
 
-#### === Details for function 2 ===
+#### === Details for step 2 ===
 A few of the pages have the purpose of visually displaying data stored in a CSV. In particular, these pages are the album list(s) and the restaurant list.
 
 Rather than dynamically load the data from these CSVs (which takes a significant amount of overhead), I load the CSV data into the HTML files during the build process so the entire website is static (mostly, there is an exception with the LeafletJS map, but that can be ignored for now).
 
-This is done ...
-
-So, the final process is:
-load base & page files --> combine into single file --> load CSV data (if needed) --> output to build/ dir
+This is done in a separate step *after* combining the base base and page files in step 1. To do this I load in the CSV data, format it into an HTML string, then perform a simple string replace in the destination html file. 
 
 
 ## Albums scripts
