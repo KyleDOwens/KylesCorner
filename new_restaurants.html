@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/restaurants.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/> <!-- TODO: -->
+    <!-- <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/"/> TODO: -->
     <!-- <meta name="viewport" content="width=device-width, initial-scale=0.4" /> -->
 </head>
 
@@ -202,15 +203,15 @@
 
     <!-- Choose random restaurant from selected -->
     <div id="random-container">
-        <button class="outset" id="random-button">choose random</button>
+        <button class="outset" id="random-button">Choose random</button>
         <input class="inset" type="text" id="random-selection" readonly>
         <input type="text" id="random-cuisine" readonly>
     </div>
     
     <!-- Export Sharable URL -->
     <div id="share-container">
-        <div><button id="share-button">share selections!</button></div>
-        <div id="share-subheader"></div>
+        <div><button id="share-button">Share selections!</button></div>
+        <div id="share-subheader">&nbsp;</div>
     </div>
 </div>
 
@@ -235,8 +236,9 @@
             <div class="filter-header">Distance filter!</div>
             <div class="filter-subheader faint-text">(Places within X minutes from clicked location)</div>
             <input id="distance-filter-input" placeholder="Time (minutes)">
-            <button class="outset" id="distance-filter-add-button">Add Isochrone</button>
-            <button class="outset" id="distance-filter-remove-button" disabled>Remove Isochrone</button>
+            <button class="outset" id="distance-filter-add-button">Add isochrone</button>
+            <button class="outset" id="distance-filter-remove-button" disabled>Remove isochrone</button>
+            <div class="faint-text" id="distance-error">&nbsp;</div>
         </div>
 
         <!-- Attribute filter menus -->
@@ -407,6 +409,63 @@
 
     <div class="gif-container">
         <img src="/images/restaurants/food_&_fun.gif" alt="Sandwich Dancing Gif" width="150px">
+    </div>
+</div>
+
+<!-- Guide -->
+<div class="embedded-window" id="guide-window">
+    <div class="title-bar">
+        <div class="title-left">
+            <span>Guide</span>
+        </div>
+
+        <div class="window-controls">
+            <button class="square-button minimize"></button>
+            <button class="square-button maximize"></button>
+            <button class="square-button close"></button>
+        </div>
+    </div>
+
+    <div class="window-container">
+        <p>
+            This page holds all the restaurants in San Antonio that I have been to, or want to go to!
+        </p>
+        <p>
+            There is a <b>Map View</b> which shows the physical locations of each restaurant, and a <b>Table View</b> which lists out each restaurant individually.
+        </p>
+        <p>
+            Each <b>marker</b> on the map represents a restaurant.
+            Clicking a marker will bring up its information, including a link to it on Google.
+            Places I have visited are colored <span class="visited-high" style="filter: none">green</span>.
+                I give them ratings of how much I enjoyed it:
+                <span class="visited-low" style="filter: none">low</span>,
+                <span class="visited-medium" style="filter: none">meidum</span>, or
+                <span class="visited-high" style="filter: none">high</span>.
+            Places I want to go are colored <span class="unvisited-high" style="filter: none">blue</span>.
+                I give them ratings of how badly I want to go:
+                <span class="unvisited-low" style="filter: none">low</span>,
+                <span class="unvisited-medium" style="filter: none">meidum</span>, or
+                <span class="unvisited-high" style="filter: none">high</span>.
+        </p>
+        <p>
+            You can click the checkbox in the table to <b>show/hide</b> a restaurant on the map.
+            If you want to apply rules for which restaurants are shown, you can use the <b>Filter Options</b> window.
+            This includes rules for visited/unvisted, cuisine type, and rating.
+        </p>
+        <p>
+            You can also add a <b>Distance Filter</b> to only show restaurants that are reachable from a starting point in a certain amount of time
+            (fun fact, the map drawn by doing this is called an <i>isochrone</i>). To do this,
+            (1) enter in the the max travel time in minutes.
+            (2) click the <b>Add Isochrone</b> button
+            (3) click on the map at your starting location.
+        </p>
+        <p>
+            If you click the <b>Choose Random</b> button, a random restaurant will be chosen from the restaurants shown on the map.
+        </p>
+        <p>
+            If you want to share your map with someone, click the <b>Share Selections</b> button!
+            This will create a custom URL that leads to your exact map and automatically copy it to your clipboard, which you can then share.
+        </p>
     </div>
 </div>
 

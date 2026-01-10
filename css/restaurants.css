@@ -3,28 +3,34 @@
 ***************************/
 /* Rather than have different colored markers, just transform a single black marker into any color I want */
 .visited-low {
+    color: #A8C95B;
     filter: invert(90%) sepia(66%) saturate(511%) hue-rotate(18deg) brightness(88%) contrast(76%)
         drop-shadow(1px 0 0 black) drop-shadow(0 1px 0 black) drop-shadow(-1px 0 0 black) drop-shadow(0 -1px 0 black);
 }
 .visited-medium {
+    color: #69984E;
     filter: invert(51%) sepia(56%) saturate(363%) hue-rotate(54deg) brightness(95%) contrast(86%)
         drop-shadow(1px 0 0 black) drop-shadow(0 1px 0 black) drop-shadow(-1px 0 0 black) drop-shadow(0 -1px 0 black);
 }
 .visited-high {
+    color: #135E26;
     filter: invert(26%) sepia(15%) saturate(2489%) hue-rotate(83deg) brightness(98%) contrast(88%)
         drop-shadow(1px 0 0 black) drop-shadow(0 1px 0 black) drop-shadow(-1px 0 0 black) drop-shadow(0 -1px 0 black);
 }
 
 .unvisited-low {
+    color: #92CAF9;
     filter: invert(71%) sepia(57%) saturate(490%) hue-rotate(180deg) brightness(102%) contrast(95%)
         drop-shadow(1px 0 0 black) drop-shadow(0 1px 0 black) drop-shadow(-1px 0 0 black) drop-shadow(0 -1px 0 black);
 }
 .unvisited-medium {
+    color: #2196F2;
     filter: invert(46%) sepia(66%) saturate(2186%) hue-rotate(184deg) brightness(99%) contrast(92%)
         drop-shadow(1px 0 0 black) drop-shadow(0 1px 0 black) drop-shadow(-1px 0 0 black) drop-shadow(0 -1px 0 black);
         
 }
 .unvisited-high {
+    color: #1668BF;
     filter: invert(31%) sepia(84%) saturate(1094%) hue-rotate(186deg) brightness(91%) contrast(98%)
         drop-shadow(1px 0 0 black) drop-shadow(0 1px 0 black) drop-shadow(-1px 0 0 black) drop-shadow(0 -1px 0 black);
 }
@@ -39,7 +45,8 @@
     color: red;
 }
 .error-red-text {
-    border-color: red;
+    border-color: red !important;
+    color: red !important;
 }
 
 .blob-cursor:hover {
@@ -127,6 +134,13 @@ ul {
     border-bottom: 2px solid #ffffff;
 }
 
+#distance-error {
+    margin-top: 5px;
+    color: gray;
+    font-size: 10pt;
+    vertical-align: top;
+    color: red
+}
 
 /**** ATTRIBUTE FILTERING ****/
 #attributes-container {
@@ -251,6 +265,7 @@ ul {
     margin-top: 5px;
     color: gray;
     font-size: 10pt;
+    vertical-align: top;
 }
 
 /******************
@@ -338,8 +353,8 @@ ul {
 
 #locket-window {
     position: absolute;
-    left: calc(64px*10.875);
-    top: calc(20px*41);
+    left: calc(64px*10.75);
+    top: calc(20px*40.785);
     width: calc(64px*4.25);
     height: calc(20px*10);
 }
@@ -358,8 +373,8 @@ ul {
 
 #foodfun-window {
     position: absolute;
-    left: calc(64px*0.375);
-    top: calc(20px*43.125);
+    left: calc(64px*10.125);
+    top: calc(20px*51.625);
     width: calc(64px*10);
     height: calc(20px*10);
 }
@@ -376,4 +391,12 @@ ul {
     top: calc(20px*31.875);
     width: calc(64px*6);
     height: calc(22px*10);
+}
+
+#guide-window {
+    position: absolute;
+    left: calc(64px*0.325);
+    top: calc(20px*43.275);
+    width: calc(64px*9.5);
+    height: calc(22px*25);
 }

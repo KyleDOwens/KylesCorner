@@ -642,7 +642,7 @@ document.getElementById("share-button").addEventListener("click", async function
     let subheader = document.getElementById("share-subheader");
     subheader.innerText = "link copied to clipboard!";
     setTimeout(() => {
-        subheader.innerText = "";
+        subheader.innerHTML = "&nbsp;";
     }, 15000);
     
 });
@@ -881,6 +881,32 @@ function passesIsochroneFilter(name) {
     return isInside;
 }
 
+function displayIsochroneError(errorMsg) {
+    console.log("ERROR:" + errorMsg);
+        
+    // display error text to user for 15 seconds
+    let errorOutput = document.getElementById("distance-error");
+    errorOutput.innerText = errorMsg;;
+    setTimeout(() => {
+        errorOutput.innerHTML = "&nbsp;";
+    }, 500*15);
+    
+    // start timer to flash input cell red (if not already going)
+    let input = document.getElementById("distance-filter-input");
+    if (!errorTimerId) {
+        errorStartTime = Date.now();
+        errorTimerId = setInterval(() => {
+            input.classList.toggle("error-red-text");
+            if (Date.now() - errorStartTime >= 500*15) {
+                clearInterval(errorTimerId);
+                errorStartTime = null;
+                errorTimerId = null;
+                input.classList.remove("error-red-text");
+            }
+        }, 500);
+    }
+}
+
 /**
  * Draw a new isochrone on the map and optionally set the filtering option
  * @param {*} lat Latitude of the isochrone center
@@ -891,26 +917,12 @@ function passesIsochroneFilter(name) {
 async function drawDistanceIsochrone(lat, long, range, alsoApply = false) {
     // Get isochrone polygon from ORS API call
     if (range == "") {
-        console.log("ERROR: Input a range (in minutes) for draw isochrone");
-        
-        // start timer to flash input cell
-        let input = document.getElementById("distance-filter-input");
-        
-        // start error timer (if not already going)
-        if (!errorTimerId) {
-            errorStartTime = Date.now();
-            errorTimerId = setInterval(() => {
-                input.classList.toggle("error-red-text");
-                if (Date.now() - errorStartTime >= 500*15) {
-                    clearInterval(errorTimerId);
-                    errorStartTime = null;
-                    errorTimerId = null;
-                    input.classList.remove("error-red-text");
-                }
-            }, 500);
-        }
-        
+        displayIsochroneError("input a range (in minutes) to draw an isochrone!");
+        return;
+    }
 
+    if (parseInt(range) > 60) {
+        displayIsochroneError("input must be less than an hour!");
         return;
     }
 
