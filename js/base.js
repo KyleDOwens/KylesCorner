@@ -353,6 +353,8 @@ document.addEventListener("mouseup", () => {
 /*******************
 **** SHEET TABS ****
 *******************/
+let NUM_TABS_SHOWN = 5;
+
 /**
  * Shortens the text within the page tabs if they are too long
  */
@@ -368,6 +370,25 @@ function shortenTabTitles() {
 }
 window.addEventListener("resize", () => {
     shortenTabTitles();
+
+    let screenWidth = window.innerWidth;
+    if (screenWidth < 360) {
+        NUM_TABS_SHOWN = 1;
+    }
+    else if (screenWidth < 450) {
+        NUM_TABS_SHOWN = 2;
+    }
+    else if (screenWidth < 600) {
+        NUM_TABS_SHOWN = 3;
+    }
+    else if (screenWidth < 800) {
+        NUM_TABS_SHOWN = 4;
+    }
+    else {
+        NUM_TABS_SHOWN = 5;
+    }
+
+    updateTabDisplay();
 });
 
 /**
@@ -403,7 +424,7 @@ function updateTabDisplay() {
     // Update which 5 tabs are shown
     let sheetTabs = document.querySelectorAll(".sheet-tab")
     sheetTabs.forEach((tab, i) => {
-        if (i >= firstTabDisplayedIndex && i < firstTabDisplayedIndex + 5) {
+        if (i >= firstTabDisplayedIndex && i < firstTabDisplayedIndex + NUM_TABS_SHOWN) {
             tab.classList.remove("hidden");
         }
         else {
@@ -462,7 +483,8 @@ function toggleSheetDropdown() {
     document.getElementById("sheet-dropdown-menu").classList.toggle("hidden");
 }
 document.getElementById("sheet-selector-dropdown").addEventListener("click", toggleSheetDropdown);
-document.getElementById("sheet-selector-input").addEventListener("click", toggleSheetDropdown);
+document.getElementById("long-sheet-selector-input").addEventListener("click", toggleSheetDropdown);
+document.getElementById("short-sheet-selector-input").addEventListener("click", toggleSheetDropdown);
 
 
 function handlePageLoad() {

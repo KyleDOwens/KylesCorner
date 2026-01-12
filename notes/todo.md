@@ -6,6 +6,7 @@
 * undo/redo - page back/forward
 * x out/close window - close webpage
 * 'Help' - link to about page?
+* [-] Make clicking anywhere close the sheet selector dropdown menu if opened
 
 # HOMEPAGE
 * [-] Listening to, site map

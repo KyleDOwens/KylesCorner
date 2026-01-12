@@ -35,15 +35,15 @@
 
             <!-- Menu bar -->
             <nav id="menu-bar">
-                <button class="menu-button"><u>F</u>ile</button>
-                <button class="menu-button"><u>E</u>dit</button>
-                <button class="menu-button"><u>V</u>iew</button>
-                <button class="menu-button"><u>I</u>nsert</button>
-                <button class="menu-button"><u>F</u>ormat</button>
-                <button class="menu-button"><u>T</u>ools</button>
-                <button class="menu-button"><u>D</u>ata</button>
-                <button class="menu-button"><u>W</u>indow</button>
-                <button class="menu-button"><u>H</u>elp</button>
+                <button class="menu-button" id="file-menu"><u>F</u>ile</button>
+                <button class="menu-button" id="edit-menu"><u>E</u>dit</button>
+                <button class="menu-button" id="view-menu"><u>V</u>iew</button>
+                <button class="menu-button" id="insert-menu"><u>I</u>nsert</button>
+                <button class="menu-button" id="format-menu"><u>F</u>ormat</button>
+                <button class="menu-button" id="tools-menu"><u>T</u>ools</button>
+                <button class="menu-button" id="data-menu"><u>D</u>ata</button>
+                <button class="menu-button" id="window-menu"><u>W</u>indow</button>
+                <button class="menu-button" id="help-menu"><u>H</u>elp</button>
             </nav>
 
             <!-- Text formatting bar -->
@@ -66,12 +66,12 @@
                     </button>
                 </div>
 
-                <div class="horizontal-group dropdown-display">
+                <div class="horizontal-group dropdown-display" id="font-input-dropdown">
                     <input type="text" id="font-input" value="Arial">
                     <button class="square-button down-button"></button>
                 </div>
 
-                <div class="horizontal-group dropdown-display">
+                <div class="horizontal-group dropdown-display" id="font-size-dropdown">
                     <input type="text" id="font-size-input" value="10">
                     <button class="square-button down-button"></button>
                 </div>
@@ -89,7 +89,7 @@
                 </div>
 
                 <div>
-                    <span class="faint-text">*READONLY MODE*</span>
+                    <span class="faint-text" id="readonly-mode">*READONLY MODE*</span>
                 </div>
 
             </nav>
@@ -98,8 +98,10 @@
             <nav id="cell-bar" #>
                 <div class="dropdown">
                     <div class="dropdown-display horizontal-group">
-                        <input type="text" autocomplete="off" readonly class="dropdown-input" id="sheet-selector-input"
+                        <input type="text" autocomplete="off" readonly class="dropdown-input" id="long-sheet-selector-input"
                             value="&lt;current sheet&gt;: REPLACEME_PAGENAME">
+                        <input type="text" autocomplete="off" readonly class="dropdown-input" id="short-sheet-selector-input"
+                            value="REPLACEME_PAGENAME">
                         <button class="square-button down-button" id="sheet-selector-dropdown"></button>
                     </div>
                     <div class="dropdown-menu hidden" id="sheet-dropdown-menu">
