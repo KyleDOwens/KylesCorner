@@ -1,24 +1,35 @@
-#test1 {
-    position: absolute;
-    left: calc(64px*2);
-    top: calc(20px*2);
-
-    width: calc(64px*4);
-    height: calc(20px*12);
-}
 #test2 {
     position: absolute;
-    left: calc(64px*4);
+    left: calc(64px*6);
     top: calc(20px*12);
 
     width: calc(64px*4);
     height: calc(20px*12);
 }
-#test3 {
-    position: absolute;
-    left: calc(64px*13);
-    top: calc(20px*50);
 
-    width: calc(64px*4);
-    height: calc(20px*12);
+#scroll-and-content {
+    overflow-x: hidden;
+    overflow-y: hidden;
+    display: flex;
+    position: relative;
+
+    height: calc(100% - 2rem);
 }
+
+#test-scroll-container {
+    overflow-x: scroll;
+    overflow-y: scroll;
+}
+#test-scroll-container::-webkit-scrollbar {
+    display: none;
+}
+
+/*
+
+main
+    scroll container
+        sheet-canvas
+            sheet-overlay
+    scrollbar
+
+*/

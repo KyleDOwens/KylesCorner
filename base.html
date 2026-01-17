@@ -164,10 +164,10 @@
         <!-- ================================================ --->
         <!--                      SHEET                       --->
         <!-- ================================================ --->
-        <main>
+        <main class="scroll-and-content">
             <!-- Main sheet -->
             <div id="corner-header"></div>
-            <div id="scroll-container">
+            <div class="scroll-container" id="sheet-scroll-container">
                 <div id="sheet-canvas">
                     <!-- Sheet "background" -->
                     <div id="mock-grid">
@@ -184,12 +184,12 @@
             
 
             <!-- Vertical scrollbar -->
-            <div id="vertical-scrollbar">
-                <button class="square-button up-button" id="up-scroll-button"></button>
-                <div class="scroll-track" id="vertical-scroll-track">
-                    <div class="scroll-thumb" id="vertical-scroll-thumb"></div>
+            <div class="vertical-scrollbar" data-prefix="sheet" id="sheet-vertical-scrollbar">
+                <button class="square-button up-button" id="sheet-up-scroll-button"></button>
+                <div class="scroll-track" id="sheet-vertical-scroll-track">
+                    <div class="scroll-thumb" id="sheet-vertical-scroll-thumb"></div>
                 </div>
-                <button class="square-button down-button" id="down-scroll-button"></button>
+                <button class="square-button down-button" id="sheet-down-scroll-button"></button>
             </div>
         </main>
 
@@ -218,12 +218,12 @@
                 </nav>
 
                 <!-- Horizontal scrollbar -->
-                <div id="horizontal-scrollbar">
-                    <button class="square-button left-button" id="left-scroll-button"></button>
-                    <div class="scroll-track" id="horizontal-scroll-track">
-                        <div class="scroll-thumb" id="horizontal-scroll-thumb"></div>
+                <div class="horizontal-scrollbar" data-prefix="sheet" id="sheet-horizontal-scrollbar">
+                    <button class="square-button left-button" id="sheet-left-scroll-button"></button>
+                    <div class="scroll-track" id="sheet-horizontal-scroll-track">
+                        <div class="scroll-thumb" id="sheet-horizontal-scroll-thumb"></div>
                     </div>
-                    <button class="square-button right-button" id="right-scroll-button"></button>
+                    <button class="square-button right-button" id="sheet-right-scroll-button"></button>
                     <button class="square-button" disabled></button>
                 </div>
             </div>

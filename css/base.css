@@ -792,22 +792,9 @@ input[type="checkbox"]:checked::before {
 <---                      SHEET                       --->
 <--- ================================================ --*/
 /*#region SHEET*/
-main {
-    overflow-x: hidden;
-    overflow-y: hidden;
-    display: flex;
-    position: relative;
-}
-
-#scroll-container {
+#sheet-scroll-container {
     background-color: #f8f8f8;
-    overflow-x: scroll;
-    overflow-y: scroll;
-
     width: 100%
-}
-#scroll-container::-webkit-scrollbar {
-    display: none;
 }
 
 #sheet-canvas {
@@ -1029,11 +1016,27 @@ nav#sheet-tabs {
 <---                CUSTOM SCROLLBARS                 --->
 <--- ================================================ --*/
 /*#region SCROLLBARS*/
-#horizontal-scrollbar {
+.scroll-and-content {
+    overflow-x: hidden;
+    overflow-y: hidden;
+    display: flex;
+    position: relative;
+    /* must also define a fixed height in the specific element's CSS */
+}
+
+.scroll-container {
+    overflow-x: scroll;
+    overflow-y: scroll;
+}
+.scroll-container::-webkit-scrollbar {
+    display: none;
+}
+
+.horizontal-scrollbar {
     display: flex;
     flex: 1;
 }
-#vertical-scrollbar {
+.vertical-scrollbar {
     display: flex;
     flex-direction: column;
     flex: 1;
@@ -1049,10 +1052,10 @@ nav#sheet-tabs {
     border-right: 2px solid #ffffff;
     border-bottom: 2px solid #ffffff;
 }
-#horizontal-scrollbar .scroll-track {
+.horizontal-scrollbar .scroll-track {
     height: 18px;
 }
-#vertical-scrollbar .scroll-track {
+.vertical-scrollbar .scroll-track {
     width: 18px;
 }
 
@@ -1073,22 +1076,22 @@ nav#sheet-tabs {
 
     cursor: pointer;
 }
-#horizontal-scrollbar .scroll-thumb {
+.horizontal-scrollbar .scroll-thumb {
     height: 100%;
     width: 60px;
 }
-#vertical-scrollbar .scroll-thumb {
+.vertical-scrollbar .scroll-thumb {
     height: 160px;
     width: 100%;
 }
 
 @media only screen and (max-width: 545px) {
-    #up-scroll-button,
-    #down-scroll-button {
+    #sheet-up-scroll-button,
+    #sheet-down-scroll-button {
         display: none;
     }
 
-    #vertical-scrollbar .scroll-track {
+    #sheet-vertical-scrollbar .scroll-track {
         width: 12px;
         display: none;
     }

@@ -9,8 +9,11 @@ document.addEventListener("DOMContentLoaded", () => {
     applyTabZIndex();
     updateTabDisplay();
 
-    resizeHorizontalScrollThumb();
-    resizeVerticalScrollThumb();
+    getAllScrollbars();
+    addScrollbarListeners();
+    addScrollbarButtonListeners();
+    resizeHorizontalScrollThumbs();
+    resizeVerticalScrollThumbs();
 
     handlePageLoad();
 });
@@ -49,42 +52,112 @@ function initializeSheet() {
 <--- ================================================ --*/
 //#region SCROLLBARS
 /**
+ * Store the prefix values for the various custom scrollbars
+ * 
+ * NOTE TO SELF: Maybe refactor this at some point in the future? 
+ * This is done this way to abstract away all the listeners/logic for scrollbar function
+ * Essentially, each scrollbar and associated elements (see structure below) follow the same HTML structure
+ * They should also follow the outlined ID naming scheme below, where the only different between scrollbars is their prefix
+ * That allows me to just get all the prefixes on webpage load, and add listeners/handlers to each associated element as needed
+ * It also allows me to still identify which specific scrollbar is being clicked, or which specific content is being scrolled
+ * 
+ * Each scrollbar should be implemented in the following way:
+ * 
+ *     <div class="scroll-and-content">
+ *         <div class="scroll-container" id="prefix-scroll-container">
+ *             ...scroll content...
+ *         </div>
+ *         <div class="vertical-scrollbar" id="prefix-vertical-scrollbar">
+ *             <button class="square-button up-button" id="prefix-up-scroll-button"></button>
+ *             <div class="scroll-track" id="prefix-vertical-scroll-track">
+ *                 <div class="scroll-thumb" id="prefix-vertical-scroll-thumb"></div>
+ *             </div>
+  *            <button class="square-button down-button" id="prefix-down-scroll-button"></button>
+ *         </div>
+ *     </div>
+ * 
+ * I haven't tested adding multiple horizontal scrollbars, but the concept should be the same
+ */
+let horizontalScrollbars = [];
+let verticalScrollbars = [];
+
+/**
+ * Gets the prefixes for each custom scrollbar on the webpage
+ */
+function getAllScrollbars() {
+    let hScrollbars = document.querySelectorAll(".horizontal-scrollbar");
+    let vScrollbars = document.querySelectorAll(".vertical-scrollbar");
+
+    hScrollbars.forEach((container) => {
+        let prefix = container.dataset.prefix;
+        horizontalScrollbars.push(prefix);
+    })
+
+    vScrollbars.forEach((container) => {
+        let prefix = container.dataset.prefix;
+       verticalScrollbars.push(prefix);
+    })
+
+    console.log("scrollbars:");
+    for (let h of horizontalScrollbars) {
+        console.log(`h : ${h}`);
+    }
+    for (let v of verticalScrollbars) {
+        console.log(`v : ${v}`);
+    }
+}
+
+/**
+ * Gets the prefix value from the given ID string
+ * @param {*} id the ID string to get the prefix from
+ * @returns the prefix string
+ */
+function getPrefixFromId(id) {
+    return id.substring(0, id.indexOf("-"));
+}
+
+/**
  * Constants used for storing state info when dragging a scrollbar
  */
 let isHorizontalDragging = false;
 let isVerticalDragging = false;
 let startMousePos = null;
 let startScrollPos = null;
+let activeScrollPrefix = null;
 
 /**
  * Resizes the horizontal scrollbars according to the screen size
  */
-function resizeHorizontalScrollThumb() {
-    let sheet_container = document.getElementById("scroll-container");
-    let scrollTrack = document.getElementById("horizontal-scroll-track");
-    let scrollThumb = document.getElementById("horizontal-scroll-thumb");
+function resizeHorizontalScrollThumbs() {
+    for (let prefix of horizontalScrollbars) {
+        let scrollContainer = document.getElementById(`${prefix}-scroll-container`);
+        let scrollTrack = document.getElementById(`${prefix}-horizontal-scroll-track`);
+        let scrollThumb = document.getElementById(`${prefix}-horizontal-scroll-thumb`);
 
-    // Update how wide the scroll thumb should be
-    let ratio = sheet_container.clientWidth / sheet_container.scrollWidth;
-    scrollThumb.style.width = `${ratio * scrollTrack.clientWidth}px`;
-    scrollThumb.style.left = `${0}px`;
+        // Update how wide the scroll thumb should be
+        let ratio = scrollContainer.clientWidth / scrollContainer.scrollWidth;
+        scrollThumb.style.width = `${ratio * scrollTrack.clientWidth}px`;
+        scrollThumb.style.left = `${0}px`;
+    }
 }
 /**
  * Resizes the vertical scrollbars according to the screen size
  */
-function resizeVerticalScrollThumb() {
-    let sheet_container = document.getElementById("scroll-container");
-    let scrollTrack = document.getElementById("vertical-scroll-track");
-    let scrollThumb = document.getElementById("vertical-scroll-thumb");
+function resizeVerticalScrollThumbs() {
+    for (let prefix of verticalScrollbars) {
+        let scrollContainer = document.getElementById(`${prefix}-scroll-container`);
+        let scrollTrack = document.getElementById(`${prefix}-vertical-scroll-track`);
+        let scrollThumb = document.getElementById(`${prefix}-vertical-scroll-thumb`);
 
-    // Update how wide the scroll thumb should be
-    let ratio = sheet_container.clientHeight / sheet_container.scrollHeight;
-    scrollThumb.style.height = `${ratio * scrollTrack.clientHeight}px`;
-    scrollThumb.style.top = `${0}px`;
+        // Update how wide the scroll thumb should be
+        let ratio = scrollContainer.clientHeight / scrollContainer.scrollHeight;
+        scrollThumb.style.height = `${ratio * scrollTrack.clientHeight}px`;
+        scrollThumb.style.top = `${0}px`;
+    }
 }
 window.addEventListener("resize", () => {
-    resizeHorizontalScrollThumb();
-    resizeVerticalScrollThumb();
+    resizeHorizontalScrollThumbs();
+    resizeVerticalScrollThumbs();
 });
 
 /**
@@ -92,8 +165,8 @@ window.addEventListener("resize", () => {
  * @param {*} currentMouseX Current x position of the user's mouse
  */
 function updateHorizontalScrollbarPosition(currentMouseX) {
-    let scrollTrack = document.getElementById("horizontal-scroll-track");
-    let scrollThumb = document.getElementById("horizontal-scroll-thumb");
+    let scrollTrack = document.getElementById(`${activeScrollPrefix}-horizontal-scroll-track`);
+    let scrollThumb = document.getElementById(`${activeScrollPrefix}-horizontal-scroll-thumb`);
     
     let xDiff = currentMouseX - startMousePos;
     
@@ -107,8 +180,8 @@ function updateHorizontalScrollbarPosition(currentMouseX) {
  * @param {*} currentMouseY Current y position of the user's mouse
  */
 function updateVerticalScrollbarPosition(currentMouseY) {
-    let scrollTrack = document.getElementById("vertical-scroll-track");
-    let scrollThumb = document.getElementById("vertical-scroll-thumb");
+    let scrollTrack = document.getElementById(`${activeScrollPrefix}-vertical-scroll-track`);
+    let scrollThumb = document.getElementById(`${activeScrollPrefix}-vertical-scroll-thumb`);
     
     let yDiff = currentMouseY - startMousePos;
     
@@ -122,39 +195,47 @@ function updateVerticalScrollbarPosition(currentMouseY) {
  * Updates the current view of the sheet, depending on how far the horizontal and vertical thumbs are scrolled.
  * Called when the user scrolls using the scrollbars
  */
-function updateSheetPosition() {
-    let horizontalScrollTrack = document.getElementById("horizontal-scroll-track");
-    let horizontalScrollThumb = document.getElementById("horizontal-scroll-thumb");
-    let verticalScrollTrack = document.getElementById("vertical-scroll-track");
-    let verticalScrollThumb = document.getElementById("vertical-scroll-thumb");
-    let sheet_container = document.getElementById("scroll-container");
+function updateScrollContainerPosition() {
+    let horizontalScrollTrack = document.getElementById(`${activeScrollPrefix}-horizontal-scroll-track`);
+    let horizontalScrollThumb = document.getElementById(`${activeScrollPrefix}-horizontal-scroll-thumb`);
+    let verticalScrollTrack = document.getElementById(`${activeScrollPrefix}-vertical-scroll-track`);
+    let verticalScrollThumb = document.getElementById(`${activeScrollPrefix}-vertical-scroll-thumb`);
+    let scrollContainer = document.getElementById(`${activeScrollPrefix}-scroll-container`);
 
-    // Get how far scrolled the scrollbars are
-    let horizontalScrollbarRatio = parseInt(horizontalScrollThumb.style.left, 10) / horizontalScrollTrack.clientWidth;
-    let verticalScrollbarRatio = parseInt(verticalScrollThumb.style.top, 10) / verticalScrollTrack.clientHeight;
-
-    // Set sheet left to match the same ratios
-    sheet_container.scrollLeft = horizontalScrollbarRatio * sheet_container.scrollWidth;
-    sheet_container.scrollTop = verticalScrollbarRatio * sheet_container.scrollHeight;
+    // Get how far scrolled the scrollbars are and set sheet left to match the same ratios
+    if (horizontalScrollTrack != null) {
+        let horizontalScrollbarRatio = parseInt(horizontalScrollThumb.style.left, 10) / horizontalScrollTrack.clientWidth;
+        scrollContainer.scrollLeft = horizontalScrollbarRatio * scrollContainer.scrollWidth;
+    }
+    if (verticalScrollTrack != null) {
+        let verticalScrollbarRatio = parseInt(verticalScrollThumb.style.top, 10) / verticalScrollTrack.clientHeight;
+        scrollContainer.scrollTop = verticalScrollbarRatio * scrollContainer.scrollHeight;
+    }
 }
 /**
  * Updates the position of the horizontal and vertical scrollbar thumbs, depending on the current view of the sheet.
  * Is called when the user scrolls using their mouse (or finger on mobile)
  */
-function updateScrollPosition() {
-    let horizontalScrollTrack = document.getElementById("horizontal-scroll-track");
-    let horizontalScrollThumb = document.getElementById("horizontal-scroll-thumb");
-    let verticalScrollTrack = document.getElementById("vertical-scroll-track");
-    let verticalScrollThumb = document.getElementById("vertical-scroll-thumb");
-    let sheet_container = document.getElementById("scroll-container");
+function updateThumbPositions(prefix) {
+    /**
+     * The reason this takes a prefix parameter and all other functions use the global value, is because this is called when the user scrolls with their mouse AND when the user is dragging the scroll thumb
+     * The activeScrollbarPrefix is not set when using mouse scroll, and since there is no way for me to differentiate between the two easily, I have to pass in the value just to be safe
+     */
+    let horizontalScrollTrack = document.getElementById(`${prefix}-horizontal-scroll-track`);
+    let horizontalScrollThumb = document.getElementById(`${prefix}-horizontal-scroll-thumb`);
+    let verticalScrollTrack = document.getElementById(`${prefix}-vertical-scroll-track`);
+    let verticalScrollThumb = document.getElementById(`${prefix}-vertical-scroll-thumb`);
+    let scrollContainer = document.getElementById(`${prefix}-scroll-container`);
 
-    // Get how far scrolled the sheet is
-    let horizontalSheetRatio = sheet_container.scrollLeft / sheet_container.scrollWidth;
-    let verticalSheetRatio = sheet_container.scrollTop / sheet_container.scrollHeight;
-
-    // Set sheet left to match the same ratios
-    horizontalScrollThumb.style.left = `${horizontalSheetRatio * horizontalScrollTrack.scrollWidth}px`;
-    verticalScrollThumb.style.top = `${verticalSheetRatio * verticalScrollTrack.scrollHeight}px`;
+    // Get how far scrolled the sheet is and set sheet left to match the same ratios
+    if (horizontalScrollTrack != null) {
+        let horizontalSheetRatio = scrollContainer.scrollLeft / scrollContainer.scrollWidth;
+        horizontalScrollThumb.style.left = `${horizontalSheetRatio * horizontalScrollTrack.scrollWidth}px`;
+    }
+    if (verticalScrollTrack != null) {
+        let verticalSheetRatio = scrollContainer.scrollTop / scrollContainer.scrollHeight;
+        verticalScrollThumb.style.top = `${verticalSheetRatio * verticalScrollTrack.scrollHeight}px`;
+    }
 }
 
 /**
@@ -168,7 +249,7 @@ function handleHorizontalThumbDrag(e) {
 
     let currentMouseX = e.x;
     updateHorizontalScrollbarPosition(currentMouseX);
-    updateSheetPosition();
+    updateScrollContainerPosition();
 }
 /**
  * Handler for when vertical scrollbar thumb is being dragged
@@ -181,30 +262,48 @@ function handleVerticalThumbDrag(e) {
 
     let currentMouseY = e.y;
     updateVerticalScrollbarPosition(currentMouseY);
-    updateSheetPosition();
+    updateScrollContainerPosition();
 }
 
 /**
  * Listeners for when the user drags a scrollbar thumb, or scrolls the sheet with their mouse (or finger on mobile)
  */
-document.getElementById("horizontal-scroll-thumb").addEventListener("mousedown", (e) => {
-    isHorizontalDragging = true;
-    startMousePos = e.pageX;
-    startScrollPos = parseInt(document.getElementById("horizontal-scroll-thumb").style.left, 10);
-    document.body.style.userSelect = "none";
-});
-document.getElementById("vertical-scroll-thumb").addEventListener("mousedown", (e) => {
-    isVerticalDragging = true;
-    startMousePos = e.pageY;
-    startScrollPos = parseInt(document.getElementById("vertical-scroll-thumb").style.top, 10);
-    document.body.style.userSelect = "none";
-});
+function addScrollbarListeners() {
+    for (let prefix of horizontalScrollbars) {
+        document.getElementById(`${prefix}-horizontal-scroll-thumb`).addEventListener("mousedown", (e) => {
+            isHorizontalDragging = true;
+            startMousePos = e.pageX;
+            startScrollPos = parseInt(document.getElementById(`${prefix}-horizontal-scroll-thumb`).style.left, 10);
+            activeScrollPrefix = getPrefixFromId(e.target.id);
+            document.body.style.userSelect = "none";
+        });
+    }
+
+    for (let prefix of verticalScrollbars) {
+        document.getElementById(`${prefix}-vertical-scroll-thumb`).addEventListener("mousedown", (e) => {
+            isVerticalDragging = true;
+            startMousePos = e.pageY;
+            startScrollPos = parseInt(document.getElementById(`${prefix}-vertical-scroll-thumb`).style.top, 10);
+            activeScrollPrefix = getPrefixFromId(e.target.id);
+            document.body.style.userSelect = "none";
+        });
+    }
+
+    let union = horizontalScrollbars.concat(verticalScrollbars).filter((value, index, arr) => arr.indexOf(value) === index);
+    for (let prefix of union) {
+        document.getElementById(`${prefix}-scroll-container`).addEventListener("scroll", (e) => {
+            updateThumbPositions(getPrefixFromId(e.target.id));
+        });
+    }
+        
+}
 window.addEventListener("mouseup", (e) => {
     document.body.style.userSelect = "auto";
     isHorizontalDragging = false;
     isVerticalDragging = false;
     startMousePos = null;
     startScrollPos = null;
+    activeScrollPrefix = null;
 });
 window.addEventListener("mousemove", (e) => {
     if (isHorizontalDragging && startMousePos != null && startScrollPos != null) {
@@ -214,9 +313,6 @@ window.addEventListener("mousemove", (e) => {
         handleVerticalThumbDrag(e);
     }
 });
-document.getElementById("scroll-container").addEventListener("scroll", () => {
-    updateScrollPosition();
-})
 //#endregion SCROLLBARS
 
 
@@ -237,10 +333,10 @@ let scrollTimerId = null;
  * @param {*} holding Boolean indicating if the button is being held or not
  */
 function handleHorizontalScrollButton(sign, holding = false) {
-    let scrollTrack = document.getElementById("horizontal-scroll-track");
-    let scrollThumb = document.getElementById("horizontal-scroll-thumb");
+    let scrollTrack = document.getElementById(`${activeScrollPrefix}-horizontal-scroll-track`);
+    let scrollThumb = document.getElementById(`${activeScrollPrefix}-horizontal-scroll-thumb`);
 
-    let scrollX = parseInt(document.getElementById("horizontal-scroll-thumb").style.left, 10);
+    let scrollX = parseInt(document.getElementById(`${activeScrollPrefix}-horizontal-scroll-thumb`).style.left, 10);
     let fiftieth = scrollTrack.clientWidth / 50;
 
     // Scale the distance scrolled depending on if this is a one time press, or a continuous press
@@ -252,7 +348,7 @@ function handleHorizontalScrollButton(sign, holding = false) {
     newLeft = Math.min(newLeft, scrollTrack.clientWidth - parseInt(scrollThumb.style.width, 10));
     newLeft = (sign == -1) ? Math.floor(newLeft) : Math.ceil(newLeft);
     scrollThumb.style.left = `${newLeft}px`;
-    updateSheetPosition();
+    updateScrollContainerPosition();
 }
 /**
  * Handles a single instance of the vertical scrollbar button being pressed.
@@ -261,10 +357,10 @@ function handleHorizontalScrollButton(sign, holding = false) {
  * @param {*} holding Boolean indicating if the button is being held or not
  */
 function handleVerticalScrollButton(sign, holding = false) {
-    let scrollTrack = document.getElementById("vertical-scroll-track");
-    let scrollThumb = document.getElementById("vertical-scroll-thumb");
+    let scrollTrack = document.getElementById(`${activeScrollPrefix}-vertical-scroll-track`);
+    let scrollThumb = document.getElementById(`${activeScrollPrefix}-vertical-scroll-thumb`);
 
-    let scrollY = parseInt(document.getElementById("vertical-scroll-thumb").style.top, 10);
+    let scrollY = parseInt(document.getElementById(`${activeScrollPrefix}-vertical-scroll-thumb`).style.top, 10);
     let fiftieth = scrollTrack.clientHeight / 50;
 
     // Scale the distance scrolled depending on if this is a one time press, or a continuous press
@@ -276,7 +372,7 @@ function handleVerticalScrollButton(sign, holding = false) {
     newTop = Math.min(newTop, scrollTrack.clientHeight - parseInt(scrollThumb.style.height, 10));
     newTop = (sign == -1) ? Math.floor(newTop) : Math.ceil(newTop);
     scrollThumb.style.top = `${newTop}px`;
-    updateSheetPosition();
+    updateScrollContainerPosition();
 }
 
 /**
@@ -313,44 +409,57 @@ function handleHoldVerticalScroll(sign) {
 /**
  * Listeners for when the user clicks/holds a scrollbar movement button
  */
-document.getElementById("left-scroll-button").addEventListener("mousedown", () => {
-    isHolding = true;
+function addScrollbarButtonListeners() {
+    for (let prefix of horizontalScrollbars) {
+        document.getElementById(`${prefix}-left-scroll-button`).addEventListener("mousedown", (e) => {
+            isHolding = true;
+            activeScrollPrefix = getPrefixFromId(e.target.id);
 
-    // Do an initial scroll, then delay, then continuously scroll
-    handleHorizontalScrollButton(-1);
-    setTimeout(() => {
-        handleHoldHorizontalScroll(-1);
-    }, 300);
-});
-document.getElementById("right-scroll-button").addEventListener("mousedown", () => {
-    isHolding = true;
+            // Do an initial scroll, then delay, then continuously scroll
+            handleHorizontalScrollButton(-1);
+            setTimeout(() => {
+                handleHoldHorizontalScroll(-1);
+            }, 300);
+        });
+        document.getElementById(`${prefix}-right-scroll-button`).addEventListener("mousedown", (e) => {
+            isHolding = true;
+            activeScrollPrefix = getPrefixFromId(e.target.id);
 
-    // Do an initial scroll, then delay, then continuously scroll
-    handleHorizontalScrollButton(1);
-    setTimeout(() => {
-        handleHoldHorizontalScroll(1);
-    }, 300);
-});
-document.getElementById("up-scroll-button").addEventListener("mousedown", () => {
-    isHolding = true;
+            // Do an initial scroll, then delay, then continuously scroll
+            handleHorizontalScrollButton(1);
+            setTimeout(() => {
+                handleHoldHorizontalScroll(1);
+            }, 300);
+        });
+    }
 
-    // Do an initial scroll, then delay, then continuously scroll
-    handleVerticalScrollButton(-1);
-    setTimeout(() => {
-        handleHoldVerticalScroll(-1);
-    }, 300);
-});
-document.getElementById("down-scroll-button").addEventListener("mousedown", () => {
-    isHolding = true;
+    for (let prefix of verticalScrollbars) {
+        document.getElementById(`${prefix}-up-scroll-button`).addEventListener("mousedown", (e) => {
+            isHolding = true;
+            activeScrollPrefix = getPrefixFromId(e.target.id);
 
-    // Do an initial scroll, then delay, then continuously scroll
-    handleVerticalScrollButton(1);
-    setTimeout(() => {
-        handleHoldVerticalScroll(1);
-    }, 300);
-});
+            // Do an initial scroll, then delay, then continuously scroll
+            handleVerticalScrollButton(-1);
+            setTimeout(() => {
+                handleHoldVerticalScroll(-1);
+            }, 300);
+        });
+        document.getElementById(`${prefix}-down-scroll-button`).addEventListener("mousedown", (e) => {
+            isHolding = true;
+            activeScrollPrefix = getPrefixFromId(e.target.id);
+
+            // Do an initial scroll, then delay, then continuously scroll
+            handleVerticalScrollButton(1);
+            setTimeout(() => {
+                handleHoldVerticalScroll(1);
+            }, 300);
+        });
+    }
+}
+
 document.addEventListener("mouseup", () => {
     isHolding = false;
+    activeScrollPrefix = null;
     if (scrollTimerId) {
         clearInterval(scrollTimerId);
         scrollTimerId = null;
