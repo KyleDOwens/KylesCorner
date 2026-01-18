@@ -7,12 +7,7 @@
     height: calc(20px*12);
 }
 
-#scroll-and-content {
-    overflow-x: hidden;
-    overflow-y: hidden;
-    display: flex;
-    position: relative;
-
+#test-scroll-and-content {
     height: calc(100% - 2rem);
 }
 

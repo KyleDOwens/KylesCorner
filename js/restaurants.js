@@ -20,7 +20,7 @@ const map = L.map("map", {
     });
 
 const newIcon = L.icon({
-    iconUrl: "images/marker.png",
+    iconUrl: "images/restaurants/marker.png",
     iconSize: [24, 24],
     // iconAnchor: []
 });

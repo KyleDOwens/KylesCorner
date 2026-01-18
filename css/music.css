@@ -1,0 +1,67 @@
+/*-- ================================================ --->
+<---                 WINDOW FORMATTING                --->
+<--- ================================================ --*/
+#album-window {
+    position: absolute;
+    left: calc(64px*0.25);
+    top: calc(20px*0.5);
+
+    /* width: calc(70vw - 32px - 64px*0.25 - 20px - 64px*0.25); */
+    width: calc(100% - 2*64px*0.25);
+    height: calc(75vh);
+}
+
+#album-scroll-and-content {
+    width: 100%;
+    height: calc(100% - 2rem);
+
+    /* background-image: url("../images/beige_popcorn3.jpg");
+    background-size: 25%; */
+}
+#album-scroll-container {
+    overflow-x: scroll;
+    overflow-y: scroll;
+}
+#album-scroll-container::-webkit-scrollbar {
+    display: none;
+}
+
+
+/*-- ================================================ --->
+<---                    ALBUM GRID                    --->
+<--- ================================================ --*/
+.album-grid {
+    margin-top: 15px;
+    margin-left: 15px;
+
+    align-items: center;
+    justify-content: center;
+}
+.album-block {
+    display: inline-block;
+    vertical-align: top;
+    width: calc(20% - 15px);
+    min-width: 225px;
+    padding: 15px 0;
+    margin-bottom: 25px;
+
+    align-items: stretch;
+}
+
+.entry-img {
+    display: flex;
+    margin:auto;
+}
+.entry-album, .entry-artist, .entry-genre {
+    text-align: center;
+}
+
+.gold {
+    background: #ffbf00;
+}
+.silver {
+    background: silver;
+}
+.bronze {
+    background: #cd7f32;
+}

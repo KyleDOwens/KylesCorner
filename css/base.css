@@ -17,6 +17,7 @@ html, body {
     height: 100%;
     margin: 0;
     background-image: url("../images/space_background.png");
+    /* background-image: url("../images/star_background.gif"); */
 }
 
 body {
@@ -37,9 +38,9 @@ body {
 #excel-window > * {
   min-width: 0;
 }
-@media (max-width: 900px) {
+@media (max-width: 1600px) {
     #excel-window {
-        width: 95vw;
+        width: 90vw;
         height: 97vh;
         border: none;
     }
@@ -50,6 +51,13 @@ body {
 
     #footer {
         overflow-x: auto;
+    }
+}
+@media (max-width: 900px) {
+    #excel-window {
+        width: 95vw;
+        height: 97vh;
+        border: none;
     }
 }
 
@@ -801,6 +809,7 @@ input[type="checkbox"]:checked::before {
     position: relative;
     width: calc(32px + 64px*26);
     height: calc(20px + 20px*99);
+    width: 100%;
 }
 
 /* Mock grid headers & cells */
@@ -834,6 +843,8 @@ input[type="checkbox"]:checked::before {
     display: flex;
     text-align: center;
     height: 100%;
+    width: 100%; /* Remove for horizontal scroll */
+    overflow-x: clip; /* Remove for horizontal scroll */
 
     position: absolute;
     top: 0;
@@ -850,6 +861,7 @@ input[type="checkbox"]:checked::before {
     border-right: 1px solid #2C2C2C;
 
     width: 64px;
+    min-width: 64px; /* Remove for horizontal scroll */
     height: 20px;
 }
 #A0 {

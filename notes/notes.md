@@ -72,6 +72,8 @@ This is done in a separate step *after* combining the base base and page files i
 * [Reference I used for old Excel design (particularly Excel v7 from Windows 95)](https://handsontable.com/blog/how-the-spreadsheet-ui-changed-over-the-years)
 * [Inspo for old UI designs](https://jdan.github.io/98.css/)
 * [Inspo/archive of old web designs](https://www.cameronsworld.net/)
+* [Inspo/achive of old font-end design](https://makefrontendshitagain.party/)
 
 * [Inspo website (and my introduction to the indieweb - she also makes music, go listen)](https://isobelsweb.com/)
 * [Inspo website (Kate Bollinger - go listen to her music, it is good)](https://katebollinger.com/)
+* [Inspo website (and also good networking guides)](https://beej.us/)

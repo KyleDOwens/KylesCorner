@@ -14,9 +14,9 @@ class MyHTMLParser(HTMLParser):
         print("Encountered some data  :", data)
 
 
-#######################################################
-# Build the individual page HTML/CSS/JavaScript
-
+# /*-- ================================================ --->
+# <---               BUILD GENERIC PAGES                --->
+# <--- ================================================ --*/
 BUILD_DIR = "./build"
 BASE_FILE = "base"
 
@@ -64,27 +64,32 @@ for file in os.listdir(os.fsencode("./pages")):
 
     combined_html = base_html.replace("REPLACEME_PAGECONTENT", input_html)
     combined_html = combined_html.replace("REPLACEME_PAGENAME", page_name)
-
-    with open(f"{BUILD_DIR}/{page_name}.html", "w") as output_file:
-        output_file.write(combined_html)
     
     # Build CSS
     shutil.copyfile(f"./css/{page_name}.css", f"./build/css/{page_name}.css")
 
     # Build JS
-    shutil.copyfile(f"./js/{page_name}.js", f"./build/js/{page_name}.js")
+    if os.path.exists(f"./js/{page_name}.js"):
+        script = f'<script type="module" src="js/{page_name}.js"></script>'
+        combined_html = combined_html.replace("<!-- REPLACEME_SCRIPT -->", script)
+        shutil.copyfile(f"./js/{page_name}.js", f"./build/js/{page_name}.js")
+    
+    # Save html to output
+    with open(f"{BUILD_DIR}/{page_name}.html", "w") as output_file:
+        output_file.write(combined_html)
 
 
-#######################################################
-# Load in CSV data to pages that need it
 
-# Load restaurants from CSV
+# /*-- ================================================ --->
+# <---               LOAD RESTAURANT DATA               --->
+# <--- ================================================ --*/
 restaurant_rows = ""
 seen_cuisines = []
-with open(f"./csv/restaurants.csv", "r") as restaurants_file:
+with open(f"./csv/restaurants/san_antonio.csv", "r") as restaurants_file:
     reader = csv.DictReader(restaurants_file, delimiter=",")
     next(reader, None)
 
+    # Create row in the restaurant list table
     for row in reader:
         restaurant_rows += (
         '<tr>'
@@ -101,18 +106,18 @@ with open(f"./csv/restaurants.csv", "r") as restaurants_file:
         '</tr>\n'
         )
 
+        # Save the cuisine to make the filters later
         for cuisine in row["cuisine"].split(" / "):
             if (cuisine not in seen_cuisines):
                 seen_cuisines.append(cuisine)
 
-# Sort cuisines by name
+# Add cuisine filter
 seen_cuisines.sort()
-
 cuisine_rows = ""
 for cuisine in seen_cuisines:
     cuisine_rows += f'<div class="multi-option"><label><input type="checkbox">{cuisine}</label></div>'
 
-# Fill restaurants.html with CSV data
+# Fill restaurants.html with data
 unfilled_html = None
 with open(f"{BUILD_DIR}/restaurants.html", "r") as input_file:
     unfilled_html = input_file.read()
@@ -122,13 +127,6 @@ filled_html = filled_html.replace("REPLACEME_CUISINEROWS", cuisine_rows)
 
 with open(f"{BUILD_DIR}/restaurants.html", "w") as output_file:
     output_file.write(filled_html)
-
-
-# TODO: load albums CSV data into music.html
-
-
-#######################################################
-# Add in page-specific data
 
 # Add LeafletJS info to restaurants
 input_html = None
@@ -142,3 +140,54 @@ output_html = output_html.replace("<!-- REPLACEME_EXTRALINK -->", leaflet_link)
 
 with open(f"{BUILD_DIR}/restaurants.html", "w") as output_file:
     output_file.write(output_html)
+
+
+
+# /*-- ================================================ --->
+# <---                 LOAD ALBUMS DATA                 --->
+# <--- ================================================ --*/
+OLDEST_YEAR = 2018
+NEWEST_YEAR = 2025
+
+albums_html = ""
+
+# Build album grid for each year
+for year in range(OLDEST_YEAR, NEWEST_YEAR + 1):
+    # Add the year container
+    albums_html += f'<div class="album-grid" id="album-grid-{year}">\n'
+
+    # Add the album contents for that year
+    # (CSV content should already be in sorted order)
+    with open(f"./csv/music/{year}.csv", "r") as albums_file:
+        reader = csv.DictReader(albums_file, delimiter=",")
+        for row in reader:
+            color = "gold" if (float(row["Rating"]) >= 9) else "silver" if (float(row["Rating"]) >= 8) else "bronze" if (float(row["Rating"]) >= 7) else ""
+            normalized_album = "".join(c for c in row["Album"] if c.isalnum()).lower()
+            normalized_artist = "".join(c for c in row["Artist"].split(",")[0] if c.isalnum()).lower()
+            img_path = f"images/music/{year}/{normalized_artist}_{normalized_album}.jpg"
+
+            albums_html += ('\t'
+                f'<div class="album-block {color}">'
+                    f'<img class="entry-img" src="{img_path}" width="135px" height="135px">'
+                    f'<div class="entry-album"><i>{row["Album"]}</i></div>'
+                    f'<div class="entry-artist"><b>By:</b><u>{row["Artist"]}</u></div>'
+                    f'<div class="entry-genre"><b>Genre:</b>{row["Genre"]}</div>'
+                    f'<div class="entry-favorites hidden">{row["Favorite Songs"]}</div>'
+                f'</div>\n'
+            )
+    
+    # Close the year container
+    albums_html += f'</div>\n'
+
+# Fill music.html with data
+unfilled_html = None
+with open(f"{BUILD_DIR}/music.html", "r") as input_file:
+    unfilled_html = input_file.read()
+
+filled_html = unfilled_html.replace("REPLACEME_ALBUMGRID", albums_html)
+
+with open(f"{BUILD_DIR}/music.html", "w") as output_file:
+    output_file.write(filled_html)
+
+
+            
