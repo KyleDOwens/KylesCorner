@@ -1,29 +1,50 @@
 /*-- ================================================ --->
 <---                 WINDOW FORMATTING                --->
 <--- ================================================ --*/
-#album-window {
+#options-window {
     position: absolute;
     left: calc(64px*0.25);
-    top: calc(20px*0.5);
+    top: calc(20px*0.25);
+
+    width: calc(100% - 2*64px*0.25);
+    height: calc(75px);
+}
+
+#music-window {
+    position: absolute;
+    left: calc(64px*0.25);
+    top: calc(20px*0.5 + 75px);
 
     /* width: calc(70vw - 32px - 64px*0.25 - 20px - 64px*0.25); */
     width: calc(100% - 2*64px*0.25);
-    height: calc(75vh);
+    height: calc(70vh);
 }
 
-#album-scroll-and-content {
+#music-scroll-and-content {
     width: 100%;
     height: calc(100% - 2rem);
 
     /* background-image: url("../images/beige_popcorn3.jpg");
     background-size: 25%; */
 }
-#album-scroll-container {
+#music-scroll-container {
     overflow-x: scroll;
     overflow-y: scroll;
+    width: 100%;
 }
-#album-scroll-container::-webkit-scrollbar {
+#music-scroll-container::-webkit-scrollbar {
     display: none;
+}
+
+/*-- ================================================ --->
+<---                     OPTIONS                      --->
+<--- ================================================ --*/
+#options-container {
+    display: flex;
+}
+
+.active {
+    background-color: green;
 }
 
 
@@ -31,37 +52,71 @@
 <---                    ALBUM GRID                    --->
 <--- ================================================ --*/
 .album-grid {
-    margin-top: 15px;
-    margin-left: 15px;
+    margin: 15px 0;
+    padding: 0 15px;
+
+    width: 100%;
 
     align-items: center;
     justify-content: center;
+
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    gap: 10px;
 }
 .album-block {
-    display: inline-block;
     vertical-align: top;
     width: calc(20% - 15px);
     min-width: 225px;
-    padding: 15px 0;
-    margin-bottom: 25px;
 
-    align-items: stretch;
+    padding: 10px 5px;
+    box-sizing: border-box;
+    border: outset;
 }
 
-.entry-img {
+.album-img {
     display: flex;
-    margin:auto;
+    margin: auto;
 }
-.entry-album, .entry-artist, .entry-genre {
+.album-name, .album-artist, .album-genre, .album-year {
     text-align: center;
 }
 
-.gold {
+.gold, .gold .album-img {
     background: #ffbf00;
+    border-color: #ffca2b;
 }
-.silver {
+.silver, .silver .album-img {
     background: silver;
+    border-color: rgb(202, 202, 202);
 }
-.bronze {
+.bronze, .bronze .album-img {
     background: #cd7f32;
+    border-color: #d18f4d;
+}
+
+
+/*-- ================================================ --->
+<---                    SONG TABLE                    --->
+<--- ================================================ --*/
+.song-table {
+    padding: 0 15px;
+    margin: 15px auto;
+    width: 60%;
+
+    border-collapse: collapse;
+}
+
+.song-table th, .song-table td {
+    border: 1px solid black;
+    padding: 8px;
+}
+
+
+/*-- ================================================ --->
+<---                    SEARCHING                     --->
+<--- ================================================ --*/
+.highlight {
+    background-color: lime;
 }

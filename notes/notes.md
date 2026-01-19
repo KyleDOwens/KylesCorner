@@ -57,11 +57,11 @@ This is done in a separate step *after* combining the base base and page files i
 ## Development Tools
 * [Convert hex color into CSS filter](https://codepen.io/sosuke/pen/Pjoqqp)
 * [Color picker from image](https://redketchup.io/color-picker)
-* [GIF tools](https://onlinegiftools.com/#tools)
-* [Search for gifs](https://gifcities.org/search?)
 * [Word art maker](https://www.makewordart.com/)
 * [Create static map image](https://stadiamaps.com/build-a-map/#map=9.78/29.4673/-98.5817&style=outdoors)
 * [Get shades/hues of a color](https://colorkit.co/color-picker/)
+* [GIF tools](https://onlinegiftools.com/#tools)
+* [Search for gifs](https://gifcities.org/search?)
 
 ## "Go Build a Personal Website" Inspiration
 * [Motivation for building a personal website](https://localghost.dev/blog/building-a-website-like-it-s-1999-in-2022/)
@@ -69,11 +69,15 @@ This is done in a separate step *after* combining the base base and page files i
     * [(And follow up article for building a website)](https://thoughts.melonking.net/guides/introduction-to-the-web-revival-3-make-a-website)
 
 ## Creative/Artistic Inspiration
-* [Reference I used for old Excel design (particularly Excel v7 from Windows 95)](https://handsontable.com/blog/how-the-spreadsheet-ui-changed-over-the-years)
-* [Inspo for old UI designs](https://jdan.github.io/98.css/)
-* [Inspo/archive of old web designs](https://www.cameronsworld.net/)
-* [Inspo/achive of old font-end design](https://makefrontendshitagain.party/)
+* [Old Excel UI reference](https://handsontable.com/blog/how-the-spreadsheet-ui-changed-over-the-years)
+* [Windows 98 UI designs](https://jdan.github.io/98.css/)
+* [Old Web Design Museum](https://www.webdesignmuseum.org/all-websites)
+* [Archive of old web designs](https://www.cameronsworld.net/)
+* [Achive of old font-end design](https://makefrontendshitagain.party/)
+
+* [Under construction gifs](http://www.textfiles.com/underconstruction/)
 
 * [Inspo website (and my introduction to the indieweb - she also makes music, go listen)](https://isobelsweb.com/)
 * [Inspo website (Kate Bollinger - go listen to her music, it is good)](https://katebollinger.com/)
-* [Inspo website (and also good networking guides)](https://beej.us/)
+* [Inspo website (and has also good networking guides)](https://beej.us/)
+* [SpaceJam??!?!](https://www.spacejam.com/1996/)

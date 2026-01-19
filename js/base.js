@@ -150,6 +150,11 @@ function resizeVerticalScrollThumbs() {
 window.addEventListener("resize", () => {
     resizeHorizontalScrollThumbs();
     resizeVerticalScrollThumbs();
+
+    let union = horizontalScrollbars.concat(verticalScrollbars).filter((value, index, arr) => arr.indexOf(value) === index);
+    for (let prefix of union) {
+        updateThumbPositions(prefix);
+    }
 });
 
 /**
@@ -530,8 +535,12 @@ function makeActiveTab(activeTab) {
 /**
  * Updates which of the 5 tabs are currently displayed at the bottom of the website
  */
-let firstTabDisplayedIndex = 0;
+let firstTabDisplayedIndex = null;
 function updateTabDisplay() {
+    if (firstTabDisplayedIndex == null) {
+        firstTabDisplayedIndex = localStorage.getItem("firstTab") ?? 0;
+    }
+
     // Update which 5 tabs are shown
     let sheetTabs = document.querySelectorAll(".sheet-tab")
     sheetTabs.forEach((tab, i) => {
@@ -562,6 +571,9 @@ function updateTabDisplay() {
         document.getElementById("next-sheet-button").disabled = false;
         document.getElementById("last-sheet-button").disabled = false;
     }
+
+    // Store the first tab in local storage so it can be loaded when moving to another page
+    localStorage.setItem("firstTab", firstTabDisplayedIndex);
 }
 
 /**

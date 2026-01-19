@@ -3,15 +3,6 @@ import shutil
 import csv
 import os
 
-class MyHTMLParser(HTMLParser):
-    def handle_starttag(self, tag, attrs):
-        print("Encountered a start tag:", tag) 
-
-    def handle_endtag(self, tag):
-        print("Encountered an end tag :", tag)
-
-    def handle_data(self, data):
-        print("Encountered some data  :", data)
 
 
 # /*-- ================================================ --->
@@ -92,18 +83,18 @@ with open(f"./csv/restaurants/san_antonio.csv", "r") as restaurants_file:
     # Create row in the restaurant list table
     for row in reader:
         restaurant_rows += (
-        '<tr>'
-            f'<td class="name">{row["name"]}</td>'
-            f'<td class="cuisine">{row["cuisine"]}</td>'
-            f'<td class="visited">{row["visited"]}</td>'
-            '<td class="shown">'
-                '<input type="checkbox" onclick="manuallySelectRestaurant(this)" checked="">'
-            '</td>'
-            f'<td class="rating hidden">{row["rating"]}</td>'
-            f'<td class="notes hidden">{row["notes"]}</td>'
-            f'<td class="gps hidden">{row["gps"]}</td>'
-            f'<td class="originalUrl hidden">{row["originalUrl"]}</td>'
-        '</tr>\n'
+            '<tr>'
+                f'<td class="name">{row["name"]}</td>'
+                f'<td class="cuisine">{row["cuisine"]}</td>'
+                f'<td class="visited">{row["visited"]}</td>'
+                '<td class="shown">'
+                    '<input type="checkbox" onclick="manuallySelectRestaurant(this)" checked="">'
+                '</td>'
+                f'<td class="rating hidden">{row["rating"]}</td>'
+                f'<td class="notes hidden">{row["notes"]}</td>'
+                f'<td class="gps hidden">{row["gps"]}</td>'
+                f'<td class="originalUrl hidden">{row["originalUrl"]}</td>'
+            '</tr>\n'
         )
 
         # Save the cuisine to make the filters later
@@ -128,7 +119,7 @@ filled_html = filled_html.replace("REPLACEME_CUISINEROWS", cuisine_rows)
 with open(f"{BUILD_DIR}/restaurants.html", "w") as output_file:
     output_file.write(filled_html)
 
-# Add LeafletJS info to restaurants
+# Add LeafletJS info to restaurants.html
 input_html = None
 with open(f"{BUILD_DIR}/restaurants.html", "r") as input_file:
     input_html = input_file.read()
@@ -144,16 +135,17 @@ with open(f"{BUILD_DIR}/restaurants.html", "w") as output_file:
 
 
 # /*-- ================================================ --->
-# <---                 LOAD ALBUMS DATA                 --->
+# <---              LOAD ALBUM & SONG DATA              --->
 # <--- ================================================ --*/
-OLDEST_YEAR = 2018
+OLDEST_ALBUM_YEAR = 2018
+OLDEST_SONG_YEAR = 2022
 NEWEST_YEAR = 2025
 
 albums_html = ""
 
 # Build album grid for each year
-for year in range(OLDEST_YEAR, NEWEST_YEAR + 1):
-    # Add the year container
+for year in range(NEWEST_YEAR, OLDEST_ALBUM_YEAR - 1, -1):
+    # Add the album grid container
     albums_html += f'<div class="album-grid" id="album-grid-{year}">\n'
 
     # Add the album contents for that year
@@ -168,16 +160,53 @@ for year in range(OLDEST_YEAR, NEWEST_YEAR + 1):
 
             albums_html += ('\t'
                 f'<div class="album-block {color}">'
-                    f'<img class="entry-img" src="{img_path}" width="135px" height="135px">'
-                    f'<div class="entry-album"><i>{row["Album"]}</i></div>'
-                    f'<div class="entry-artist"><b>By:</b><u>{row["Artist"]}</u></div>'
-                    f'<div class="entry-genre"><b>Genre:</b>{row["Genre"]}</div>'
-                    f'<div class="entry-favorites hidden">{row["Favorite Songs"]}</div>'
-                f'</div>\n'
+                    f'<img class="album-img" src="{img_path}" width="135px" height="135px">'
+                    f'<div class="album-name"><i>{row["Album"]}</i></div>'
+                    f'<div class="album-artist"><b>By: </b><u>{row["Artist"]}</u></div>'
+                    f'<div class="album-genre"><b>Genre: </b>{row["Genre"]}</div>'
+                    f'<div class="album-favorites hidden">{row["Favorite Songs"]}</div>'
+                    f'<div class="album-year hidden"><b>Release year: </b>{year}</div>'
+                '</div>\n'
             )
     
-    # Close the year container
+    # Close the album grid container
     albums_html += f'</div>\n'
+
+# Build song table for each year
+for year in range(NEWEST_YEAR, OLDEST_SONG_YEAR - 1, -1):
+    # Add the song table container
+    albums_html += f'<table class="song-table" id="song-table-{year}">\n'
+
+    # Add header
+    albums_html += ('\t'
+        '<thead class="song-table-header">'
+            '<tr>'
+                '<th class="song-name">Song</th>'
+                '<th class="song-artist">Artist</th>'
+                '<th class="song-album">Album</th>'
+                '<th class="song-genre">Genre</th>'
+            '</tr>'
+        '</thead>\n'
+    )
+
+    # Add the song contents for that year
+    # (CSV content should already be in sorted order)
+    albums_html += '\t<tbody>'
+    with open(f"./csv/music/{year}_songs.csv", "r") as songs_file:
+        reader = csv.DictReader(songs_file, delimiter=",")
+        for row in reader:
+            albums_html += ('\t\t'
+                '<tr class="song-row">'
+                    f'<td class="song-name">{row["Song"]}</td>'
+                    f'<td class="song-artist">{row["Artist"]}</td>'
+                    f'<td class="song-album">{row["Album"]}</td>'
+                    f'<td class="song-genre">{row["Genre"]}</td>'
+                '</tr>\n'
+            )
+    
+    # Close the song table container
+    albums_html += '\t</tbody>'
+    albums_html += '</table>\n'
 
 # Fill music.html with data
 unfilled_html = None
@@ -188,6 +217,3 @@ filled_html = unfilled_html.replace("REPLACEME_ALBUMGRID", albums_html)
 
 with open(f"{BUILD_DIR}/music.html", "w") as output_file:
     output_file.write(filled_html)
-
-
-            

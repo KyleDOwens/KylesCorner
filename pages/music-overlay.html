@@ -1,22 +1,76 @@
-<div class="embedded-window" id="album-window">
+<div class="embedded-window" id="options-window">
     <div class="title-bar">
-        <div class="title-left">
-            <span>2025 Album List</span>
-        </div>
+        Options
     </div>
 
-    <div class="scroll-and-content" id="album-scroll-and-content">
-        <div class="scroll-container" id="album-scroll-container">
+    <div id="options-container">
+        <div id="year-selector">
+            <button class="square-button left-button" id="year-display-decrease"></button>
+                <button class="year-button">2021</button>
+                <button class="year-button">2022</button>
+                <button class="year-button">2023</button>
+                <button class="year-button">2024</button>
+                <button class="year-button" class="active">2025</button>
+            <button class="square-button right-button" id="year-display-increase"></button>
+        </div>
+
+        <div id="list-selector">
+            <button id="albums-button">Albums</button>
+            <button id="songs-button">Songs</button>
+        </div>
+
+        <div id="playlist-display">
+            Spotify playlist: <a id="playlist-link" href="" target="_blank">Albums</a>
+        </div>
+
+        <div id="music-search">
+            <input type="search" id="searchbox" placeholder="Search music..." autocomplete="off">
+        </div>
+    </div>
+    
+</div>
+
+
+<div class="embedded-window" id="music-window">
+    <div class="title-bar" id="music-window-title">
+        <!-- Will be filled in by JavaScript -->
+    </div>
+
+    <div class="scroll-and-content" id="music-scroll-and-content">
+        <div class="scroll-container" id="music-scroll-container">
+            
+            <!-- Search results -->
+            <div class="hidden" id="search-results">
+                <div class="album-grid" id="search-grid">
+                    <!-- Will be filled in by JavaScript -->
+                </div>
+                <table class="song-table" id="search-table">
+                    <thead class="song-table-header">
+                        <tr>
+                            <th class="song-name">Song</th>
+                            <th class="song-artist">Artist</th>
+                            <th class="song-album">Album</th>
+                            <th class="song-genre">Genre</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Will be filled in by JavaScript -->
+                    </tbody>
+                </table>
+
+            </div>
+
+            <!-- Album grid and tables -->
             REPLACEME_ALBUMGRID
         </div>
 
         <!-- Vertical scrollbar -->
-        <div class="vertical-scrollbar" data-prefix="album" id="album-vertical-scrollbar">
-            <button class="square-button up-button" id="album-up-scroll-button"></button>
-            <div class="scroll-track" id="album-vertical-scroll-track">
-                <div class="scroll-thumb" id="album-vertical-scroll-thumb"></div>
+        <div class="vertical-scrollbar" data-prefix="music" id="music-vertical-scrollbar">
+            <button class="square-button up-button" id="music-up-scroll-button"></button>
+            <div class="scroll-track" id="music-vertical-scroll-track">
+                <div class="scroll-thumb" id="music-vertical-scroll-thumb"></div>
             </div>
-            <button class="square-button down-button" id="album-down-scroll-button"></button>
+            <button class="square-button down-button" id="music-down-scroll-button"></button>
         </div>
     </div>
 </div>
