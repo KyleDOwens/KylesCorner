@@ -15,12 +15,14 @@
         </div>
 
         <div id="list-selector">
-            <button id="albums-button">Albums</button>
-            <button id="songs-button">Songs</button>
+            <button class="list-button" id="albums-button">Albums</button>
+            <button class="list-button" id="songs-button">Songs</button>
         </div>
 
         <div id="playlist-display">
-            Spotify playlist: <a id="playlist-link" href="" target="_blank">Albums</a>
+            <span id="long-playlist">Spotify playlist:</span>
+            <span id="short-playlist">Playlist:</span>
+            <a id="playlist-link" href="" target="_blank">Albums</a>
         </div>
 
         <div id="music-search">
@@ -51,6 +53,7 @@
                             <th class="song-artist">Artist</th>
                             <th class="song-album">Album</th>
                             <th class="song-genre">Genre</th>
+                            <th class="song-year">Year</th>
                         </tr>
                     </thead>
                     <tbody>

@@ -180,11 +180,12 @@ for year in range(NEWEST_YEAR, OLDEST_SONG_YEAR - 1, -1):
     # Add header
     albums_html += ('\t'
         '<thead class="song-table-header">'
-            '<tr>'
+            '<tr class="song-row">'
                 '<th class="song-name">Song</th>'
                 '<th class="song-artist">Artist</th>'
                 '<th class="song-album">Album</th>'
                 '<th class="song-genre">Genre</th>'
+                '<th class="song-year hidden">Year</th>'
             '</tr>'
         '</thead>\n'
     )
@@ -201,6 +202,7 @@ for year in range(NEWEST_YEAR, OLDEST_SONG_YEAR - 1, -1):
                     f'<td class="song-artist">{row["Artist"]}</td>'
                     f'<td class="song-album">{row["Album"]}</td>'
                     f'<td class="song-genre">{row["Genre"]}</td>'
+                    f'<td class="song-year hidden">{year}</td>'
                 '</tr>\n'
             )
     

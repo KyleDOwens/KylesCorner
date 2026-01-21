@@ -42,6 +42,9 @@ document.addEventListener("DOMContentLoaded", () => {
  * Update the page to display the correct data for the selected year and selected list
  */
 function updateDisplay() {
+    setActiveYearButton();
+    setActiveListButton();
+
     // Hide all displays
     document.getElementById("search-results").classList.add("hidden");
     for (let i = OLDEST_YEAR; i <= NEWEST_YEAR; i++) {
@@ -56,6 +59,8 @@ function updateDisplay() {
         document.getElementById("search-results").classList.remove("hidden");
         document.getElementById("music-window-title").innerHTML = `Search Results`;
         window.dispatchEvent(new Event('resize'));
+        grayOutYearButtons();
+        grayOutListButtons();
         return;
     }
 
@@ -77,6 +82,9 @@ function updateDisplay() {
     let playlistName = `${currentList} ${currentYear}`;
     document.getElementById("playlist-link").innerHTML = playlistName;
     document.getElementById("playlist-link").href = `${PLAYLIST_LINKS[playlistName]}`;
+
+    grayOutYearButtons();
+    grayOutListButtons();
 }
 
 
@@ -94,9 +102,7 @@ document.querySelectorAll(".year-button").forEach(btn => {
             currentList = "Albums"
         }
         
-        setActiveYearButton();
         updateDisplay();
-        grayOutListButtons();
     });
 });
 
@@ -129,7 +135,8 @@ function updateYearIncDecButtons() {
 function grayOutYearButtons() {
     document.querySelectorAll(".year-button").forEach(btn => {
         let year = btn.innerHTML;
-        btn.disabled = (PLAYLIST_LINKS[`${currentList} ${year}`] == null);
+        let referenceList = (currentList == "Search") ? "Albums" : currentList;
+        btn.disabled = (PLAYLIST_LINKS[`${referenceList} ${year}`] == null);
     });
 }
 
@@ -164,19 +171,11 @@ document.getElementById("year-display-decrease").addEventListener("click", (e) =
  */
 document.getElementById("albums-button").addEventListener("click", (e) => {
     currentList = e.target.innerHTML;
-    
-    setActiveYearButton();
-    setActiveListButton();
     updateDisplay();
-    grayOutYearButtons();
 });
 document.getElementById("songs-button").addEventListener("click", (e) => {
     currentList = e.target.innerHTML;
-    
-    setActiveYearButton();
-    setActiveListButton();
     updateDisplay();
-    grayOutYearButtons();
 });
 
 /**
@@ -231,30 +230,22 @@ function highlightMatch(element, toMatch) {
     element.innerHTML = highlightedText;
 }
 
-function searchGrids(toSearch) {
+function searchAllGrids(toSearch) {
     let blockMatches = [];
 
     document.querySelectorAll(".album-block").forEach(block => {
-        let name = normalizeBlockContent(block.querySelector(".album-name"));
-        let artist = normalizeBlockContent(block.querySelector(".album-artist"));
-        let genre = normalizeBlockContent(block.querySelector(".album-genre"));
-
         let isMatch = false;
         let copyBlock = block.cloneNode(true);
         copyBlock.querySelector(".album-year").classList.remove("hidden");
 
-        if (name.includes(toSearch)) {
-            highlightMatch(copyBlock.querySelector(".album-name"), toSearch);
-            isMatch = true;
-        }
-        if (artist.includes(toSearch)) {
-            highlightMatch(copyBlock.querySelector(".album-artist"), toSearch);
-            isMatch = true;
-        }
-        if (genre.includes(toSearch)) {
-            highlightMatch(copyBlock.querySelector(".album-genre"), toSearch);
-            isMatch = true;
-        }
+        let selectors = [".album-name", ".album-artist", ".album-genre"]
+        selectors.forEach(selector => {
+            let text = normalizeBlockContent(block.querySelector(selector));
+            if (text.includes(toSearch)) {
+                highlightMatch(copyBlock.querySelector(selector), toSearch);
+                isMatch = true;
+            }
+        });
 
         if (isMatch) {
             blockMatches.push(copyBlock);
@@ -264,20 +255,46 @@ function searchGrids(toSearch) {
     return blockMatches;
 }
 
+function searchAllTables(toSearch) {
+    let rowMatches = [];
+
+    document.querySelectorAll(".song-row").forEach(row => {
+        let isMatch = false;
+        let copyRow = row.cloneNode(true);
+        copyRow.querySelector(".song-year").classList.remove("hidden");
+
+        let selectors = [".song-name", ".song-artist", ".song-album", ".song-genre"]
+        selectors.forEach(selector => {
+            let text = row.querySelector(selector).innerHTML.toLowerCase();
+            
+            if (text.includes(toSearch)) {
+                highlightMatch(copyRow.querySelector(selector), toSearch);
+                isMatch = true;
+            }
+        });
+
+        if (isMatch) {
+            rowMatches.push(copyRow);
+        }
+    });
+
+    return rowMatches;
+}
+
 function search(toSearch) {
     // Clear search area in preparation
     let searchGrid = document.getElementById("search-grid");
     let searchTable = document.getElementById("search-table");
+    let searchTableBody = searchTable.querySelector("tbody");
     searchGrid.classList.add("hidden");
     searchTable.classList.add("hidden");
     searchGrid.textContent = "";
-    searchTable.textContent = "";
-
+    searchTableBody.textContent = "";
 
     // Search all content
     toSearch = toSearch.toLowerCase();
-    let blockMatches = searchGrids(toSearch);
-    let songMatches = [];
+    let blockMatches = searchAllGrids(toSearch);
+    let songMatches = searchAllTables(toSearch);
 
     // Add all results to the search area
     if (blockMatches.length > 0) {
@@ -291,13 +308,11 @@ function search(toSearch) {
         searchTable.classList.remove("hidden");
     }
     songMatches.forEach(match => {
-        searchTable.querySelector("tbody").addRow(match);
+        searchTableBody.appendChild(match);
     });
 
     // Update the display to only show the search area
     currentList = "Search";
-    setActiveYearButton();
-    setActiveListButton();
     updateDisplay();
 }
 

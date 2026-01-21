@@ -25,11 +25,6 @@
 * [-] Listening to, site map, ascii art, midi song?
 
 ## MUSIC
-* [x] windows with popcorn beige background? shelves for albums to sit on? solg/silver/bronze plaque under the album "nailed" onlto the shelf that displays name/genre?
-* [+] Update location of CSVs to be in csv/music/...
-* [+] Tear out old logic for building table/grid - will be handled by build.py
-* [+] Tear out D3
-* [+] Remove table view
 
 # RESTAURANTS
 * [-] !!!Make responsive

@@ -376,6 +376,11 @@ ul {
     border-bottom: 1px solid black;
 }
 
+.name,
+.cuisine {
+    text-align: left;
+}
+
 .visited {
     text-align: center;
 }

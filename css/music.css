@@ -1,31 +1,28 @@
 /*-- ================================================ --->
 <---                 WINDOW FORMATTING                --->
 <--- ================================================ --*/
+/*#region WINDOWS */
 #options-window {
     position: absolute;
-    left: calc(64px*0.25);
-    top: calc(20px*0.25);
+    top: 0.5%;
+    left: 1%;
 
-    width: calc(100% - 2*64px*0.25);
-    height: calc(75px);
+    width: 98%;
+    height: 75px;
 }
 
 #music-window {
     position: absolute;
-    left: calc(64px*0.25);
-    top: calc(20px*0.5 + 75px);
+    top: calc(0.5% + 75px + 0.5%);
+    left: 1%;
 
-    /* width: calc(70vw - 32px - 64px*0.25 - 20px - 64px*0.25); */
-    width: calc(100% - 2*64px*0.25);
-    height: calc(70vh);
+    width: 98%;
+    height: 70vh;
 }
 
 #music-scroll-and-content {
     width: 100%;
     height: calc(100% - 2rem);
-
-    /* background-image: url("../images/beige_popcorn3.jpg");
-    background-size: 25%; */
 }
 #music-scroll-container {
     overflow-x: scroll;
@@ -35,22 +32,101 @@
 #music-scroll-container::-webkit-scrollbar {
     display: none;
 }
+/*#endregion WINDOWS */
+
 
 /*-- ================================================ --->
 <---                     OPTIONS                      --->
 <--- ================================================ --*/
+/*#region OPTIONS */
 #options-container {
+    width: 100%;
+    height: calc(100% - 2rem);
+
     display: flex;
+    justify-content: space-evenly;
+    align-items: center;
 }
 
-.active {
-    background-color: green;
+/* List selector */
+#list-selector {
+    display: flex;
+    justify-content: flex-start;
 }
+.list-button {
+    height: 22px;
+    text-align: center;
+}
+
+/* Year selector */
+#year-selector {
+    display: flex;
+    justify-content: flex-start;
+}
+.year-button {
+    height: 22px;
+    text-align: center;
+}
+#year-display-decrease {
+    margin: auto 0;
+    margin-right: 5px;
+}
+#year-display-increase {
+    margin: auto 0;
+    margin-left: 5px;
+}
+
+/* Search */
+#searchbox {
+    border-top: 3px solid #404040;
+    border-left: 3px solid #404040;
+    border-right: 3px solid #ffffff;
+    border-bottom: 3px solid #ffffff;
+}
+#searchbox:focus, input:focus{
+    outline: none;
+}
+.highlight {
+    background-color: lime;
+}
+#search-grid {
+    margin-bottom: 50px;
+}
+
+/* Spotify playlist */
+#short-playlist {
+    display: none;
+}
+
+/* General buttons */
+#options-container button {
+    background-color: silver;
+    border: outset;
+
+    border-top: 2px solid #ffffff;
+    border-left: 2px solid #ffffff;
+    border-right: 2px solid #404040;
+    border-bottom: 2px solid #404040;
+}
+#options-container button:disabled
+{
+    text-decoration: line-through
+}
+#options-container button:active,
+#options-container button:disabled,
+#options-container .active {
+    border-top: 2px solid #404040;
+    border-left: 2px solid #404040;
+    border-right: 2px solid #ffffff;
+    border-bottom: 2px solid #ffffff;
+}
+/*#endregion OPTIONS */
 
 
 /*-- ================================================ --->
 <---                    ALBUM GRID                    --->
 <--- ================================================ --*/
+/*#region ALBUM_GRID */
 .album-grid {
     margin: 15px 0;
     padding: 0 15px;
@@ -95,28 +171,110 @@
     background: #cd7f32;
     border-color: #d18f4d;
 }
+/*#endregion ALBUM_GRID */
 
 
 /*-- ================================================ --->
 <---                    SONG TABLE                    --->
 <--- ================================================ --*/
+/*#region SONG_TABLE */
 .song-table {
     padding: 0 15px;
     margin: 15px auto;
     width: 60%;
 
     border-collapse: collapse;
+    border: outset;
 }
-
 .song-table th, .song-table td {
-    border: 1px solid black;
-    padding: 8px;
+    /* border: 1px solid black; */
+    /* padding: 8px; */
+    padding: 3px 3px;
+    border-bottom: 1px solid silver;
+    text-align: left;
 }
 
+.song-table th {
+    border: outset;
+    background-color: silver;
+    border-top: none;
+}
+.song-table th .song-name {
+    border-left: none;
+}
+.song-table th .song-genre {
+    border-left: none;
+}
 
-/*-- ================================================ --->
-<---                    SEARCHING                     --->
-<--- ================================================ --*/
-.highlight {
-    background-color: lime;
+.song-table td {
+    background-color: #fcfcfc;
+}
+/*#endregion SONG_TABLE */
+
+
+@media (max-width: 1150px) {
+    #searchbox {
+        display: none;
+    }
+}
+@media (max-width: 850px) {
+    #long-playlist {
+        display: none;
+    }
+    #short-playlist {
+        display: inline-block;
+    }
+}
+@media (max-width: 700px) {
+    #short-playlist {
+        display: none;
+    }
+
+    #year-display-decrease,
+    #year-display-increase {
+        margin: auto 0;
+    }
+
+    .album-grid {
+        padding: 0 5px;
+        gap: 5px;
+    }
+}
+@media (max-width: 575px) {
+    #options-container {
+        align-items: center;
+        justify-content: center;
+
+        display: flex;
+        flex-wrap: wrap;
+    }
+    #year-selector {
+        margin: 0 auto;
+        margin-bottom: 4px;
+        padding: 0 10px;
+    }
+    #list-selector {
+        margin: 0 auto;
+        padding: 0 1000px;
+    }
+    #short-playlist {
+        display: inline-block;
+    }
+
+    #options-window {
+        height: 105px;
+    }
+    #music-window {
+        top: calc(0.5% + 95px + 0.5%);
+    }
+}
+@media (max-width: 550px) {
+    .song-album {
+        display: none;
+    }
+}
+@media (max-width: 400px) {
+    .song-genre {
+        display: none;
+    }
 }

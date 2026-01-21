@@ -16,7 +16,9 @@
 html, body {
     height: 100%;
     margin: 0;
-    background-image: url("../images/space_background2.png");
+    background-image: url("../images/space_background3.png");
+    /* background-image: url("../images/space_background2.png"); */
+    /* background-image: url("../images/space_background.png"); */
     /* background-image: url("../images/star_background.gif"); */
 }
 
@@ -60,6 +62,12 @@ body {
         border: none;
     }
 }
+@media (max-width: 545px) {
+    .embedded-window .title-bar {
+        /* font-size: 14pt; */
+    }
+}
+
 
 .hidden {
     display: none !important;
@@ -129,7 +137,11 @@ input[type="checkbox"]:checked::before {
     --cell-header-width: 32px;
     --cell-width: 64px;
 
+    --title-font-color: #f8f8f8;
     --title-blue: #080065;
+    /* --title-blue: #1D6F42; */
+    /* --title-blue: #600000; */
+    /* --title-blue: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet); */
     --background-gray: #B9B6BB;
     --background-gray-bright2: #c7c4c8;
     --background-gray-bright3: #cecbcf;
@@ -236,15 +248,14 @@ input[type="checkbox"]:checked::before {
     align-items: center;
     user-select: none;
 
-
-    height: 2rem;
-    padding: 10px;
+    height: fit-content;
+    padding: 0 10px;
 
     border-style: outset; 
     /* background: linear-gradient(rgb(10, 36, 106), rgb(58, 110, 165)); */
     /* background: linear-gradient(rgb(0, 0, 128), rgb(16, 132, 208)); */
     background: var(--title-blue);
-    color:#f8f8f8;
+    color: var(--title-font-color);
 
     font-size: 18pt;
 }
@@ -1099,12 +1110,16 @@ nav#sheet-tabs {
 @media only screen and (max-width: 545px) {
     #sheet-up-scroll-button,
     #sheet-down-scroll-button {
-        display: none;
+        /* display: none; */
     }
 
     #sheet-vertical-scrollbar .scroll-track {
-        width: 12px;
-        display: none;
+        /* width: 8px; */
+        /* display: none; */
+    }
+
+    #mock-grid {
+        width: calc(100% + 10px);
     }
 }
 
