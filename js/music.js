@@ -58,6 +58,7 @@ function updateDisplay() {
     if (currentList == "Search") {
         document.getElementById("search-results").classList.remove("hidden");
         document.getElementById("music-window-title").innerHTML = `Search Results`;
+        document.getElementById("short-music-window-title").innerHTML = `Search Results`;
         window.dispatchEvent(new Event('resize'));
         grayOutYearButtons();
         grayOutListButtons();
@@ -66,6 +67,7 @@ function updateDisplay() {
 
     // Update the title of the embedded window
     document.getElementById("music-window-title").innerHTML = `${currentYear} Favorite ${currentList}`;
+    document.getElementById("short-music-window-title").innerHTML = `Favorite ${currentList}`;
 
     // Unhide the table/grid for the current year
     if (currentList == "Albums") {

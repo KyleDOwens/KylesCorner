@@ -36,14 +36,23 @@ function initializeSheet() {
 
     // Add row headers
     let mockVerticalHeader = document.getElementById("mock-vheader");
-    for (let i = 0; i <= 125; i++) {
+    for (let i = 0; i <= 275; i++) {
         let headerCell = document.createElement("span");
         headerCell.classList.add("vertical-header");
         headerCell.id = `_${i}`;
         headerCell.innerHTML = `${i}`;
 
-        if (i > 99) {
-            headerCell.classList.add("extension-header");
+        if (125 >= i && i > 99) {
+            headerCell.classList.add("extension-1");
+        }
+        else if (150 >= i && i > 125) {
+            headerCell.classList.add("extension-2");
+        }
+        else if (200 >= i && i > 150) {
+            headerCell.classList.add("extension-3");
+        }
+        else if (275 >= i && i > 200) {
+            headerCell.classList.add("extension-4");
         }
 
         mockVerticalHeader.appendChild(headerCell);
@@ -543,13 +552,17 @@ function makeActiveTab(activeTab) {
 let firstTabDisplayedIndex = null;
 function updateTabDisplay() {
     if (firstTabDisplayedIndex == null) {
-        firstTabDisplayedIndex = localStorage.getItem("firstTab") ?? 0;
+        firstTabDisplayedIndex = localStorage.getItem("firstTab") ? parseInt(localStorage.getItem("firstTab")) : 0;
     }
 
-    // Update which 5 tabs are shown
+    // Update which tabs are shown
     let sheetTabs = document.querySelectorAll(".sheet-tab")
+
+    // get the range on tab indices to show (tries to always show tabs to the right of the first, but will show left if no remain to the right) 
+    let leftIndex = (firstTabDisplayedIndex + NUM_TABS_SHOWN > sheetTabs.length) ? firstTabDisplayedIndex - (firstTabDisplayedIndex + NUM_TABS_SHOWN - sheetTabs.length) : firstTabDisplayedIndex;
+    let rightIndex = (firstTabDisplayedIndex + NUM_TABS_SHOWN > sheetTabs.length) ? sheetTabs.length : firstTabDisplayedIndex + NUM_TABS_SHOWN;
     sheetTabs.forEach((tab, i) => {
-        if (i >= firstTabDisplayedIndex && i < firstTabDisplayedIndex + NUM_TABS_SHOWN) {
+        if (leftIndex <= i && i < rightIndex) {
             tab.classList.remove("hidden");
         }
         else {
@@ -564,7 +577,7 @@ function updateTabDisplay() {
         document.getElementById("next-sheet-button").disabled = false;
         document.getElementById("last-sheet-button").disabled = false;
     }
-    else if (firstTabDisplayedIndex == (sheetTabs.length - 5)) {
+    else if (firstTabDisplayedIndex == (sheetTabs.length - NUM_TABS_SHOWN)) {
         document.getElementById("first-sheet-button").disabled = false;
         document.getElementById("previous-sheet-button").disabled = false;
         document.getElementById("next-sheet-button").disabled = true;
@@ -593,11 +606,11 @@ document.getElementById("previous-sheet-button").addEventListener("click", () =>
     updateTabDisplay();
 });
 document.getElementById("next-sheet-button").addEventListener("click", () => {
-    firstTabDisplayedIndex = Math.min(document.querySelectorAll(".sheet-tab").length - 5, ++firstTabDisplayedIndex);
+    firstTabDisplayedIndex = Math.min(document.querySelectorAll(".sheet-tab").length - NUM_TABS_SHOWN, ++firstTabDisplayedIndex);
     updateTabDisplay();
 });
 document.getElementById("last-sheet-button").addEventListener("click", () => {
-    firstTabDisplayedIndex = document.querySelectorAll(".sheet-tab").length - 5;
+    firstTabDisplayedIndex = document.querySelectorAll(".sheet-tab").length - NUM_TABS_SHOWN;
     updateTabDisplay();
 });
 

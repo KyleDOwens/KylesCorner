@@ -210,12 +210,33 @@ for year in range(NEWEST_YEAR, OLDEST_SONG_YEAR - 1, -1):
     albums_html += '\t</tbody>'
     albums_html += '</table>\n'
 
+# Build favorites grid
+favorites_html = '<div class="album-grid" id="favorites-grid">\n'
+
+with open(f"./csv/music/favorites.csv", "r") as fav_file:
+    reader = csv.DictReader(fav_file, delimiter=",")
+    for row in reader:
+        normalized_album = "".join(c for c in row["Album"] if c.isalnum()).lower()
+        normalized_artist = "".join(c for c in row["Artist"].split(",")[0] if c.isalnum()).lower()
+        img_path = f"images/music/favorites/{normalized_artist}_{normalized_album}.jpg"
+
+        favorites_html += ('\t'
+            f'<div class="small-album-block">'
+                f'<img class="album-img" src="{img_path}" width="100px" height="100px">'
+                f'<i>{row["Album"]}</i> - <u>{row["Artist"]}</u>'
+            '</div>\n'
+        )
+
+favorites_html += f'</div>\n'
+
+
 # Fill music.html with data
 unfilled_html = None
 with open(f"{BUILD_DIR}/music.html", "r") as input_file:
     unfilled_html = input_file.read()
 
 filled_html = unfilled_html.replace("REPLACEME_ALBUMGRID", albums_html)
+filled_html = filled_html.replace("REPLACEME_FAVORITES", favorites_html)
 
 with open(f"{BUILD_DIR}/music.html", "w") as output_file:
     output_file.write(filled_html)

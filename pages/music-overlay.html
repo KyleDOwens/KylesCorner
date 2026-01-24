@@ -19,6 +19,8 @@
             <button class="list-button" id="songs-button">Songs</button>
         </div>
 
+        <div class="break"></div> <!-- Used to separate the options container into two rows -->
+
         <div id="playlist-display">
             <span id="long-playlist">Spotify playlist:</span>
             <span id="short-playlist">Playlist:</span>
@@ -35,6 +37,9 @@
 
 <div class="embedded-window" id="music-window">
     <div class="title-bar" id="music-window-title">
+        <!-- Will be filled in by JavaScript -->
+    </div>
+    <div class="title-bar" id="short-music-window-title">
         <!-- Will be filled in by JavaScript -->
     </div>
 
@@ -76,4 +81,104 @@
             <button class="square-button down-button" id="music-down-scroll-button"></button>
         </div>
     </div>
+</div>
+
+<div class="horizontal-group">
+    <div class="embedded-window" id="playlists-window">
+        <div class="title-bar">
+            Playlists
+        </div>
+
+        <div id="playlists-container">
+            <div class="window-container">
+                I create a playlist for each album/song list I make.
+                There are links to them on each list page, but I've also included them all here :)
+            </div>
+            <div id="playlists-blocks">
+                <div class="playlist-block">
+                    <div class="year-title"><u>2025</u></div>
+                    <div class="playlist"><a href="https://open.spotify.com/playlist/0Q6k70RNa5yfCzR7FoWZJT?si=088be65e8d3d4ad1" target="_blank">Albums 2025</a></div>
+                    <div class="playlist"><a href="https://open.spotify.com/playlist/78N72f5j0mTbZOkbTlPAJH?si=18c024ca5f964778" target="_blank">Songs 2025</a></div>
+                </div>
+                <div class="playlist-block">
+                    <div class="year-title"><u>2024</u></div>
+                    <div class="playlist"><a href="https://open.spotify.com/playlist/0MATwTyjzRLJT9rhMKwM6S?si=5e28ec4d25564422" target="_blank">Albums 2024</a></div>
+                    <div class="playlist"><a href="https://open.spotify.com/playlist/7nzU9D67SJdgd41dLbRwcf?si=18384ce1a1d54f9d" target="_blank">Songs 2024</a></div>
+                </div>
+                <div class="playlist-block">
+                    <div class="year-title"><u>2023</u></div>
+                    <div class="playlist"><a href="https://open.spotify.com/playlist/01jDUCJ4Z4c2No5bijVJKw?si=2e76605284f64e8e" target="_blank">Albums 2023</a></div>
+                    <div class="playlist"><a href="https://open.spotify.com/playlist/4SLr4bfpWLHQGyQzKonxjE?si=35409659241941f0" target="_blank">Songs 2023</a></div>
+                </div>
+                <div class="playlist-block">
+                    <div class="year-title"><u>2022</u></div>
+                    <div class="playlist"><a href="https://open.spotify.com/playlist/7jwCBOFBCl1BrwmkPrPLBr?si=099649841fa54b03" target="_blank">Albums 2022</a></div>
+                    <div class="playlist"><a href="https://open.spotify.com/playlist/1JGn9zna2lNdGRklbuOlUX?si=eea92f25e4d44292" target="_blank">Songs 2022</a></div>
+                </div>
+                <div class="playlist-block">
+                    <div class="year-title"><u>2021</u></div>
+                    <div class="playlist"><a href="https://open.spotify.com/playlist/0T0mqDU2EjiHQaDFIJm79V?si=ff7af6c9a10449a9" target="_blank">Albums 2021</a></div>
+                    <div class="playlist"><a href="#" class="disabled">Songs 2021</a></div> <!-- ADD TARGET = "_BLANK"-->
+                </div>
+                <div class="playlist-block">
+                    <div class="year-title"><u>2020</u></div>
+                    <div class="playlist"><a href="https://open.spotify.com/playlist/3UXyXqHD527llczssqr3TK?si=6a27492ae6ec4ad1" target="_blank">Albums 2020</a></div>
+                    <div class="playlist"><a href="#" class="disabled">Songs 2020</a></div> <!-- ADD TARGET = "_BLANK"-->
+                </div>
+                <div class="playlist-block">
+                    <div class="year-title"><u>2019</u></div>
+                    <div class="playlist"><a href="https://open.spotify.com/playlist/3v253ZQ652keRJmdDJy0Sb?si=edfb8d65f1c342b1" target="_blank">Albums 2019</a></div>
+                    <div class="playlist"><a href="#" class="disabled">Songs 2019</a></div> <!-- ADD TARGET = "_BLANK"-->
+                </div>
+                <div class="playlist-block">
+                    <div class="year-title"><u>2018</u></div>
+                    <div class="playlist"><a href="https://open.spotify.com/playlist/2khHeRdQA4tF096H1LNX08?si=f7691f6956294331" target="_blank">Albums 2018</a></div>
+                    <div class="playlist"><a href="#" class="disabled">Songs 2018</a></div> <!-- ADD TARGET = "_BLANK"-->
+                </div> 
+            </div>
+        </div>
+        
+    </div>
+
+    <div class="embedded-window" id="guide-window">
+        <div class="title-bar">
+            Guide
+        </div>
+
+        <div class="window-container" id="guide-container">
+            <p>
+                This is the page for me to share my music hobby!
+                Each year I have the goal of listening to at least 100 new albums. 
+                At the end of the year I make lists of my favorite albums and songs I listened to, and put those here!
+            </p>
+            <p>
+                I don't like "out of 10" rating scores, so instead I usea rating system inspired by the olympic medals.
+                I rate albums into different <i>"tiers,"</i> where there is a noteworthy difference between the albums in different tiers.
+                I use the colors to indicate these tiers, which is why you will see albums colored as <span class="gold">gold</span>, <span class="silver">silver</span>, and <span class="bronze">bronze</span>.
+                Each tier is also <i>in order</i> from favorite to least favorite, with the first album/song being my favorite.
+            </p>
+            <p>
+                (Also, every album listed here is something I really like, even if it appears "low" on my list.)
+            </p>
+        </div>
+        
+    </div>
+</div>
+
+<div class="embedded-window" id="favorites-window">
+    <div class="title-bar">
+        Other Favorites
+    </div>
+
+    <div class="window-container" id="favorites-container">
+        <p>
+            This section is to show off other albums I really like, or were really defining for me, that were not from years that I made lists for (anything before 2018).
+            These aren't completely representative of all my all-time favorites (although many are in here).
+            This is more so to give a rounder view of my music taste, in addition to my album lists.
+            Enjoy :)
+        </p>
+
+        REPLACEME_FAVORITES
+    </div>
+
 </div>

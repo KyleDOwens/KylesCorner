@@ -3,21 +3,15 @@
 <--- ================================================ --*/
 /*#region WINDOWS */
 #options-window {
-    position: absolute;
-    top: 0.5%;
-    left: 1%;
-
-    width: 98%;
-    height: 75px;
+    margin: 0.5% 1%;
+    min-width: 98%;
+    min-height: 75px;
 }
 
 #music-window {
-    position: absolute;
-    top: calc(0.5% + 75px + 0.5%);
-    left: 1%;
-
-    width: 98%;
-    height: 70vh;
+    margin: 0.5% 1%;
+    min-width: 98%;
+    height: 66vh;
 }
 
 #music-scroll-and-content {
@@ -32,6 +26,11 @@
 #music-scroll-container::-webkit-scrollbar {
     display: none;
 }
+
+#sheet-overlay .horizontal-group {
+    gap: 1%;
+    margin: 0.5% 1%;
+}
 /*#endregion WINDOWS */
 
 
@@ -41,7 +40,7 @@
 /*#region OPTIONS */
 #options-container {
     width: 100%;
-    height: calc(100% - 2rem);
+    height: 40px;
 
     display: flex;
     justify-content: space-evenly;
@@ -124,6 +123,10 @@
 <---                    ALBUM GRID                    --->
 <--- ================================================ --*/
 /*#region ALBUM_GRID */
+#short-music-window-title {
+    display: none;
+}
+
 .album-grid {
     margin: 15px 0;
     padding: 0 15px;
@@ -138,10 +141,25 @@
     align-items: stretch;
     gap: 10px;
 }
+#favorites-grid {
+    gap: 5px;
+}
 .album-block {
     vertical-align: top;
-    width: calc(20% - 15px);
-    min-width: 225px;
+    width: calc(20% - 30px);
+    min-width: 190px;
+
+    padding: 10px 5px;
+    box-sizing: border-box;
+    border: outset;
+}
+.small-album-block {
+    vertical-align: top;
+    width: calc(10% - 30px);
+    min-width: 150px;
+
+    text-align: center;
+    font-size: 10pt;
 
     padding: 10px 5px;
     box-sizing: border-box;
@@ -209,12 +227,105 @@
 /*#endregion SONG_TABLE */
 
 
-@media (max-width: 1150px) {
-    #searchbox {
-        display: none;
+/*-- ================================================ --->
+<---                  PLAYLIST WINDOW                 --->
+<--- ================================================ --*/
+/*#region PLAYLISTS */
+#playlists-window {
+    min-width: 47%;
+    height: fit-content;
+}
+#playlists-blocks {
+    margin: 15px auto;
+    width: 100%;
+    max-width: calc(150px*5 + 10px*4);
+    min-width: 150px;
+
+    align-items: center;
+    justify-content: center;
+
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    gap: 10px;
+}
+.playlist-block {
+    vertical-align: top;
+    width: 150px;
+    height: 100px;
+    width: 115px;
+
+    text-align: center;
+
+    padding: 10px;
+    box-sizing: border-box;
+    border: outset;
+    margin-bottom: 10px;
+}
+/*#endregion PLAYLISTS */
+
+
+/*-- ================================================ --->
+<---                  CONTENT WINDOWS                 --->
+<--- ================================================ --*/
+/*#region CONTENT_WINDOWS */
+#guide-window {
+    min-width: 47%;
+    height: fit-content;
+}
+
+#favorites-window {
+    margin: 0.5% 1%;
+    min-width: 98%;
+    height: fit-content;
+}
+/*#endregion CONTENT_WINDOWS */
+
+
+/*-- ================================================ --->
+<---           MEDIA QUERIES / RESPONSIVENES          --->
+<--- ================================================ --*/
+/*#region MEDIA */
+/* Mock grid extensions */
+@media (max-width: 1050px) {
+    .extension-1 {
+        display: block;
+        font-size: 8pt;
+    }
+    #mock-grid {
+        height: calc(20px + 20px*125);
     }
 }
-@media (max-width: 850px) {
+@media (max-width: 785px) {
+    .extension-2 {
+        display: block;
+        font-size: 8pt;
+    }
+    #mock-grid {
+        height: calc(20px + 20px*150);
+    }
+}
+@media (max-width: 600px) {
+    .extension-3 {
+        display: block;
+        font-size: 8pt;
+    }
+    #mock-grid {
+        height: calc(20px + 20px*200);
+    }
+}
+@media (max-width: 435px) {
+    .extension-4 {
+        display: block;
+        font-size: 8pt;
+    }
+    #mock-grid {
+        height: calc(20px + 20px*275);
+    }
+}
+
+/* Responsiveness */
+@media (max-width: 1150px) {
     #long-playlist {
         display: none;
     }
@@ -222,47 +333,56 @@
         display: inline-block;
     }
 }
-@media (max-width: 700px) {
+@media (max-width: 980px) {
     #short-playlist {
         display: none;
+    }
+}
+@media (max-width: 850px) {
+    #options-container {
+        align-items: center;
+        justify-content: center;
+        display: flex;
+        flex-wrap: wrap;
+    }
+    .break {
+        width: 100%
+    }
+    #year-selector {
+        margin: 4px 0;
+        margin-right: 3%;
+    }
+    #list-selector {
+        margin: 4px 0;
+        margin-left: 3%;
+    }
+    #playlist-display {
+        margin-right: 3%;
+    }
+    #music-search {
+        margin-left: 3%;
+    }
+    #short-playlist {
+        display: inline-block;
+    }
+    #options-window {
+        height: 95px;
     }
 
     #year-display-decrease,
     #year-display-increase {
         margin: auto 0;
     }
-
     .album-grid {
         padding: 0 5px;
         gap: 5px;
     }
 }
-@media (max-width: 575px) {
-    #options-container {
-        align-items: center;
-        justify-content: center;
 
-        display: flex;
-        flex-wrap: wrap;
-    }
-    #year-selector {
-        margin: 0 auto;
-        margin-bottom: 4px;
-        padding: 0 10px;
-    }
-    #list-selector {
-        margin: 0 auto;
-        padding: 0 1000px;
-    }
-    #short-playlist {
-        display: inline-block;
-    }
 
-    #options-window {
-        height: 105px;
-    }
-    #music-window {
-        top: calc(0.5% + 95px + 0.5%);
+@media (max-width: 650px) {
+    #sheet-overlay .horizontal-group {
+        display: block;
     }
 }
 @media (max-width: 550px) {
@@ -270,8 +390,40 @@
         display: none;
     }
 }
+@media (max-width: 545px) {
+    #options-window,
+    #music-window,
+    #playlists-window,
+    #guide-window,
+    #favorites-window {
+        margin-left: -2%;
+    }
+    #sheet-overlay .horizontal-group {
+        gap: 0%;
+        margin: 0.5% 0;
+    }
+}
+@media (max-width: 500px) {
+    #options-window {
+        height: 110px;
+    }
+}
+@media (max-width: 450px) {
+    #options-window {
+        height: 138px;
+    }
+}
 @media (max-width: 400px) {
     .song-genre {
         display: none;
     }
 }
+@media (max-width: 345px) {
+    #music-window-title {
+        display: none;
+    }
+    #short-music-window-title {
+        display: block;
+    }
+}
+/*#endregion MEDIA */
