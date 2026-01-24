@@ -28,7 +28,6 @@
 
 # RESTAURANTS
 * [-] Reduce # of markers on map or add marker clustering
-* [-] Make random select last forever, add ability to encode/decode it, and add button to remove random selection
 * [-] Refactor completely into non-absolute divs, using horizontal-groups and vertical-groups
 
 # RECIPES

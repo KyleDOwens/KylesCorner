@@ -1168,7 +1168,7 @@ nav#sheet-tabs {
     width: fit-content;
 }
 .dropdown-item {
-    padding-left: 1.5rem;
+    padding: 0 1.5rem;
     color: black;
     border-top: 1px solid #f0f0f0;
 }

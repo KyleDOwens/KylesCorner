@@ -344,14 +344,14 @@ function passesMenuFilters(name) {
 /**
  * Apply all filters (isited, cuisine, rating, distance) and only show restaurants that pass
  */
-function applyFilters(skipManualSelections = false) {
+function applyFilters(initialCall = false) {
     // Clear manual selections, since they will all be overwritten when filters are applied
-    if (!skipManualSelections) {
+    if (!initialCall) {
         manualSelections = [];
     }
 
     // Stop displaying a random selection, since the selection is changing
-    if (randomTimerId) {
+    if (!initialCall && randomTimerId) {
         stopHighlightTimer();
     }
 
@@ -362,7 +362,7 @@ function applyFilters(skipManualSelections = false) {
         let shownCheckbox = row.cells[tableColNameToIndex("Show")].children[0];
 
         // Skip manually selected restaurants (only done on load in with URL parameters)
-        if (skipManualSelections && manualSelections.includes(name)) {
+        if (initialCall && manualSelections.includes(name)) {
             continue;
         }
 
@@ -594,16 +594,36 @@ function encodeManualSelections() {
 }
 
 /**
+ * Converts the current random restaurant into a bit string
+ * @returns A bit string representing the random restaurant
+ */
+function encodeRandom() {
+    let bitString = "";
+
+    // Append bit string representing the key indices of the manual selections
+    let bitLen = parseInt(Object.keys(restaurants).length).toString(2).length;
+
+    let randomSelection = document.getElementById("random-selection").value;
+    if (randomSelection) {
+        let index = Object.keys(restaurants).indexOf(normalizeName(randomSelection)).toString(2);
+        bitString += "0".repeat(Math.abs(bitLen - index.length)) + index;
+    }
+    
+    return bitString;
+}
+
+/**
  * Listener to handle when the button to create the sharable URL is clicked - will update the URL and copy sharable URL to clipboard
  */
 document.getElementById("share-button").addEventListener("click", async function() {
-    let newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname
+    let newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
 
     // Get bit strings representing the state
-    let filtersBitString = encodeFilters()
-    let isochroneBitString = encodeIsochrone()
-    let manualSelectionsBitString = encodeManualSelections()
-    
+    let filtersBitString = encodeFilters();
+    let isochroneBitString = encodeIsochrone();
+    let manualSelectionsBitString = encodeManualSelections();
+    let randomBitString = encodeRandom();
+
     // Encode the map state as base62 and add to URL
     if (filtersBitString) {
         let encodedFilters = bitStringToBase62("1" + filtersBitString);
@@ -619,6 +639,11 @@ document.getElementById("share-button").addEventListener("click", async function
         let encodedManualSelections = bitStringToBase62("1" + manualSelectionsBitString);
         let prefix = newUrl.includes("?") ? "&" : "?";
         newUrl += prefix + "m=" + encodedManualSelections;
+    }
+    if (randomBitString) {
+        let encodedRandom = bitStringToBase62("1" + randomBitString);
+        let prefix = newUrl.includes("?") ? "&" : "?";
+        newUrl += prefix + "r=" + encodedRandom;
     }
     
     // Set the encoding as the new URL and copy to clipboard
@@ -737,6 +762,20 @@ function decodeAndSetManualSelections(bitString) {
 }
 
 /**
+ * Set which restaurant should be highlighted as the random selection, based on the info within the bit string
+ * @param {string} bitString The bit string containing the random restaurant
+ */
+function decodeAndSetRandom(bitString) {
+    let keyIndex = parseInt(bitString, 2);
+    let normalizedName = Object.keys(restaurants)[keyIndex];
+
+    document.getElementById("random-selection").value = restaurants[normalizedName]["name"];
+    document.getElementById("random-cuisine").value = restaurants[normalizedName]["cuisine"];
+
+    startHighlightTimer(restaurants[normalizedName]["name"]);
+}
+
+/**
  * Parses the current URL and updates the map/table state to match the information in the URL
  */
 function parseUrl() {
@@ -746,9 +785,10 @@ function parseUrl() {
     let encodedFilters = urlParams.get("f");
     let encodedIsochrone = urlParams.get("i");
     let encodedManualSelections = urlParams.get("m");
+    let encodedRandom = urlParams.get("r");
 
     // If no parameters, nothing to do
-    if (!(encodedFilters || encodedIsochrone || encodedManualSelections)) {
+    if (!(encodedFilters || encodedIsochrone || encodedManualSelections || encodedRandom)) {
         return;
     }
 
@@ -764,6 +804,10 @@ function parseUrl() {
     if (encodedManualSelections) {
         let manualSelectionsBitString = base62ToBitString(encodedManualSelections).slice(1);
         decodeAndSetManualSelections(manualSelectionsBitString);
+    }
+    if (encodedRandom) {
+        let randomBitString = base62ToBitString(encodedRandom).slice(1);
+        decodeAndSetRandom(randomBitString);
     }
 }
 //#endregion URL_SHARING
@@ -1008,6 +1052,29 @@ map.on("click", (event) => {
 <--- ================================================ --*/
 //#region RANDOM_SELECTION
 /**
+ * Starts the highlight/unhighlight timer for the given restaurant name
+ */
+function startHighlightTimer(randName) {
+    // Bring the marker to the front
+    let marker = markers[normalizeName(randName)];
+    randomOldZOffset = marker.options.zIndexOffset;
+    marker.options.zIndexOffset = 1000;
+    marker.setLatLng(marker.getLatLng()); // redraws the marker
+    
+    // Save values needed to stop the timer, then start the timer
+    randomTimerMarker = marker;
+    randomStartTime = Date.now();
+    marker._icon.classList.add("highlight");
+    randomTimerId = setInterval(() => {
+        randomTimerMarker._icon.classList.toggle("highlight");
+    }, 750);
+
+    // Enable the stop button
+    let button = document.getElementById("clear-random-button");
+    button.disabled = false;
+}
+
+/**
  * Stop the highlight/unhighlight timer and reset the marker to its original state
  */
 function stopHighlightTimer() {
@@ -1054,22 +1121,19 @@ document.getElementById("random-button").addEventListener("click", function() {
     document.getElementById("random-selection").value = randName;
     document.getElementById("random-cuisine").value = randCuisine;
 
-    // Bring the marker to the front
-    let marker = markers[normalizeName(randName)];
-    randomOldZOffset = marker.options.zIndexOffset;
-    marker.options.zIndexOffset = 1000;
-    marker.setLatLng(marker.getLatLng()); // redraws the marker
-    
     // Add timer to alternate between original marker color and highlight
-    randomTimerMarker = marker;
-    randomStartTime = Date.now();
-    marker._icon.classList.add("highlight");
-    randomTimerId = setInterval(() => {
-        randomTimerMarker._icon.classList.toggle("highlight");
-        if (Date.now() - randomStartTime >= 750*16) {
-            stopHighlightTimer();
-        }
-    }, 750);
+    startHighlightTimer(randName);
+});
+
+document.getElementById("clear-random-button").addEventListener("click", function() {
+    if (randomTimerId) {
+        stopHighlightTimer();
+    }
+
+    document.getElementById("random-selection").value = "";
+    document.getElementById("random-cuisine").value = "";
+    
+    this.disabled = true;
 });
 //#endregion RANDOM_SELECTION
 

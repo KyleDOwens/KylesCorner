@@ -5,33 +5,39 @@
 /* Rather than have different colored markers, just transform a single black marker into any color I want */
 .visited-low {
     color: #A8C95B;
+    /* background: #A8C95B; */
     filter: invert(90%) sepia(66%) saturate(511%) hue-rotate(18deg) brightness(88%) contrast(76%)
         drop-shadow(1px 0 0 black) drop-shadow(0 1px 0 black) drop-shadow(-1px 0 0 black) drop-shadow(0 -1px 0 black);
 }
 .visited-medium {
     color: #69984E;
+    /* background: #69984E; */
     filter: invert(51%) sepia(56%) saturate(363%) hue-rotate(54deg) brightness(95%) contrast(86%)
         drop-shadow(1px 0 0 black) drop-shadow(0 1px 0 black) drop-shadow(-1px 0 0 black) drop-shadow(0 -1px 0 black);
 }
 .visited-high {
     color: #135E26;
+    /* background: #135E26; */
     filter: invert(26%) sepia(15%) saturate(2489%) hue-rotate(83deg) brightness(98%) contrast(88%)
         drop-shadow(1px 0 0 black) drop-shadow(0 1px 0 black) drop-shadow(-1px 0 0 black) drop-shadow(0 -1px 0 black);
 }
 
 .unvisited-low {
     color: #92CAF9;
+    /* background: #92CAF9; */
     filter: invert(71%) sepia(57%) saturate(490%) hue-rotate(180deg) brightness(102%) contrast(95%)
         drop-shadow(1px 0 0 black) drop-shadow(0 1px 0 black) drop-shadow(-1px 0 0 black) drop-shadow(0 -1px 0 black);
 }
 .unvisited-medium {
     color: #2196F2;
+    /* background: #2196F2; */
     filter: invert(46%) sepia(66%) saturate(2186%) hue-rotate(184deg) brightness(99%) contrast(92%)
         drop-shadow(1px 0 0 black) drop-shadow(0 1px 0 black) drop-shadow(-1px 0 0 black) drop-shadow(0 -1px 0 black);
         
 }
 .unvisited-high {
     color: #1668BF;
+    /* background: #1668BF; */
     filter: invert(31%) sepia(84%) saturate(1094%) hue-rotate(186deg) brightness(91%) contrast(98%)
         drop-shadow(1px 0 0 black) drop-shadow(0 1px 0 black) drop-shadow(-1px 0 0 black) drop-shadow(0 -1px 0 black);
 }
@@ -64,6 +70,10 @@
 
 ul {
     margin: 0;
+}
+
+button:disabled {
+    border: inset;
 }
 
 #sheet-canvas {
@@ -141,12 +151,13 @@ ul {
 
 #distance-filter button {
     padding: 3px;
+    border: outset;
+    background-color: #B9B6BB;
 }
-#distance-filter button:active:not(:disabled) {
-    border-top: 2px solid #404040;
-    border-left: 2px solid #404040;
-    border-right: 2px solid #ffffff;
-    border-bottom: 2px solid #ffffff;
+#distance-filter button:active,
+#distance-filter button:disabled,
+#distance-filter .active  {
+    border: inset;
 }
 
 #distance-info {
@@ -242,12 +253,13 @@ ul {
 }
 #random-container button {
     padding: 3px;
+    border: outset;
+    background-color: #B9B6BB;
 }
-#random-container button:active {
-    border-top: 2px solid #404040;
-    border-left: 2px solid #404040;
-    border-right: 2px solid #ffffff;
-    border-bottom: 2px solid #ffffff;
+#random-container button:active,
+#random-container button:disabled,
+#random-container .active {
+    border: inset;
 }
 
 #random-container input {
@@ -264,13 +276,6 @@ ul {
 
 #random-container input:focus {
     outline-width: 0;
-}
-
-@media (max-width: 875px) {
-    #random-container {
-        flex-direction: column;
-        gap: 0;
-    }
 }
 /*#endregion RANDOM_SELECTION */
 
@@ -289,17 +294,11 @@ ul {
 }
 #share-button {
     padding: 3px;
-
-    border-top: 2px solid #ffffff;
-    border-left: 2px solid #ffffff;
-    border-right: 2px solid #404040;
-    border-bottom: 2px solid #404040;
+    border: outset;
+    background-color: #B9B6BB;
 }
 #share-button:active {
-    border-top: 2px solid #404040;
-    border-left: 2px solid #404040;
-    border-right: 2px solid #ffffff;
-    border-bottom: 2px solid #ffffff;
+    border: inset;
 }
 
 #share-subheader {
@@ -487,10 +486,26 @@ ul {
         display: none;
     }
 }
-@media (max-width: 1250px) {
+@media (max-width: 1265px) {
     .visited {
         display: none;
-    }    
+    }
+    #map {
+        margin-bottom: 4px;
+    }
+    #random-container {
+        align-items: center;
+        justify-content: center;
+        display: flex;
+        flex-wrap: wrap;
+        row-gap: 4px;
+    }
+    #share-container {
+        margin-top: 4px;
+    }
+    .break {
+        width: 100%;
+    } 
 }
 @media (max-width: 1100px) { /* Switch to single column */
     .window-container {
@@ -511,16 +526,15 @@ ul {
     }
     #map {
         height: 70%;
+        margin-bottom: 10px;
     }
+    .break {
+        width: 0%;
+    } 
     #random-container {
         display: flex;
-        flex-wrap: wrap;
-        align-items: center;
         justify-content: center;
-        gap: 2px;
-    }
-    #share-container {
-        margin-top: 4px;
+        gap: 5px;
     }
     #list-window {
         top: 34%;
@@ -611,6 +625,18 @@ ul {
         font-size: 10pt;
     }
 }
+@media (max-width: 670px) {
+    #random-container {
+        align-items: center;
+        justify-content: center;
+        display: flex;
+        flex-wrap: wrap;
+        row-gap: 4px;
+    }
+    .break {
+        width: 100%;
+    } 
+}
 @media (max-width: 545px) {
     #map-window,
     #list-window,
@@ -628,6 +654,12 @@ ul {
     .visited {
         display: none;
     }   
+}
+@media (max-width: 670px) {
+    #map {
+        margin-bottom: 4px;
+        height: 69%;
+    }
 }
 @media (max-width: 410px) {
     #cuisine-vertical-scrollbar {
