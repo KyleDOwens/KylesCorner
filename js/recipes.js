@@ -1,4 +1,5 @@
 let recipeIndex = 0;
+let recipeHeights = {};
 
 /*-- ================================================ --->
 <---                  INITIALIZATION                  --->
@@ -14,6 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
 function initializeBook() {
     let recipes = document.querySelectorAll(".recipe");
     recipes.forEach((recipeElement) => {
+        recipeHeights[recipeElement.id] = recipeElement.scrollHeight;
         recipeElement.style.display = "none";
     });
 
@@ -30,6 +32,12 @@ function updatePageButtons() {
     document.getElementById("previous-recipe-button").disabled = (recipeIndex == 0);
     document.getElementById("next-recipe-button").disabled = (recipeIndex == recipes.length - 1);
     document.getElementById("table-contents-button").disabled = (recipeIndex == 0);
+}
+
+function updateBookHeight() {
+    let bookContainer = document.getElementById("book-container");
+    let recipes = document.querySelectorAll(".recipe");
+    bookContainer.style.height = `${recipeHeights[recipes[recipeIndex].id] / 2}px`;
 }
 
 function flipForwards(newIndex) {
@@ -54,6 +62,7 @@ function flipForwards(newIndex) {
         recipeIndex = newIndex;
         bookContainer.style.backgroundImage = 'url("../images/recipes/bigbook_crop_static.png")';
         updatePageButtons();
+        updateBookHeight();
     }, 1250);
 }
 function flipBackwards(newIndex) {
@@ -78,6 +87,7 @@ function flipBackwards(newIndex) {
         recipeIndex = newIndex;
         bookContainer.style.backgroundImage = 'url("../images/recipes/bigbook_crop_static.png")';
         updatePageButtons();
+        updateBookHeight();
     }, 1250);
 }
 

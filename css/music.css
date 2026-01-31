@@ -262,6 +262,9 @@
     border: outset;
     margin-bottom: 10px;
 }
+.playlist {
+    margin-top: 5px;
+}
 /*#endregion PLAYLISTS */
 
 
