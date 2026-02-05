@@ -1,0 +1,73 @@
+#skating-window {
+    width: 80%;
+    margin: 2% auto;
+} 
+
+#checklist-container {
+    background-image: url("../images/skating/snow.gif");
+    padding: 2% 3%;
+    justify-content: center;
+    align-items: center;
+
+    display: flex;
+    flex-direction: column;
+}
+
+label, input {
+    pointer-events: none;
+}
+#checklist-container input {
+    float: left;
+    margin-right: 8px;
+    margin-bottom: 6px;
+    background-color: silver;
+}
+
+
+h1 {
+    margin-bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+h2 {
+    margin-top: 25px;
+    margin-bottom: 8px;
+    padding: 0 8px;
+    border-bottom: 2px solid black;
+}
+
+.header {
+    width: 70%;
+    max-height: 60px;
+}
+.decorator {
+    width: 5%
+}
+
+#skater-gif {
+    transform: translateY(30px);
+}
+
+#ice-container {
+    background-image: url("../images/skating/ice.png");
+    height: 80px;
+}
+
+@media (max-width: 900px) {
+    #skating-window {
+        width: 98%;
+        margin: 0.5% auto;
+    }
+    .header {
+        width: 90%;
+    }
+    .decorator {
+        width: 5%
+    }
+}
+@media (max-width: 545px) { /* shrink sheet headers */
+    #skating-window {
+        margin: -0.5% -1.5%;
+    } 
+}
