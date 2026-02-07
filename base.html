@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="css/REPLACEME_PAGENAME.css">
     <!-- REPLACEME_EXTRALINK -->
     <!-- <meta name="viewport" content="width=device-width, initial-scale=0.4" /> -->
+     <link rel="icon" href="images/world.gif">
 </head>
 
 <body>
@@ -21,8 +22,9 @@
             <div class="title-bar">
                 <!-- Window title -->
                 <div class="title-left">
-                    <span>∟</span>
-                    <span>Kyle's Corner</span>
+                    <!-- <span>∟</span> -->
+                    <img src="images/world.gif" height="30px">
+                    <span>Kyle's World</span>
                 </div>
 
                 <!-- Window control buttons -->
@@ -39,25 +41,20 @@
                 <button class="menu-button" id="edit-menu"><u>E</u>dit</button>
                 <button class="menu-button" id="view-menu"><u>V</u>iew</button>
                 <button class="menu-button" id="insert-menu"><u>I</u>nsert</button>
-                <button class="menu-button" id="format-menu"><u>F</u>ormat</button>
-                <button class="menu-button" id="tools-menu"><u>T</u>ools</button>
-                <button class="menu-button" id="data-menu"><u>D</u>ata</button>
-                <button class="menu-button" id="window-menu"><u>W</u>indow</button>
                 <button class="menu-button" id="help-menu"><u>H</u>elp</button>
-            </nav>
 
-            <!-- Text formatting bar -->
-            <nav id="text-bar" #>
-                <!-- Cut, Copy, Paste,,, Save, Undo, Redo -->
+                <!-- Save button -->
                 <div class="horizontal-group">
                     <button class="square-button" id="save-button"></button>
                 </div>
 
+                <!-- Undo redo buttons -->
                 <div class="horizontal-group">
-                    <button class="square-button unredo-button" id="undo-button"><span id="undo-hook"></span></button>
-                    <button class="square-button unredo-button" id="redo-button"></button>
+                    <button class="square-button unredo-button" id="undo-button" onclick="history.back()"><span id="undo-hook"></span></button>
+                    <button class="square-button unredo-button" id="redo-button" onclick="history.forward(1)"></button>
                 </div>
 
+                <!-- Cut, copy, paste -->
                 <div class="horizontal-group">
                     <button class="square-button clipboard-button" id="cut-button"></button>
                     <button class="square-button clipboard-button" id="copy-button"></button>
@@ -66,58 +63,91 @@
                     </button>
                 </div>
 
-                <div class="horizontal-group dropdown-display" id="font-input-dropdown">
-                    <input type="text" id="font-input" value="Arial">
-                    <button class="square-button down-button"></button>
+                <!-- Theme selector -->
+                <div class="dropdown" id="theme-selector">
+                    <div class="dropdown-display">
+                        <!-- theme -->.
+                        <button class="square-button down-button"></button>
+                    </div>
+                    <div class="dropdown-options hidden">
+                        <div class="dropdown-item dropdown-selected"><i class="faint-text">coming soon</i></div>
+                        <!-- <div class="dropdown-item dropdown-selected">blue</div>
+                        <div class="dropdown-item">green</div>
+                        <div class="dropdown-item">red</div>
+                        <div class="dropdown-item">rainbow</div> -->
+                    </div>
                 </div>
 
-                <div class="horizontal-group dropdown-display" id="font-size-dropdown">
-                    <input type="text" id="font-size-input" value="10">
-                    <button class="square-button down-button"></button>
+                <!-- Background selector -->
+                <div class="dropdown" id="background-selector">
+                    <div class="dropdown-display">
+                        <!-- background -->.
+                        <button class="square-button down-button"></button>
+                    </div>
+                    <div class="dropdown-options hidden">
+                        <div class="dropdown-item dropdown-selected"><i class="faint-text">coming soon</i></div>
+                        <!-- <div class="dropdown-item dropdown-selected">space (twinkle)</div>
+                        <div class="dropdown-item">space (static)</div>
+                        <div class="dropdown-item">background3</div> -->
+                    </div>
                 </div>
 
+                <!-- Cursor selector -->
+                <div class="dropdown" id="cursor-selector">
+                    <div class="dropdown-display">
+                        <!-- cursor -->.
+                        <button class="square-button down-button"></button>
+                    </div>
+                    <div class="dropdown-options hidden">
+                        <div class="dropdown-item dropdown-selected"><i class="faint-text">coming soon</i></div>
+                        <!-- <div class="dropdown-item dropdown-selected">cursor1</div>
+                        <div class="dropdown-item">cursor2</div>
+                        <div class="dropdown-item">cursor3</div> -->
+                    </div>
+                </div>
+
+                <!-- Bold, italic, underline -->
                 <div class="horizontal-group">
                     <button class="square-button font-button" id="bold-button"><b>B</b></button>
                     <button class="square-button font-button" id="italic-button"><i>I</i></button>
                     <button class="square-button font-button" id="underline-button"><u>U</u></button>
                 </div>
 
+                <!-- Left, center, right align -->
                 <div class="horizontal-group">
                     <button class="square-button align-button" id="left-align-button"></button>
                     <button class="square-button align-button" id="center-align-button"></button>
                     <button class="square-button align-button" id="right-align-button"></button>
                 </div>
 
-                <div>
+                <!-- Readonly -->
+                <div class="horizontal-group">
                     <span class="faint-text" id="readonly-mode">*READONLY MODE*</span>
                 </div>
-
             </nav>
 
             <!-- Cell info / marquee bar -->
-            <nav id="cell-bar" #>
+            <nav id="marquee-bar" #>
+
                 <div class="dropdown">
-                    <div class="dropdown-display horizontal-group">
-                        <input type="text" autocomplete="off" readonly class="dropdown-input" id="long-sheet-selector-input"
-                            value="current sheet: REPLACEME_PAGENAME">
-                        <input type="text" autocomplete="off" readonly class="dropdown-input" id="short-sheet-selector-input"
-                            value="REPLACEME_PAGENAME">
-                        <button class="square-button down-button" id="sheet-selector-dropdown"></button>
+                    <div class="dropdown-display">
+                        REPLACEME_PAGENAME
+                        <button class="square-button down-button"></button>
                     </div>
-                    <div class="dropdown-menu hidden" id="sheet-dropdown-menu">
+                    <div class="dropdown-options hidden">
                         <a class="sheet-link" href="homepage.html" data-title="homepage"><div class="dropdown-item dropdown-selected">homepage</div></a>
                         <a class="sheet-link" href="about.html" data-title="about"><div class="dropdown-item">about</div></a>
                         <a class="sheet-link" href="music.html" data-title="music"><div class="dropdown-item">music</div></a>
                         <a class="sheet-link" href="restaurants.html" data-title="restaurants"><div class="dropdown-item">restaurants</div></a>
                         <a class="sheet-link" href="recipes.html" data-title="recipes"><div class="dropdown-item">recipes</div></a>
                         <!-- <a class="sheet-link" href="vinyls.html" data-title="vinyls"><div class="dropdown-item">vinyls</div></a> -->
-                        <a class="sheet-link" href="pictures.html" data-title="pictures"><div class="dropdown-item">pictures</div></a>
+                        <a class="sheet-link" href="pictures.html" data-title="pictures"><div class="dropdown-item">photobook</div></a>
                         <a class="sheet-link" href="art.html" data-title="art"><div class="dropdown-item">art</div></a>
                         <!-- <a class="sheet-link" href="fiber_arts.html" data-title="fiber_arts"><div class="dropdown-item">fiber_arts</div></a>
                         <a class="sheet-link" href="ceramics.html" data-title="ceramics"><div class="dropdown-item">ceramics</div></a> -->
                     </div>
                 </div>
-                <input type="text" id="blank-input">
+
                 <input type="text" id="formula-input" placeholder="Insert formula...">
                 <div class="marquee-container">
                     <div class="marquee-track" style="--item-count: 14">
@@ -165,17 +195,17 @@
         <!--                      SHEET                       --->
         <!-- ================================================ --->
         <main class="scroll-and-content">
-            <!-- Main sheet -->
             <div id="corner-header"></div>
+            <!-- Entire sheet -->
             <div class="scroll-container" id="sheet-scroll-container">
                 <div id="sheet-canvas">
-                    <!-- Sheet "background" -->
+                    <!-- Sheet background & headers -->
                     <div id="mock-grid">
                         <div id="mock-hheader"></div>
                         <div id="mock-vheader"></div>
                     </div>
 
-                    <!-- Sheet overlay -->
+                    <!-- Sheet content -->
                     <div id="sheet-overlay">
                         REPLACEME_PAGECONTENT
                     </div>
@@ -212,7 +242,7 @@
                     <div class="sheet-tab"><a class="sheet-link" href="restaurants.html" data-title="restaurants">restaur…</a></div>
                     <div class="sheet-tab"><a class="sheet-link" href="recipes.html" data-title="recipes">recipes</a></div>
                     <!-- <div class="sheet-tab hidden"><a class="sheet-link" href="vinyls.html" data-title="vinyls">vinyls</a></div> -->
-                    <div class="sheet-tab hidden"><a class="sheet-link" href="pictures.html" data-title="pictures">pictures</a></div>
+                    <div class="sheet-tab hidden"><a class="sheet-link" href="pictures.html" data-title="pictures">photobook</a></div>
                     <div class="sheet-tab hidden"><a class="sheet-link" href="art.html" data-title="art">art</a></div>
                     <!-- <div class="sheet-tab hidden"><a class="sheet-link" href="fiber_arts.html" data-title="fiber_arts">fiber_arts</a></div>
                     <div class="sheet-tab hidden"><a class="sheet-link" href="ceramics.html" data-title="ceramics">ceramics</a></div> -->

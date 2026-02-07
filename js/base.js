@@ -16,6 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
     resizeVerticalScrollThumbs();
 
     handlePageLoad();
+    fitSheetToHeight();
 });
 
 
@@ -36,27 +37,45 @@ function initializeSheet() {
 
     // Add row headers
     let mockVerticalHeader = document.getElementById("mock-vheader");
-    for (let i = 0; i <= 275; i++) {
+    for (let i = 0; i <= 300; i++) {
         let headerCell = document.createElement("span");
         headerCell.classList.add("vertical-header");
         headerCell.id = `_${i}`;
         headerCell.innerHTML = `${i}`;
 
-        if (125 >= i && i > 99) {
-            headerCell.classList.add("extension-1");
-        }
-        else if (150 >= i && i > 125) {
-            headerCell.classList.add("extension-2");
-        }
-        else if (200 >= i && i > 150) {
-            headerCell.classList.add("extension-3");
-        }
-        else if (275 >= i && i > 200) {
-            headerCell.classList.add("extension-4");
+        if (i >= 100) {
+            headerCell.style.fontSize = "8pt";
         }
 
         mockVerticalHeader.appendChild(headerCell);
     }
+}
+
+/**
+ * Alter the height of the sheet overlay to fit all the content upon resize
+ */
+window.addEventListener("resize", () => {
+    fitSheetToHeight();
+});
+function fitSheetToHeight() {
+    let mockGrid = document.getElementById("mock-grid");
+    mockGrid.style.height = `auto`;
+
+    let scrollContainer = document.getElementById("sheet-scroll-container");
+    let scrollHeight = scrollContainer.scrollHeight;
+    let numRows = scrollHeight / 20 + 3;
+
+    let rowHeaders = document.querySelectorAll(".vertical-header");
+    rowHeaders.forEach((rowHeader, i) => {
+        if (i <= numRows) {
+            rowHeader.classList.remove("hidden");
+        }
+        else {
+            rowHeader.classList.add("hidden");
+        }
+    });
+
+    mockGrid.style.height = `${numRows * 20}px`;
 }
 //#endregion INITIALIZATION
 
@@ -615,18 +634,6 @@ document.getElementById("last-sheet-button").addEventListener("click", () => {
 });
 
 /**
- * Handles the toggling of the <current sheet> dropdown menu
- */
-function toggleSheetDropdown() {
-    this.classList.toggle("down-button");
-    this.classList.toggle("up-button");
-    document.getElementById("sheet-dropdown-menu").classList.toggle("hidden");
-}
-document.getElementById("sheet-selector-dropdown").addEventListener("click", toggleSheetDropdown);
-document.getElementById("long-sheet-selector-input").addEventListener("click", toggleSheetDropdown);
-document.getElementById("short-sheet-selector-input").addEventListener("click", toggleSheetDropdown);
-
-/**
  * Updates the dropdown and sheet tabs on page load
  */
 function handlePageLoad() {
@@ -634,7 +641,12 @@ function handlePageLoad() {
     let pageName = window.location.pathname.slice(window.location.pathname.lastIndexOf("/") + 1, window.location.pathname.indexOf(".html"));
 
     // Update the dropdown item classes
-    document.querySelectorAll("#sheet-dropdown-menu .sheet-link").forEach(sheetLink => {
+    document.querySelectorAll(".sheet-link").forEach(sheetLink => {
+        // Skip the bottom tabs
+        if (sheetLink.closest(".sheet-tab") != null) {
+            return;
+        }
+
         let dropdownItem = sheetLink.children[0];
         if (dropdownItem.innerHTML == pageName) {
             dropdownItem.classList.add("dropdown-selected");
@@ -662,3 +674,43 @@ function handlePageLoad() {
     }
 }
 //#endregion SHEET_TABS
+
+
+/*-- ================================================ --->
+<---                     DROPDOWNS                    --->
+<--- ================================================ --*/
+//#region DROPDOWN
+let openDropdown = null;
+
+/**
+ * Handles the toggling of the <current sheet> dropdown menu
+ */
+function toggleDropdown(dropdown) {
+    let button = dropdown.querySelector(".square-button");
+    let options = dropdown.querySelector(".dropdown-options");
+
+    button.classList.toggle("down-button");
+    button.classList.toggle("up-button");
+    options.classList.toggle("hidden");
+
+    openDropdown = (openDropdown == null) ? dropdown : null;
+}
+window.addEventListener("mouseup", function(e) {
+    console.log(`openDropdown = ${openDropdown?.id}`);
+    console.log(`e.target.closest(".dropdown") = ${e.target.closest(".dropdown")}`);
+    if ((openDropdown != null) && (e.target.closest(".dropdown") == null)) {
+        console.log(`closing dropdown ${openDropdown?.id} on click`);
+        toggleDropdown(openDropdown);
+    }
+});
+document.querySelectorAll(".dropdown").forEach((dropdown) => {
+    dropdown.querySelector(".dropdown-display").addEventListener("click", function() {
+        toggleDropdown(dropdown);
+    });
+});
+//#endregion DROPDOWN
+
+
+/*-- ================================================ --->
+<---                   MENU BUTTONS                   --->
+<--- ================================================ --*/
