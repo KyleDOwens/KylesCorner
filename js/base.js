@@ -63,7 +63,11 @@ function fitSheetToHeight() {
 
     let scrollContainer = document.getElementById("sheet-scroll-container");
     let scrollHeight = scrollContainer.scrollHeight;
-    let numRows = scrollHeight / 20 + 3;
+    let numRows = scrollHeight / 20;
+
+    if (numRows > 35) {
+        numRows += 3;
+    }
 
     let rowHeaders = document.querySelectorAll(".vertical-header");
     rowHeaders.forEach((rowHeader, i) => {
@@ -696,10 +700,7 @@ function toggleDropdown(dropdown) {
     openDropdown = (openDropdown == null) ? dropdown : null;
 }
 window.addEventListener("mouseup", function(e) {
-    console.log(`openDropdown = ${openDropdown?.id}`);
-    console.log(`e.target.closest(".dropdown") = ${e.target.closest(".dropdown")}`);
     if ((openDropdown != null) && (e.target.closest(".dropdown") == null)) {
-        console.log(`closing dropdown ${openDropdown?.id} on click`);
         toggleDropdown(openDropdown);
     }
 });

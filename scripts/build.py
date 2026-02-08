@@ -46,7 +46,7 @@ with open(f"./js/{BASE_FILE}.js", "r") as base_file:
 # Loop through all pages and build with base
 for file in os.listdir(os.fsencode("./pages")):
     filename = os.fsdecode(file)
-    page_name = filename.replace("-overlay.html", "")
+    page_name = filename.replace(".html", "")
 
     # Build HTML content
     input_html = None

@@ -1,5 +1,5 @@
 <div class="embedded-window" id="options-window">
-    <div class="title-bar">
+    <div class="embedded-title">
         Options
     </div>
 
@@ -36,12 +36,11 @@
 
 
 <div class="embedded-window" id="music-window">
-    <div class="title-bar" id="music-window-title">
-        <!-- Will be filled in by JavaScript -->
+    <div class="embedded-title">
+        <div id="music-window-title"><!-- Will be filled in by JavaScript --></div>
+        <img src="images/music/music_note.gif" height="25px">
     </div>
-    <div class="title-bar" id="short-music-window-title">
-        <!-- Will be filled in by JavaScript -->
-    </div>
+    <div class="embedded-title" id="short-music-window-title"><!-- Will be filled in by JavaScript --></div>
 
     <div class="scroll-and-content" id="music-scroll-and-content">
         <div class="scroll-container" id="music-scroll-container">
@@ -83,10 +82,12 @@
     </div>
 </div>
 
+<!-- TODO: remove horizontal group and just use natural flex spacing -->
 <div class="horizontal-group">
     <div class="embedded-window" id="playlists-window">
-        <div class="title-bar">
+        <div class="embedded-title">
             Playlists
+            <img src="images/music/cd_spin.gif" height="25px">
         </div>
 
         <div id="playlists-container">
@@ -141,7 +142,7 @@
     </div>
 
     <div class="embedded-window" id="guide-window">
-        <div class="title-bar">
+        <div class="embedded-title">
             Guide
         </div>
 
@@ -166,8 +167,9 @@
 </div>
 
 <div class="embedded-window" id="favorites-window">
-    <div class="title-bar">
+    <div class="embedded-title">
         Other Favorites
+        <img src="images/music/music_note.gif" height="25px">
     </div>
 
     <div class="window-container" id="favorites-container">
