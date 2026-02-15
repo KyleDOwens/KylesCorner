@@ -1,4 +1,212 @@
-<div class="embedded-window" id="recipe-book-window">
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kyle's Corner</title>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/recipes.css">
+    <!-- REPLACEME_EXTRALINK -->
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=0.4" /> -->
+    <link rel="icon" href="images/favicons/recipes_favicon.gif">
+</head>
+
+<body>
+    <div id="excel-window">
+
+        <!-- ================================================ --->
+        <!--                     HEADER                       --->
+        <!-- ================================================ --->
+        <header>
+            <div class="title-bar" id="main-title">
+                <!-- Window title -->
+                <div id="main-title-left">
+                    <!-- <span>∟</span> -->
+                    <img id="title-img" src="images/world.gif">
+                    <span id="main-title-text">KYLE'S WORLD</span>
+                </div>
+
+                <!-- Window control buttons -->
+                <div class="window-controls">
+                    <button class="square-button minimize"></button>
+                    <button class="square-button maximize"></button>
+                    <button class="square-button close"></button>
+                </div>
+            </div>
+
+            <!-- Menu bar -->
+            <nav id="menu-bar">
+                <button class="menu-button" id="file-menu"><u>F</u>ile</button>
+                <button class="menu-button" id="edit-menu"><u>E</u>dit</button>
+                <button class="menu-button" id="view-menu"><u>V</u>iew</button>
+                <button class="menu-button" id="insert-menu"><u>I</u>nsert</button>
+                <button class="menu-button" id="help-menu"><u>H</u>elp</button>
+
+                <!-- Save button -->
+                <div class="horizontal-group">
+                    <button class="square-button" id="save-button"></button>
+                </div>
+
+                <!-- Undo redo buttons -->
+                <div class="horizontal-group">
+                    <button class="square-button unredo-button" id="undo-button" onclick="history.back()"><span id="undo-hook"></span></button>
+                    <button class="square-button unredo-button" id="redo-button" onclick="history.forward(1)"></button>
+                </div>
+
+                <!-- Cut, copy, paste -->
+                <div class="horizontal-group">
+                    <button class="square-button clipboard-button" id="cut-button"></button>
+                    <button class="square-button clipboard-button" id="copy-button"></button>
+                    <button class="square-button clipboard-button" id="paste-button">
+                        <div id="paste-button-2"></div>
+                    </button>
+                </div>
+
+                <!-- Theme selector -->
+                <div class="dropdown" id="theme-selector">
+                    <div class="dropdown-display">
+                        <!-- theme -->.
+                        <button class="square-button down-button"></button>
+                    </div>
+                    <div class="dropdown-options hidden">
+                        <div class="dropdown-item dropdown-selected"><i class="faint-text">coming soon</i></div>
+                        <!-- <div class="dropdown-item dropdown-selected">blue</div>
+                        <div class="dropdown-item">green</div>
+                        <div class="dropdown-item">red</div>
+                        <div class="dropdown-item">rainbow</div> -->
+                    </div>
+                </div>
+
+                <!-- Background selector -->
+                <div class="dropdown" id="background-selector">
+                    <div class="dropdown-display">
+                        <!-- background -->.
+                        <button class="square-button down-button"></button>
+                    </div>
+                    <div class="dropdown-options hidden">
+                        <div class="dropdown-item dropdown-selected"><i class="faint-text">coming soon</i></div>
+                        <!-- <div class="dropdown-item dropdown-selected">space (twinkle)</div>
+                        <div class="dropdown-item">space (static)</div>
+                        <div class="dropdown-item">background3</div> -->
+                    </div>
+                </div>
+
+                <!-- Cursor selector -->
+                <div class="dropdown" id="cursor-selector">
+                    <div class="dropdown-display">
+                        <!-- cursor -->.
+                        <button class="square-button down-button"></button>
+                    </div>
+                    <div class="dropdown-options hidden">
+                        <div class="dropdown-item dropdown-selected"><i class="faint-text">coming soon</i></div>
+                        <!-- <div class="dropdown-item dropdown-selected">cursor1</div>
+                        <div class="dropdown-item">cursor2</div>
+                        <div class="dropdown-item">cursor3</div> -->
+                    </div>
+                </div>
+
+                <!-- Bold, italic, underline -->
+                <div class="horizontal-group">
+                    <button class="square-button font-button" id="bold-button"><b>B</b></button>
+                    <button class="square-button font-button" id="italic-button"><i>I</i></button>
+                    <button class="square-button font-button" id="underline-button"><u>U</u></button>
+                </div>
+
+                <!-- Left, center, right align -->
+                <div class="horizontal-group">
+                    <button class="square-button align-button" id="left-align-button"></button>
+                    <button class="square-button align-button" id="center-align-button"></button>
+                    <button class="square-button align-button" id="right-align-button"></button>
+                </div>
+
+                <!-- Readonly -->
+                <div class="horizontal-group">
+                    <span class="faint-text" id="readonly-mode">*READONLY MODE*</span>
+                </div>
+            </nav>
+
+            <!-- Cell info / marquee bar -->
+            <nav id="marquee-bar" #>
+
+                <div class="dropdown">
+                    <div class="dropdown-display">
+                        recipes
+                        <button class="square-button down-button"></button>
+                    </div>
+                    <div class="dropdown-options hidden">
+                        <a class="sheet-link" href="homepage.html" data-title="homepage"><div class="dropdown-item dropdown-selected">homepage</div></a>
+                        <a class="sheet-link" href="about.html" data-title="about"><div class="dropdown-item">about</div></a>
+                        <a class="sheet-link" href="music.html" data-title="music"><div class="dropdown-item">music</div></a>
+                        <a class="sheet-link" href="restaurants.html" data-title="restaurants"><div class="dropdown-item">restaurants</div></a>
+                        <a class="sheet-link" href="recipes.html" data-title="recipes"><div class="dropdown-item">recipes</div></a>
+                        <a class="sheet-link" href="pictures.html" data-title="pictures"><div class="dropdown-item">photobook</div></a>
+                        <a class="sheet-link" href="art.html" data-title="art"><div class="dropdown-item">art</div></a>
+                        <a class="sheet-link" href="skating.html" data-title="skating"><div class="dropdown-item">skating</div></a>
+                    </div>
+                </div>
+
+                <input type="text" id="formula-input" placeholder="Insert formula...">
+                <div class="marquee-container">
+                    <div class="marquee-track" style="--item-count: 14">
+                        <div>
+                            <div class="marquee-item">welcome to my website :)</div>
+                            <div class="marquee-item">go to the 'about' page to learn more!</div>
+                            <div class="marquee-item">click the page tabs in the bottom left!</div>
+                            <div class="marquee-item">scroll around!</div>
+                            <div class="marquee-item">this isnt a real spreadsheet, sorry :(</div>
+                            <div class="marquee-item">made with love &lt;3</div>
+                            <div class="marquee-item">wheee!</div>
+                            <div class="marquee-item">i've got a mean cookie recipe</div>
+                            <div class="marquee-item">go make a personal website!</div>
+                            <div class="marquee-item">more coming soon</div>
+                            <div class="marquee-item">i wonder if there are any secrets here…</div>
+                            <div class="marquee-item">♪♬♪♬♪♬</div>
+                            <div class="marquee-item">☉ ‿ ☉</div>
+                            <div class="marquee-item">click the volume button to play music!</div>
+                            <!-- <div class="marquee-item"><a href="secret.html">secret page???</a></div> -->
+                        </div>
+                        <!-- Duplicate to make the loop seamless -->
+                        <div>
+                            <div class="marquee-item">welcome to my website :)</div>
+                            <div class="marquee-item">go to the 'about' page to learn more!</div>
+                            <div class="marquee-item">click the page tabs in the bottom left!</div>
+                            <div class="marquee-item">scroll around!</div>
+                            <div class="marquee-item">this isnt a real spreadsheet, sorry :(</div>
+                            <div class="marquee-item">made with love &lt;3</div>
+                            <div class="marquee-item">wheee!</div>
+                            <div class="marquee-item">i've got a mean cookie recipe</div>
+                            <div class="marquee-item">go make a personal website!</div>
+                            <div class="marquee-item">more coming soon</div>
+                            <div class="marquee-item">i wonder if there are any secrets here…</div>
+                            <div class="marquee-item">♪♬♪♬♪♬</div>
+                            <div class="marquee-item">☉ ‿ ☉</div>
+                            <div class="marquee-item">click the volume button to play music!</div>
+                            <!-- <div class="marquee-item"><a href="secret.html">secret page???</a></div> -->
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </header>
+
+        <!-- ================================================ --->
+        <!--                      SHEET                       --->
+        <!-- ================================================ --->
+        <main class="scroll-and-content">
+            <div id="corner-header"></div>
+            <div class="scroll-container" id="sheet-scroll-container">
+                <div id="sheet-canvas">
+                    <!-- Mock spreadsheet background & headers -->
+                    <div id="mock-grid">
+                        <div id="mock-hheader"></div>
+                        <div id="mock-vheader"></div>
+                    </div>
+
+                    <!-- ================================================ --->
+                    <!--                 WEPAGE CONTENT                   --->
+                    <!-- ================================================ --->
+                    <div id="sheet-overlay">
+                        <div class="embedded-window" id="recipe-book-window">
     <div class="embedded-title">
         Recipe Book
     </div>
@@ -529,3 +737,64 @@
         <img src="" alt="">
     </div>
 </div> -->
+                    </div>
+                </div>
+            </div>
+            
+
+            <!-- Vertical scrollbar -->
+            <div class="vertical-scrollbar" data-prefix="sheet" id="sheet-vertical-scrollbar">
+                <button class="square-button up-button" id="sheet-up-scroll-button"></button>
+                <div class="scroll-track" id="sheet-vertical-scroll-track">
+                    <div class="scroll-thumb" id="sheet-vertical-scroll-thumb"></div>
+                </div>
+                <button class="square-button down-button" id="sheet-down-scroll-button"></button>
+            </div>
+        </main>
+
+        <!-- ================================================ --->
+        <!--                     FOOTER                       --->
+        <!-- ================================================ --->
+        <footer>
+            <div id="sheets-and-scrollbar">
+                <!-- Sheet selection buttons -->
+                <button class="square-button left-button" id="first-sheet-button"></button>
+                <button class="square-button left-button" id="previous-sheet-button"></button>
+                <button class="square-button right-button" id="next-sheet-button"></button>
+                <button class="square-button right-button" id="last-sheet-button"></button>
+
+                <!-- Sheet tabs -->
+                <nav id="sheet-tabs">
+                    <div class="sheet-tab active-tab"><a class="sheet-link" href="homepage.html" data-title="homepage">homepage</a></div>
+                    <div class="sheet-tab"><a class="sheet-link" href="about.html" data-title="about">about</a></div>
+                    <div class="sheet-tab"><a class="sheet-link" href="music.html" data-title="music">music</a></div>
+                    <div class="sheet-tab"><a class="sheet-link" href="restaurants.html" data-title="restaurants">restaur…</a></div>
+                    <div class="sheet-tab"><a class="sheet-link" href="recipes.html" data-title="recipes">recipes</a></div>
+                    <div class="sheet-tab hidden"><a class="sheet-link" href="pictures.html" data-title="pictures">photobook</a></div>
+                    <div class="sheet-tab hidden"><a class="sheet-link" href="art.html" data-title="art">art</a></div>
+                    <div class="sheet-tab hidden"><a class="sheet-link" href="skating.html" data-title="skating">skating</a></div>
+                </nav>
+
+                <!-- Horizontal scrollbar -->
+                <div class="horizontal-scrollbar" data-prefix="sheet" id="sheet-horizontal-scrollbar">
+                    <button class="square-button left-button" id="sheet-left-scroll-button"></button>
+                    <div class="scroll-track" id="sheet-horizontal-scroll-track">
+                        <div class="scroll-thumb" id="sheet-horizontal-scroll-thumb"></div>
+                    </div>
+                    <button class="square-button right-button" id="sheet-right-scroll-button"></button>
+                    <button class="square-button" disabled></button>
+                </div>
+            </div>
+        </footer>
+
+
+    </div>
+
+    <!-- <div class="update-notice" style="color: white; font-size: 8pt;">
+        These pages were last updated on the <u>18th of January 2025</u>
+    </div> -->
+
+    <script src="js/base.js"></script>
+    <script type="module" src="js/recipes.js"></script>
+    <!-- REPLACEME_EXTRASCRIPT -->
+</body>

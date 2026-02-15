@@ -78,6 +78,10 @@ function updateDisplay() {
     // Dispatch a 'resize' event so the base javascript will resize the scrollbar
     window.dispatchEvent(new Event('resize'));
 
+    // Set the scrollbar back to the top
+    let scrollContainer = document.getElementById("music-scroll-container");
+    scrollContainer.scrollTop = 0;
+
     // Update the link to spotify playlist
     let playlistName = `${currentList} ${currentYear}`;
     document.getElementById("playlist-link").innerHTML = playlistName;

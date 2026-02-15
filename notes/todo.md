@@ -23,13 +23,16 @@
 * [-] Listening to, site map, ascii art, midi song?
 
 ## MUSIC
-* [-] Add one line descriptions for favorites that pop up on click
+* [-] Add one line descriptions for favorites that pop up on click (maybe shake the album when you hover it?)
 
 # RESTAURANTS
 * [-] Reduce # of markers on map or add marker clustering
-* https://stadiamaps.com/build-a-map/#map=9.78/29.461/-98.584&style=outdoors
-* https://github.com/Leaflet/Leaflet.markercluster
+    * https://stadiamaps.com/build-a-map/#map=9.78/29.461/-98.584&style=outdoors
+    * https://github.com/Leaflet/Leaflet.markercluster
+* [-] Create custom map viewer and remove LeafletJS
 
 
 
 # RECIPES
+* [-] Add pictures for each recipe
+* [-] Add chef photo

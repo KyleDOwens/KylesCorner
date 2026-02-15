@@ -8,40 +8,16 @@ import os
 # /*-- ================================================ --->
 # <---               BUILD GENERIC PAGES                --->
 # <--- ================================================ --*/
-BUILD_DIR = "./build"
+BUILD_DIR = "."
 BASE_FILE = "base"
 
-# Make build directory
 if (os.getcwd().split("/")[-1] != "kyles_corner"):
     exit("ERROR: This script must be run from the project directory, not the script directory or anywhere else")
-
-if os.path.exists(f"{BUILD_DIR}"):
-    shutil.rmtree(f"{BUILD_DIR}")
-os.makedirs(f"{BUILD_DIR}")
-os.makedirs(f"{BUILD_DIR}/css")
-os.makedirs(f"{BUILD_DIR}/js")
-
-# Copy static content into base folder (fonts, images, base files)
-shutil.copyfile(f"./css/{BASE_FILE}.css", f"./build/css/{BASE_FILE}.css")
-shutil.copyfile(f"./js/{BASE_FILE}.js", f"./build/js/{BASE_FILE}.js")
-
-shutil.copyfile(f"./js/config.js", f"./build/js/config.js") # TODO: remove
-
-shutil.copytree("./css/fonts", "build/css/fonts", dirs_exist_ok=True)
-shutil.copytree("./images", "build/images", dirs_exist_ok=True)
 
 # Read in base info
 base_html = None
 with open(f"./{BASE_FILE}.html", "r") as base_file:
     base_html = base_file.read()
-
-base_css = None
-with open(f"./css/{BASE_FILE}.css", "r") as base_file:
-    base_css = base_file.read()
-
-base_js = None
-with open(f"./js/{BASE_FILE}.js", "r") as base_file:
-    base_js = base_file.read()
 
 # Loop through all pages and build with base
 for file in os.listdir(os.fsencode("./pages")):
@@ -56,14 +32,10 @@ for file in os.listdir(os.fsencode("./pages")):
     combined_html = base_html.replace("REPLACEME_PAGECONTENT", input_html)
     combined_html = combined_html.replace("REPLACEME_PAGENAME", page_name)
     
-    # Build CSS
-    shutil.copyfile(f"./css/{page_name}.css", f"./build/css/{page_name}.css")
-
     # Build JS
     if os.path.exists(f"./js/{page_name}.js"):
         script = f'<script type="module" src="js/{page_name}.js"></script>'
         combined_html = combined_html.replace("<!-- REPLACEME_SCRIPT -->", script)
-        shutil.copyfile(f"./js/{page_name}.js", f"./build/js/{page_name}.js")
     
     # Save html to output
     with open(f"{BUILD_DIR}/{page_name}.html", "w") as output_file:
@@ -228,7 +200,6 @@ with open(f"./csv/music/favorites.csv", "r") as fav_file:
         )
 
 favorites_html += f'</div>\n'
-
 
 # Fill music.html with data
 unfilled_html = None
