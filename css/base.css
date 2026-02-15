@@ -221,11 +221,33 @@ input:focus{
     padding: 0 10px;
 
     border-style: outset; 
-    /* background: linear-gradient(rgb(10, 36, 106), rgb(58, 110, 165)); */
-    /* background: linear-gradient(rgb(0, 0, 128), rgb(16, 132, 208)); */
     background: var(--title-blue);
     color: var(--title-font-color);
     font-size: 18pt;
+}
+
+#main-title-left {
+    height: 100%;
+    height: 36px;
+    cursor: pointer;
+}
+
+#main-title {
+    height: 36px;
+    line-height: 36px;
+    box-sizing: border-box;
+}
+#title-img {
+    height: 30px;
+    width: auto;
+    object-position: 1px;
+    display: inline-block;
+    vertical-align: middle;
+    margin-top: -2px;
+}
+#main-title-text {
+    min-height: 36px;
+    line-height: 36px;
 }
 
 

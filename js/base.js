@@ -81,6 +81,27 @@ function fitSheetToHeight() {
 
     mockGrid.style.height = `${numRows * 20}px`;
 }
+
+/**
+ * Make scrolling anywhere in the background scroll the main page
+ */
+/*
+int count = 0;
+document.addEventListener("wheel", (e) => {
+    if (e.target == document.getElementsByTagName("body")[0]) {
+        let sign = (e.deltaY > 0) ? 1 : -1;
+
+        // Jank interval to mimic smooth scrolling, since I can't call .scrollTo() with a passive wheel event
+        let initialCount = 0;
+        let intervalId = setInterval(() => {
+            document.getElementById("sheet-scroll-container").scrollTop += sign * document.getElementById("sheet-vertical-scroll-track").scrollHeight * 0.043039*5.75 / 30;
+            if (count++ >= initialCount + 30) {
+                clearInterval(intervalId);
+            }
+        }, 2)
+    }
+}, {passive: true});
+*/
 //#endregion INITIALIZATION
 
 
@@ -89,16 +110,21 @@ function fitSheetToHeight() {
 <--- ================================================ --*/
 //#region SCROLLBARS
 /**
- * Store the prefix values for the various custom scrollbars
+ * 
+ * Since the default HTML scrollbars do not offer a lot of customizability, I have created my own scrollbar elements
+ * These are made up of regular HTML tags (mostly divs), and so I have to add in functionality to mimic scrolling when they are interacted with
+ * This includes updating the size of the scroll thumb, the thumb's position within the track, and scrolling the associated content
+ * These functions accomplish that functionality
  * 
  * NOTE TO SELF: Maybe refactor this at some point in the future? 
- * This is done this way to abstract away all the listeners/logic for scrollbar function
- * Essentially, each scrollbar and associated elements (see structure below) follow the same HTML structure
- * They should also follow the outlined ID naming scheme below, where the only different between scrollbars is their prefix
- * That allows me to just get all the prefixes on webpage load, and add listeners/handlers to each associated element as needed
+ * I have designed this in a way so there is only one function for each feature, which is applied to each scrollbar with a loop
+ * Each scrollbar element is associated with a content element in the HTML
+ * Each scrollbar and associated elements (see structure below) follow the same HTML structure and naming conventions (outlined below)
+ * So, the only different between scrollbars is their prefix data tag, which links a scrollbar with its content
+ * That allows me to just get all the prefixes on webpage load, loop through them, and add listeners/handlers to each associated element
  * It also allows me to still identify which specific scrollbar is being clicked, or which specific content is being scrolled
  * 
- * Each scrollbar should be implemented in the following way:
+ * Each scrollbar should be implemented in the following way, replacing all 'prefix' with the name for the scrollbar:
  * 
  *     <div class="scroll-and-content">
  *         <div class="scroll-container" id="prefix-scroll-container">
@@ -115,6 +141,8 @@ function fitSheetToHeight() {
  * 
  * I haven't tested adding multiple horizontal scrollbars, but the concept should be the same
  */
+
+// Store the prefix values for the various custom scrollbars
 let horizontalScrollbars = [];
 let verticalScrollbars = [];
 
@@ -638,6 +666,38 @@ document.getElementById("last-sheet-button").addEventListener("click", () => {
 });
 
 /**
+ * Gets the html element for the tag associated with the currently loaded page
+ */
+function getCurrentTab() {
+    let pageName = window.location.pathname.slice(window.location.pathname.lastIndexOf("/") + 1, window.location.pathname.indexOf(".html"));
+    let pageTab = null;
+    document.querySelectorAll(".sheet-tab").forEach(tab => {
+        let sheetLink = tab.children[0];
+        if (sheetLink.dataset.title == pageName) {
+            pageTab = tab;
+        }
+    });
+
+    return pageTab;
+}
+
+/**
+ * Gets the index of the tag associated with the currently loaded page
+ */
+function getCurrentTabIndex() {
+    let pageName = window.location.pathname.slice(window.location.pathname.lastIndexOf("/") + 1, window.location.pathname.indexOf(".html"));
+    let pageIndex = null;
+    document.querySelectorAll(".sheet-tab").forEach((tab, i) => {
+        let sheetLink = tab.children[0];
+        if (sheetLink.dataset.title == pageName) {
+            pageIndex = i;
+        }
+    });
+
+    return pageIndex;
+}
+
+/**
  * Updates the dropdown and sheet tabs on page load
  */
 function handlePageLoad() {
@@ -660,21 +720,44 @@ function handlePageLoad() {
         }
     });
 
-    // Find corresponding tab
-    let pageTab = null;
-    document.querySelectorAll(".sheet-tab").forEach(tab => {
-        let sheetLink = tab.children[0];
-        if (sheetLink.dataset.title == pageName) {
-            pageTab = tab;
-        }
-    });
-
     // Update active tab
+    let pageTab = getCurrentTab();
+
     if (pageTab != null) {
         makeActiveTab(pageTab);
     }
     else {
         console.log("ERROR: Could not find corresponding tab for loaded page");
+        return;
+    }
+
+    // Get current range of tabs shown
+    let leftIndex = null;
+    let rightIndex = null;
+    let currentIndex = getCurrentTabIndex();
+    document.querySelectorAll(".sheet-tab").forEach((tab, i) => {
+        if (!tab.classList.contains("hidden")) {
+            rightIndex = i;
+            if (leftIndex == null) {
+                leftIndex = i;
+            }
+        }
+    });
+
+    // If the current page is NOT shown in the tab range, update the tab range to include it
+    if (currentIndex < leftIndex) {
+        console.log(`currentIndex = ${currentIndex}`);
+        console.log(`leftIndex = ${leftIndex}`);
+        console.log(`rightIndex = ${rightIndex}`);
+        firstTabDisplayedIndex = currentIndex;
+        updateTabDisplay();
+    }
+    else if (currentIndex > rightIndex) {
+        console.log(`currentIndex = ${currentIndex}`);
+        console.log(`leftIndex = ${leftIndex}`);
+        console.log(`rightIndex = ${rightIndex}`);
+        firstTabDisplayedIndex = currentIndex - (NUM_TABS_SHOWN - 1)
+        updateTabDisplay();
     }
 }
 //#endregion SHEET_TABS
@@ -715,3 +798,6 @@ document.querySelectorAll(".dropdown").forEach((dropdown) => {
 /*-- ================================================ --->
 <---                   MENU BUTTONS                   --->
 <--- ================================================ --*/
+document.getElementById("main-title-left").addEventListener("click", () => {
+    window.location.href = "homepage.html";
+});

@@ -7,7 +7,7 @@
 }
 
 #book-container {
-    background-image: url("../images/recipes/bigbook_crop_static.png");
+    background-image: url("../images/recipes/bigbook_static.png");
     background-size: 100% 100%;
     min-height: 600px;
     /* height: calc(100% - 75px); */
@@ -51,7 +51,6 @@ ol li {
 }
 .note {
     font-size: 10pt;
-    margin-top: -8px;
     margin-bottom: 8px;
 }
 .ingredient {

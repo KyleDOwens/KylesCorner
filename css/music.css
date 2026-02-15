@@ -11,7 +11,7 @@
 #music-window {
     margin: 0.5% 1%;
     min-width: 98%;
-    height: 66vh;
+    height: 75vh;
 }
 
 #music-scroll-and-content {
@@ -123,10 +123,6 @@
 <---                    ALBUM GRID                    --->
 <--- ================================================ --*/
 /*#region ALBUM_GRID */
-#short-music-window-title {
-    display: none;
-}
-
 .album-grid {
     margin: 15px 0;
     padding: 0 15px;
@@ -354,6 +350,23 @@
     .song-album {
         display: none;
     }
+
+    .album-block {
+        vertical-align: top;
+        width: calc(10% - 30px);
+        min-width: 165px;
+
+        text-align: center;
+        font-size: 10pt;
+
+        padding: 10px 5px;
+        box-sizing: border-box;
+        border: outset;
+    }
+    .album-img {
+        width: 100px;
+        height: 100px;
+    }
 }
 @media (max-width: 545px) {
     #options-window,
@@ -381,14 +394,6 @@
 @media (max-width: 400px) {
     .song-genre {
         display: none;
-    }
-}
-@media (max-width: 345px) {
-    #music-window-title {
-        display: none;
-    }
-    #short-music-window-title {
-        display: block;
     }
 }
 /*#endregion MEDIA */

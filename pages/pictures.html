@@ -1,11 +1,9 @@
 <style>
     #construciton-window {
-        position: absolute;
-        left: calc(64px*0.25);
-        top: calc(20px*0.5);
-
-        width: fit-content;
+        width: 100%;
+        max-width: fit-content;
         height: fit-content;
+        margin: 0;
     }
     .construction-wrapper {
         position: relative;
@@ -13,10 +11,18 @@
         margin-top: 0;
         width: 787px;
         height: 307px;
+
+        overflow: hidden;
     }
-    img {
+    #construciton-window img {
         position: absolute;
         display: block;
+    }
+    @media (max-width: 545px) { /* shrink sheet headers */
+        #construciton-window {
+            margin: -1.5% -3%;
+            width: 105%;
+        }
     }
 </style>
 <div class="embedded-window" id="construciton-window">

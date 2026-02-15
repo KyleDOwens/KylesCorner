@@ -11,7 +11,8 @@ This document contains all of my notes for this entire project.
 
 # How-Tos
 ## How to export locations from Google Maps:
-* Use [ExportGoogleMaps](https://exportgooglemaps.com/) tool
+
+
 * Follow the directions on the webpage to export you Google Maps data from [Google Takeout](https://takeout.google.com/settings/takeout)
 * Upload the CSV of the list you want to upload to the website
 * Once you recieve the confirmation email, follow the confirmation link to start the task
@@ -58,11 +59,16 @@ This is done in a separate step *after* combining the base base and page files i
 * [Convert hex color into CSS filter](https://codepen.io/sosuke/pen/Pjoqqp)
 * [Color picker from image](https://redketchup.io/color-picker)
 * [Word art maker](https://www.makewordart.com/)
-* [Create static map image](https://stadiamaps.com/build-a-map/#map=9.78/29.4673/-98.5817&style=outdoors)
+* [Better word art maker](https://cooltext.com/)
 * [Get shades/hues of a color](https://colorkit.co/color-picker/)
-* [GIF tools](https://onlinegiftools.com/#tools)
-* [Search for gifs](https://gifcities.org/search?)
-* [Word art creator](https://cooltext.com/)
+* [GIF tools (crop, remove background, change speed, etc.)](https://onlinegiftools.com/#tools)
+* [gif finder](https://gifcities.org/search?)
+* [under construction gifs](http://www.textfiles.com/underconstruction/)
+
+## Data tools
+* [tool to export google maps data](https://takeout.google.com/settings/takeout)
+* [tool to obtain additional data from google maps export](https://exportgooglemaps.com/)
+* [Create static map image](https://stadiamaps.com/build-a-map/#map=9.78/29.4673/-98.5817&style=outdoors)
 
 ## "Go Build a Personal Website" Inspiration
 * [Motivation for building a personal website](https://localghost.dev/blog/building-a-website-like-it-s-1999-in-2022/)
@@ -76,9 +82,14 @@ This is done in a separate step *after* combining the base base and page files i
 * [Archive of old web designs](https://www.cameronsworld.net/)
 * [Achive of old font-end design](https://makefrontendshitagain.party/)
 
-* [Under construction gifs](http://www.textfiles.com/underconstruction/)
-
-* [Inspo website (and my introduction to the indieweb - she also makes music, go listen)](https://isobelsweb.com/)
-* [Inspo website (Kate Bollinger - go listen to her music, it is good)](https://katebollinger.com/)
-* [Inspo website (and has also good networking guides)](https://beej.us/)
-* [SpaceJam??!?!](https://www.spacejam.com/1996/)
+* Inspo websites
+    * https://isobelsweb.com/
+    * https://katebollinger.com/
+    * https://beej.us/
+    * https://www.spacejam.com/1996/
+    * https://anlucas.neocities.org/
+    * https://aphub.neocities.org/
+* [Inspo website (and my introduction to the indieweb - she also makes music, go listen)]()
+* [Inspo website (Kate Bollinger - go listen to her music, it is good)]()
+* [Inspo website (and has also good networking guides)]()
+* [SpaceJam??!?!]()

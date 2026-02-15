@@ -49,7 +49,7 @@ window.addEventListener("resize", () => {
     let bookContainer = document.getElementById("book-container");
     if (width > 1000) {
         updateBookHeight();
-        bookContainer.style.backgroundImage = 'url("../images/recipes/bigbook_crop_static.png")';
+        bookContainer.style.backgroundImage = 'url("../images/recipes/bigbook_static.png")';
     }
     else {
         bookContainer.style.backgroundImage = 'none';
@@ -64,6 +64,9 @@ function updateBookHeight() {
         let newHeight = Math.max(recipeHeight / 2 + 25, 470) ;
         recipe.style.height = `${newHeight}px`;
     }
+
+    // dispatch resize event to resize the scrollbar
+    window.dispatchEvent(new Event('resize'));
 }
 
 /**
@@ -92,13 +95,13 @@ function flipForwards(newIndex) {
 
     // Change background to show animation
     let bookContainer = document.getElementById("book-container");
-    bookContainer.style.backgroundImage = 'url("../images/recipes/bigbook_crop.gif")';
+    bookContainer.style.backgroundImage = 'url("../images/recipes/bigbook_forward.gif")';
 
     // Go back to static image and show page after animation is done
     setTimeout(() => {
         recipes[newIndex].style.display = "block";
         recipeIndex = newIndex;
-        bookContainer.style.backgroundImage = 'url("../images/recipes/bigbook_crop_static.png")';
+        bookContainer.style.backgroundImage = 'url("../images/recipes/bigbook_static.png")';
         updatePageButtons();
         updateBookHeight();
     }, 1250);
@@ -125,13 +128,13 @@ function flipBackwards(newIndex) {
 
     // Change background to show animation
     let bookContainer = document.getElementById("book-container");
-    bookContainer.style.backgroundImage = 'url("../images/recipes/bigbook_crop_reverse.gif")';
+    bookContainer.style.backgroundImage = 'url("../images/recipes/bigbook_reverse.gif")';
 
     // Go back to static image and show page after animation is done
     setTimeout(() => {
         recipes[newIndex].style.display = "block";
         recipeIndex = newIndex;
-        bookContainer.style.backgroundImage = 'url("../images/recipes/bigbook_crop_static.png")';
+        bookContainer.style.backgroundImage = 'url("../images/recipes/bigbook_static.png")';
         updatePageButtons();
         updateBookHeight();
     }, 1250);
