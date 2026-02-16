@@ -364,6 +364,7 @@ function addScrollbarListeners() {
         document.getElementById(`${prefix}-scroll-container`).addEventListener("scroll", (e) => {
             updateThumbPositions(getPrefixFromId(e.target.id));
         });
+        // listeners for mobile to prevent drag and scrolling to the side
         document.getElementById(`${prefix}-scroll-container`).addEventListener("touchstart", (e) => {
             startTouch = e.touches[0].clientY;
             touchContainer = (touchContainer == null) ? document.getElementById(`${prefix}-scroll-container`) : touchContainer;
@@ -380,6 +381,7 @@ function addScrollbarListeners() {
         document.getElementById(`${prefix}-scroll-container`).addEventListener("touchend", (e) => {
             startTouch = null;
             startContainerTouch = null;
+            touchContainer = null;
         }, { passive: false});
     }    
 }
