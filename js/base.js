@@ -182,6 +182,7 @@ let startMousePos = null;
 let startScrollPos = null;
 let activeScrollPrefix = null;
 
+let touchContainer = null;
 let startContainerTouch = null;
 let startTouch = null;
 
@@ -365,15 +366,20 @@ function addScrollbarListeners() {
         });
         document.getElementById(`${prefix}-scroll-container`).addEventListener("touchstart", (e) => {
             startTouch = e.touches[0].clientY;
-            startContainerTouch = document.getElementById(`${prefix}-scroll-container`).scrollTop;
+            touchContainer = (touchContainer == null) ? document.getElementById(`${prefix}-scroll-container`) : touchContainer;
+            startContainerTouch = touchContainer.scrollTop;
         }, { passive: false});
         document.getElementById(`${prefix}-scroll-container`).addEventListener("touchmove", (e) => {
             e.preventDefault();
             let deltaY = e.touches[0].clientY - startTouch;
             console.log(startContainerTouch);
             console.log(deltaY);
-            document.getElementById(`${prefix}-scroll-container`).scrollTop = startContainerTouch + deltaY;
+            touchContainer.scrollTop = startContainerTouch - deltaY;
             updateThumbPositions(getPrefixFromId(e.target.id));
+        }, { passive: false});
+        document.getElementById(`${prefix}-scroll-container`).addEventListener("touchend", (e) => {
+            startTouch = null;
+            startContainerTouch = null;
         }, { passive: false});
     }    
 }
