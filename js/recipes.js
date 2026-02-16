@@ -53,6 +53,7 @@ window.addEventListener("resize", () => {
     else {
         bookContainer.style.backgroundImage = 'none';
     }
+    console.log("RESIZE")
 });
 function updateBookHeight() {
     let recipe = document.querySelectorAll(".recipe")[recipeIndex];
@@ -102,6 +103,7 @@ function flipForwards(newIndex) {
         bookContainer.style.backgroundImage = 'url("images/recipes/bigbook_static.png")';
         updatePageButtons();
         updateBookHeight();
+        window.dispatchEvent(new Event('resize')); // dispatch to resize the mock grid
     }, 1250);
 }
 function flipBackwards(newIndex) {
@@ -135,6 +137,7 @@ function flipBackwards(newIndex) {
         bookContainer.style.backgroundImage = 'url("images/recipes/bigbook_static.png")';
         updatePageButtons();
         updateBookHeight();
+        window.dispatchEvent(new Event('resize')); // dispatch to resize the mock grid
     }, 1250);
 }
 
