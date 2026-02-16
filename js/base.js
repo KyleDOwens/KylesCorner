@@ -212,7 +212,7 @@ function resizeVerticalScrollThumbs() {
         scrollThumb.style.top = `${0}px`;
     }
 }
-window.addEventListener("resize", () => {
+function resizeScrollThumbs() {
     resizeHorizontalScrollThumbs();
     resizeVerticalScrollThumbs();
 
@@ -220,6 +220,10 @@ window.addEventListener("resize", () => {
     for (let prefix of union) {
         updateThumbPositions(prefix);
     }
+}
+
+window.addEventListener("resize", () => {
+    resizeScrollThumbs();
 });
 
 /**

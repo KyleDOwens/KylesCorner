@@ -58,7 +58,7 @@ function updateDisplay() {
     if (currentList == "Search") {
         document.getElementById("search-results").classList.remove("hidden");
         document.getElementById("music-window-title").innerHTML = `Search Results`;
-        window.dispatchEvent(new Event('resize'));
+        resizeScrollThumbs();
         grayOutYearButtons();
         grayOutListButtons();
         return;
@@ -75,8 +75,7 @@ function updateDisplay() {
         document.getElementById(`song-table-${currentYear}`).classList.remove("hidden");
     }
 
-    // Dispatch a 'resize' event so the base javascript will resize the scrollbar
-    window.dispatchEvent(new Event('resize'));
+    resizeScrollThumbs();
 
     // Set the scrollbar back to the top
     let scrollContainer = document.getElementById("music-scroll-container");

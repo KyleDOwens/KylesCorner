@@ -9,9 +9,8 @@ let recipeIndex = 0;
 document.addEventListener("DOMContentLoaded", () => {
     initialize()
     updatePageButtons();
-    updateBookHeight();
 
-    // Dispatch a 'resize' event so the base javascript will resize the scrollbar
+    // Dispatch a 'resize' event to: (1) resize the mock grid, (2) resize the scrollbars, (3) resize the book container
     window.dispatchEvent(new Event('resize'));
 });
 
@@ -65,8 +64,7 @@ function updateBookHeight() {
         recipe.style.height = `${newHeight}px`;
     }
 
-    // dispatch resize event to resize the scrollbar
-    window.dispatchEvent(new Event('resize'));
+    resizeScrollThumbs();
 }
 
 /**
