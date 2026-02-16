@@ -11,7 +11,7 @@ import os
 BUILD_DIR = "."
 BASE_FILE = "base"
 
-if (os.getcwd().split("/")[-1] != "kyles_corner"):
+if (os.getcwd().split("/")[-1] != "kyles_world"):
     exit("ERROR: This script must be run from the project directory, not the script directory or anywhere else")
 
 # Read in base info
