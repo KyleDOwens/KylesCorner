@@ -53,7 +53,6 @@ window.addEventListener("resize", () => {
     else {
         bookContainer.style.backgroundImage = 'none';
     }
-    console.log("RESIZE")
 });
 function updateBookHeight() {
     let recipe = document.querySelectorAll(".recipe")[recipeIndex];

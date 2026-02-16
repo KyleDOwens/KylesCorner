@@ -19,6 +19,11 @@
     * [-] Add MIDI music and replace button with volume control
 
 
+# MOBILE
+* [-] Button text is blue?
+* [-] Disable the extra drag and scroll in directions that shouldn't be scrollable
+* [-] Change ratio, since top and bottom of page are being cut off?
+
 # HOMEPAGE
 * [-] Listening to, site map, ascii art, midi song?
 

@@ -182,6 +182,9 @@ let startMousePos = null;
 let startScrollPos = null;
 let activeScrollPrefix = null;
 
+let startContainerTouch = null;
+let startTouch = null;
+
 /**
  * Resizes the horizontal scrollbars according to the screen size
  */
@@ -360,8 +363,19 @@ function addScrollbarListeners() {
         document.getElementById(`${prefix}-scroll-container`).addEventListener("scroll", (e) => {
             updateThumbPositions(getPrefixFromId(e.target.id));
         });
-    }
-        
+        document.getElementById(`${prefix}-scroll-container`).addEventListener("touchstart", (e) => {
+            startTouch = e.touches[0].clientY;
+            startContainerTouch = document.getElementById(`${prefix}-scroll-container`).scrollTop;
+        }, { passive: false});
+        document.getElementById(`${prefix}-scroll-container`).addEventListener("touchmove", (e) => {
+            e.preventDefault();
+            let deltaY = e.touches[0].clientY - startTouch;
+            console.log(startContainerTouch);
+            console.log(deltaY);
+            document.getElementById(`${prefix}-scroll-container`).scrollTop = startContainerTouch + deltaY;
+            updateThumbPositions(getPrefixFromId(e.target.id));
+        }, { passive: false});
+    }    
 }
 window.addEventListener("mouseup", (e) => {
     document.body.style.userSelect = "auto";
@@ -670,10 +684,21 @@ document.getElementById("last-sheet-button").addEventListener("click", () => {
 });
 
 /**
+ * Get the string of the current page name
+ */
+function getPageName() {
+    let pageName = window.location.pathname.slice(window.location.pathname.lastIndexOf("/") + 1, window.location.pathname.indexOf(".html"));
+    if (pageName == "") {
+        return "homepage";
+    }
+    return pageName;
+}
+
+/**
  * Gets the html element for the tag associated with the currently loaded page
  */
 function getCurrentTab() {
-    let pageName = window.location.pathname.slice(window.location.pathname.lastIndexOf("/") + 1, window.location.pathname.indexOf(".html"));
+    let pageName = getPageName();
     let pageTab = null;
     document.querySelectorAll(".sheet-tab").forEach(tab => {
         let sheetLink = tab.children[0];
@@ -689,7 +714,7 @@ function getCurrentTab() {
  * Gets the index of the tag associated with the currently loaded page
  */
 function getCurrentTabIndex() {
-    let pageName = window.location.pathname.slice(window.location.pathname.lastIndexOf("/") + 1, window.location.pathname.indexOf(".html"));
+    let pageName = getPageName();
     let pageIndex = null;
     document.querySelectorAll(".sheet-tab").forEach((tab, i) => {
         let sheetLink = tab.children[0];
@@ -706,7 +731,7 @@ function getCurrentTabIndex() {
  */
 function handlePageLoad() {
     // Get the current page name
-    let pageName = window.location.pathname.slice(window.location.pathname.lastIndexOf("/") + 1, window.location.pathname.indexOf(".html"));
+    let pageName = getPageName();
 
     // Update the dropdown item classes
     document.querySelectorAll(".sheet-link").forEach(sheetLink => {
@@ -750,16 +775,10 @@ function handlePageLoad() {
 
     // If the current page is NOT shown in the tab range, update the tab range to include it
     if (currentIndex < leftIndex) {
-        console.log(`currentIndex = ${currentIndex}`);
-        console.log(`leftIndex = ${leftIndex}`);
-        console.log(`rightIndex = ${rightIndex}`);
         firstTabDisplayedIndex = currentIndex;
         updateTabDisplay();
     }
     else if (currentIndex > rightIndex) {
-        console.log(`currentIndex = ${currentIndex}`);
-        console.log(`leftIndex = ${leftIndex}`);
-        console.log(`rightIndex = ${rightIndex}`);
         firstTabDisplayedIndex = currentIndex - (NUM_TABS_SHOWN - 1)
         updateTabDisplay();
     }
