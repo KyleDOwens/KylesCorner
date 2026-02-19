@@ -5,7 +5,7 @@ This is the repository for my personal website! I've been developing this websit
 
 
 ## How can I visit the website?
-The website domain is [kyles-world.net](kyles-world.net).
+The website domain is [kyles-world.net](https://www.kyles-world.net).
 
 
 ## Repository structure

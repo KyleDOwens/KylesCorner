@@ -32,13 +32,24 @@ body {
 }
 
 #excel-window {
-    height: 95%;
+    min-height: 95vh;
+    max-height: 95vh;
+    /* height: 95%; */
     width: 70%;
-    display: grid;
+    display: flex;
+    flex-direction: column;
     border: 1px solid #c0c0c0;
 }
 #excel-window > * {
   min-width: 0;
+}
+
+header, footer {
+    height: fit-content;
+}
+
+main {
+    flex: 1;
 }
 
 .hidden {
@@ -75,58 +86,20 @@ body {
     border-bottom: 2px solid #ffffff;
 }
 
-input[type="checkbox"] {
-    appearance: none;
-    -webkit-appearance: none;
-    margin: 0;
-    
-    width: 16px;
-    height: 16px;
-    border: inset;
-
-    display: grid;
-    place-content: center;
-}
-input[type="checkbox"]::before {
-    content: "";
-    width: 10px;
-    height: 10px;
-
-    /* background-color: red; */
-    transform: scale(0);
-    transform-origin: bottom left;
-    box-shadow: inset 1em 1em black;
-    clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
-}
-input[type="checkbox"]:checked::before {
-    transform: scale(1);
-}
-input:focus{
-    outline: none;
-}
-
 :root {
-    /* TODO: */
-    --zindex-sheet-corner-header: 4;
-    --zindex-sheet-headers: 3;
-    --zindex-sheet-embeds: 2;
-    --zindex-sheet-cells: 1;
-
-    --zindex-dropdown: 10;
-
-    --cell-height: 20px;
-    --cell-header-width: 32px;
-    --cell-width: 64px;
-
     --title-font-color: #f8f8f8;
+
     --title-blue: #080065;
     /* --title-blue: #1D6F42; */
     /* --title-blue: #600000; */
     /* --title-blue: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet); */
+
     --background-gray: #B9B6BB;
+
     --background-gray-bright2: #c7c4c8;
     --background-gray-bright3: #cecbcf;
     --background-gray-bright4: #d4d3d6;
+
     --background-gray-dark1: #a09ea2;
     --background-gray-dark2: #89868a;
 
@@ -205,6 +178,36 @@ input:focus{
     border-right: 5px solid transparent;
     border-top: 8px solid black;
 }
+
+input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    margin: 0;
+    
+    width: 16px;
+    height: 16px;
+    border: inset;
+
+    display: grid;
+    place-content: center;
+}
+input[type="checkbox"]::before {
+    content: "";
+    width: 10px;
+    height: 10px;
+
+    /* background-color: red; */
+    transform: scale(0);
+    transform-origin: bottom left;
+    box-shadow: inset 1em 1em black;
+    clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+}
+input[type="checkbox"]:checked::before {
+    transform: scale(1);
+}
+input:focus{
+    outline: none;
+}
 /*#endregion BUTTONS*/
 
 
@@ -232,7 +235,6 @@ input:focus{
     height: 36px;
     cursor: pointer;
 }
-
 #main-title {
     height: 36px;
     line-height: 36px;
@@ -251,8 +253,7 @@ input:focus{
     line-height: 36px;
 }
 
-
-/* Window controls */
+/* Window controls (minimize, maximize, close) */
 .window-controls {
     display: flex;
     gap: 0.5rem;
@@ -724,7 +725,8 @@ input:focus{
 #sheet-canvas {
     position: relative;
     /* width: calc(32px + 64px*26); */
-    height: calc(20px + 20px*39);
+    /* height: calc(20px + 20px*39); */
+    height: 100%;
     width: 100%;
 }
 
@@ -762,6 +764,7 @@ input:focus{
     
     width: 100%; /* Remove for horizontal scroll */
     overflow: clip; /* Remove for horizontal scroll */
+    margin-left: 32px;
 
     position: absolute;
     top: 0;
@@ -780,9 +783,6 @@ input:focus{
     width: 64px;
     min-width: 64px; /* Remove for horizontal scroll */
     height: 20px;
-}
-#A0 {
-    margin-left: 32px;
 }
 
 #mock-vheader {
@@ -1071,6 +1071,16 @@ nav#sheet-tabs {
 <---           MEDIA QUERIES / RESPONSIVENES          --->
 <--- ================================================ --*/
 /*#region MEDIA */
+@media (min-height: 1200px) {
+    #mock-grid {
+        background-image: linear-gradient(#d4d4d4 2px, transparent 2px), linear-gradient(90deg, #d4d4d4 2px, transparent 2px);
+    }
+}
+@media (min-width: 2000px) {
+    #mock-grid {
+        background-image: linear-gradient(#d4d4d4 2px, transparent 2px), linear-gradient(90deg, #d4d4d4 2px, transparent 2px);
+    }
+}
 @media (max-width: 1600px) {
     #excel-window {
         width: 90vw;

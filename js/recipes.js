@@ -70,14 +70,11 @@ function updateBookHeight() {
 /**
  * Change the display to a new recipe, perform the page turn animation
  * @param {*} newIndex the new index being flipped too
+ * @param {*} animationPath the path to the gif to display when flipping the page
  */
-function flipForwards(newIndex) {
-    let recipes = document.querySelectorAll(".recipe");
-    if (newIndex >= recipes.length || newIndex <= recipeIndex) {
-        return;
-    }
-
+function flipBook(newIndex, animationPath) {
     // Hide page text
+    let recipes = document.querySelectorAll(".recipe");
     recipes.forEach((recipeElement) => {
         recipeElement.style.display = "none";
     });
@@ -88,12 +85,14 @@ function flipForwards(newIndex) {
         recipes[newIndex].style.display = "block";
         recipeIndex = newIndex;
         updatePageButtons();
+        window.dispatchEvent(new Event('resize')); // dispatch to resize the mock grid
+        resizeScrollThumbs();
         return;
     }
 
     // Change background to show animation
     let bookContainer = document.getElementById("book-container");
-    bookContainer.style.backgroundImage = 'url("images/recipes/bigbook_forward.gif")';
+    bookContainer.style.backgroundImage = `url("${animationPath}")`;
 
     // Go back to static image and show page after animation is done
     setTimeout(() => {
@@ -105,39 +104,25 @@ function flipForwards(newIndex) {
         window.dispatchEvent(new Event('resize')); // dispatch to resize the mock grid
     }, 1250);
 }
-function flipBackwards(newIndex) {
+
+/**
+ * Change the display to a new recipe by flipping the book page forwards/backwards
+ * @param {*} newIndex the new index being flipped too
+ */
+function flipForwards(newIndex) {
     let recipes = document.querySelectorAll(".recipe");
+    if (newIndex >= recipes.length || newIndex <= recipeIndex) {
+        return;
+    }
+
+    flipBook(newIndex, "images/recipes/bigbook_forward.gif");
+}
+function flipBackwards(newIndex) {
     if (newIndex < 0 || newIndex >= recipeIndex) {
         return;
     }
-
-    // Hide page text
-    recipes.forEach((recipeElement) => {
-        recipeElement.style.display = "none";
-    });
-
-    // If too narrow, don't do the book animation
-    let width = window.innerWidth;
-    if (width <= 1000) {
-        recipes[newIndex].style.display = "block";
-        recipeIndex = newIndex;
-        updatePageButtons();
-        return;
-    }
-
-    // Change background to show animation
-    let bookContainer = document.getElementById("book-container");
-    bookContainer.style.backgroundImage = 'url("images/recipes/bigbook_reverse.gif")';
-
-    // Go back to static image and show page after animation is done
-    setTimeout(() => {
-        recipes[newIndex].style.display = "block";
-        recipeIndex = newIndex;
-        bookContainer.style.backgroundImage = 'url("images/recipes/bigbook_static.png")';
-        updatePageButtons();
-        updateBookHeight();
-        window.dispatchEvent(new Event('resize')); // dispatch to resize the mock grid
-    }, 1250);
+    
+    flipBook(newIndex, "images/recipes/bigbook_reverse.gif");
 }
 
 /**

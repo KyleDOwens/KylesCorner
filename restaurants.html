@@ -142,6 +142,7 @@
                         <a class="sheet-link" href="pictures.html" data-title="pictures"><div class="dropdown-item">photobook</div></a>
                         <a class="sheet-link" href="art.html" data-title="art"><div class="dropdown-item">art</div></a>
                         <a class="sheet-link" href="skating.html" data-title="skating"><div class="dropdown-item">skating</div></a>
+                        <a class="sheet-link" href="#" data-title="website"><div class="dropdown-item">website</div></a>
                     </div>
                 </div>
 
@@ -162,7 +163,7 @@
                             <div class="marquee-item">i wonder if there are any secrets here…</div>
                             <div class="marquee-item">♪♬♪♬♪♬</div>
                             <div class="marquee-item">☉ ‿ ☉</div>
-                            <div class="marquee-item">click the volume button to play music!</div>
+                            <!-- <div class="marquee-item">click the volume button to play music!</div> -->
                             <!-- <div class="marquee-item"><a href="secret.html">secret page???</a></div> -->
                         </div>
                         <!-- Duplicate to make the loop seamless -->
@@ -180,7 +181,7 @@
                             <div class="marquee-item">i wonder if there are any secrets here…</div>
                             <div class="marquee-item">♪♬♪♬♪♬</div>
                             <div class="marquee-item">☉ ‿ ☉</div>
-                            <div class="marquee-item">click the volume button to play music!</div>
+                            <!-- <div class="marquee-item">click the volume button to play music!</div> -->
                             <!-- <div class="marquee-item"><a href="secret.html">secret page???</a></div> -->
                         </div>
                     </div>
@@ -192,10 +193,10 @@
         <!--                      SHEET                       --->
         <!-- ================================================ --->
         <main class="scroll-and-content">
-            <div id="corner-header"></div>
+            <div id="corner-header"><!-- Corner header of the mock grid - needed on outside level so it can be absolutely positioned within container --></div> 
             <div class="scroll-container" id="sheet-scroll-container">
                 <div id="sheet-canvas">
-                    <!-- Mock spreadsheet background & headers -->
+                    <!-- Provides the mock spreadsheet background grid & headers -->
                     <div id="mock-grid">
                         <div id="mock-hheader"></div>
                         <div id="mock-vheader"></div>
@@ -205,6 +206,7 @@
                     <!--                 WEPAGE CONTENT                   --->
                     <!-- ================================================ --->
                     <div id="sheet-overlay">
+                        <!-- This is where the page-specific content is inserted -->
                         <div class="column">
     <!-- Restaurant Map -->
     <div class="embedded-window" id="map-window">
@@ -407,7 +409,7 @@
 <tr><td class="name">SA FredericksBURGERS</td><td class="cuisine">Hamburger</td><td class="visited"></td><td class="shown"><input type="checkbox" onclick="manuallySelectRestaurant(this)" checked=""></td><td class="rating hidden">low</td><td class="notes hidden"></td><td class="gps hidden">29.532134,-98.648559</td><td class="originalUrl hidden">https://www.google.com/maps/place/FredericksBURGERS/data=!4m2!3m1!1s0x865c5fa7770d254b:0x6329ce492f22dc3b</td></tr>
 <tr><td class="name">French Sandwiches</td><td class="cuisine">Sandwich</td><td class="visited"></td><td class="shown"><input type="checkbox" onclick="manuallySelectRestaurant(this)" checked=""></td><td class="rating hidden">medium</td><td class="notes hidden"></td><td class="gps hidden">29.5192267,-98.5745991</td><td class="originalUrl hidden">https://www.google.com/maps/place/French+Sandwiches/data=!4m2!3m1!1s0x865c675345e9d629:0x404070a28dc68069</td></tr>
 <tr><td class="name">Garcia's</td><td class="cuisine">Mexican</td><td class="visited"></td><td class="shown"><input type="checkbox" onclick="manuallySelectRestaurant(this)" checked=""></td><td class="rating hidden">low</td><td class="notes hidden"></td><td class="gps hidden">29.5871703,-98.2699109</td><td class="originalUrl hidden">https://www.google.com/maps/place/Garcia's+Mexican+Restaurant/data=!4m2!3m1!1s0x865c92525bd939c5:0xf4901e7ce990afd8</td></tr>
-<tr><td class="name">Gino's Deli @ Stop & Buy</td><td class="cuisine">Sandwich</td><td class="visited">✓</td><td class="shown"><input type="checkbox" onclick="manuallySelectRestaurant(this)" checked=""></td><td class="rating hidden">medium</td><td class="notes hidden">Cheesesteaks</td><td class="gps hidden">29.5644436,-98.5601234</td><td class="originalUrl hidden">https://www.google.com/maps/place/Gino's+Deli+@+Stop+%26+Buy/data=!4m2!3m1!1s0x865c612683446f3f:0x39873d76b1621ebb</td></tr>
+<tr><td class="name">Gino's Deli @ Stop & Buy</td><td class="cuisine">Sandwich</td><td class="visited">✓</td><td class="shown"><input type="checkbox" onclick="manuallySelectRestaurant(this)" checked=""></td><td class="rating hidden">high</td><td class="notes hidden">One of the best delis in town, very good philly cheesesteaks</td><td class="gps hidden">29.5644436,-98.5601234</td><td class="originalUrl hidden">https://www.google.com/maps/place/Gino's+Deli+@+Stop+%26+Buy/data=!4m2!3m1!1s0x865c612683446f3f:0x39873d76b1621ebb</td></tr>
 <tr><td class="name">Golden Kirin</td><td class="cuisine">Chinese</td><td class="visited"></td><td class="shown"><input type="checkbox" onclick="manuallySelectRestaurant(this)" checked=""></td><td class="rating hidden">low</td><td class="notes hidden"></td><td class="gps hidden">29.4878181,-98.5507602</td><td class="originalUrl hidden">https://www.google.com/maps/place/Golden+Kirin+Restaurant/data=!4m2!3m1!1s0x865c5e4048c2f6ab:0x5100c37ddd5a4801</td></tr>
 <tr><td class="name">Golden Meals</td><td class="cuisine">Mediterranean</td><td class="visited"></td><td class="shown"><input type="checkbox" onclick="manuallySelectRestaurant(this)" checked=""></td><td class="rating hidden">low</td><td class="notes hidden"></td><td class="gps hidden">29.4587437,-98.4705743</td><td class="originalUrl hidden">https://www.google.com/maps/place/Golden+Meals/data=!4m2!3m1!1s0x865cf50fec227f67:0xcb0dcaa043f8d29e</td></tr>
 <tr><td class="name">Goro's Sushi</td><td class="cuisine">Japanese / Sushi</td><td class="visited"></td><td class="shown"><input type="checkbox" onclick="manuallySelectRestaurant(this)" checked=""></td><td class="rating hidden">high</td><td class="notes hidden"></td><td class="gps hidden">29.5134314,-98.5384449</td><td class="originalUrl hidden">https://www.google.com/maps/place/Goro's+Sushi+Restaurant/data=!4m2!3m1!1s0x865c5f8295216033:0x1ec675390b0dda24</td></tr>
@@ -764,12 +766,12 @@
                 Places I have visited are colored <span class="visited-high" style="filter: none">green</span>,
                     with the shade determining how much I enjoyed it:
                     <span class="visited-low" style="filter: none">low</span> ->
-                    <span class="visited-medium" style="filter: none">meidum</span> ->
+                    <span class="visited-medium" style="filter: none">medium</span> ->
                     <span class="visited-high" style="filter: none">high</span>.
                 Places I want to go are colored <span class="unvisited-high" style="filter: none">blue</span>,
                     with the shade determining how badly I want to go:
                     <span class="unvisited-low" style="filter: none">low</span> ->
-                    <span class="unvisited-medium" style="filter: none">meidum</span> ->
+                    <span class="unvisited-medium" style="filter: none">medium</span> ->
                     <span class="unvisited-high" style="filter: none">high</span>.
             </p>
             <p>
@@ -793,7 +795,7 @@
             </div>
             
 
-            <!-- Vertical scrollbar -->
+            <!-- Vertical scrollbar for the mock sheet -->
             <div class="vertical-scrollbar" data-prefix="sheet" id="sheet-vertical-scrollbar">
                 <button class="square-button up-button" id="sheet-up-scroll-button"></button>
                 <div class="scroll-track" id="sheet-vertical-scroll-track">
@@ -824,6 +826,7 @@
                     <div class="sheet-tab hidden"><a class="sheet-link" href="pictures.html" data-title="pictures">photobook</a></div>
                     <div class="sheet-tab hidden"><a class="sheet-link" href="art.html" data-title="art">art</a></div>
                     <div class="sheet-tab hidden"><a class="sheet-link" href="skating.html" data-title="skating">skating</a></div>
+                    <div class="sheet-tab hidden"><a class="sheet-link" href="#" data-title="website">website</a></div>
                 </nav>
 
                 <!-- Horizontal scrollbar -->

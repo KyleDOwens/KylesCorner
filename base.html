@@ -142,6 +142,7 @@
                         <a class="sheet-link" href="pictures.html" data-title="pictures"><div class="dropdown-item">photobook</div></a>
                         <a class="sheet-link" href="art.html" data-title="art"><div class="dropdown-item">art</div></a>
                         <a class="sheet-link" href="skating.html" data-title="skating"><div class="dropdown-item">skating</div></a>
+                        <a class="sheet-link" href="#" data-title="website"><div class="dropdown-item">website</div></a>
                     </div>
                 </div>
 
@@ -162,7 +163,7 @@
                             <div class="marquee-item">i wonder if there are any secrets here…</div>
                             <div class="marquee-item">♪♬♪♬♪♬</div>
                             <div class="marquee-item">☉ ‿ ☉</div>
-                            <div class="marquee-item">click the volume button to play music!</div>
+                            <!-- <div class="marquee-item">click the volume button to play music!</div> -->
                             <!-- <div class="marquee-item"><a href="secret.html">secret page???</a></div> -->
                         </div>
                         <!-- Duplicate to make the loop seamless -->
@@ -180,7 +181,7 @@
                             <div class="marquee-item">i wonder if there are any secrets here…</div>
                             <div class="marquee-item">♪♬♪♬♪♬</div>
                             <div class="marquee-item">☉ ‿ ☉</div>
-                            <div class="marquee-item">click the volume button to play music!</div>
+                            <!-- <div class="marquee-item">click the volume button to play music!</div> -->
                             <!-- <div class="marquee-item"><a href="secret.html">secret page???</a></div> -->
                         </div>
                     </div>
@@ -192,10 +193,10 @@
         <!--                      SHEET                       --->
         <!-- ================================================ --->
         <main class="scroll-and-content">
-            <div id="corner-header"></div>
+            <div id="corner-header"><!-- Corner header of the mock grid - needed on outside level so it can be absolutely positioned within container --></div> 
             <div class="scroll-container" id="sheet-scroll-container">
                 <div id="sheet-canvas">
-                    <!-- Mock spreadsheet background & headers -->
+                    <!-- Provides the mock spreadsheet background grid & headers -->
                     <div id="mock-grid">
                         <div id="mock-hheader"></div>
                         <div id="mock-vheader"></div>
@@ -205,13 +206,14 @@
                     <!--                 WEPAGE CONTENT                   --->
                     <!-- ================================================ --->
                     <div id="sheet-overlay">
+                        <!-- This is where the page-specific content is inserted -->
                         REPLACEME_PAGECONTENT
                     </div>
                 </div>
             </div>
             
 
-            <!-- Vertical scrollbar -->
+            <!-- Vertical scrollbar for the mock sheet -->
             <div class="vertical-scrollbar" data-prefix="sheet" id="sheet-vertical-scrollbar">
                 <button class="square-button up-button" id="sheet-up-scroll-button"></button>
                 <div class="scroll-track" id="sheet-vertical-scroll-track">
@@ -242,6 +244,7 @@
                     <div class="sheet-tab hidden"><a class="sheet-link" href="pictures.html" data-title="pictures">photobook</a></div>
                     <div class="sheet-tab hidden"><a class="sheet-link" href="art.html" data-title="art">art</a></div>
                     <div class="sheet-tab hidden"><a class="sheet-link" href="skating.html" data-title="skating">skating</a></div>
+                    <div class="sheet-tab hidden"><a class="sheet-link" href="#" data-title="website">website</a></div>
                 </nav>
 
                 <!-- Horizontal scrollbar -->

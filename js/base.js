@@ -26,11 +26,10 @@ document.addEventListener("DOMContentLoaded", () => {
 function initializeSheet() {
     // Add column headers
     let mockHorizontalHeader = document.getElementById("mock-hheader");
-    let colHeaders = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    let colHeaders = "ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ";
     for (let i = 0; i < colHeaders.length; i++) {
         let headerCell = document.createElement("span");
         headerCell.classList.add("horizontal-header");
-        headerCell.id = `${colHeaders[i]}0`;
         headerCell.innerHTML = `${colHeaders[i]}`;
         mockHorizontalHeader.appendChild(headerCell);
     }
@@ -196,7 +195,8 @@ function resizeHorizontalScrollThumbs() {
         let scrollThumb = document.getElementById(`${prefix}-horizontal-scroll-thumb`);
 
         // Update how wide the scroll thumb should be
-        let ratio = scrollContainer.clientWidth / scrollContainer.scrollWidth;
+        // let ratio = scrollContainer.clientWidth / scrollContainer.scrollWidth;
+        let ratio = 1;
         scrollThumb.style.width = `${ratio * scrollTrack.clientWidth}px`;
         scrollThumb.style.left = `${0}px`;
     }

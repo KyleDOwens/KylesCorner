@@ -1,10 +1,9 @@
 # BASE
-* [-] Update maximize button to be single box
-
 * [-] Add 'Tools' page that links to fun tools?
     * ASCII art generator? collage maker? cryptography algorithms?
 
 * [-] add fun cursor (maybe a trail? maybe a click animation?)
+    * use the excel thick cross cursor! maybe add a trail of green sparks or something?
 
 * [-] Replace generic excel titlebar buttons with fun functions:
     * [-] X out/close window - close webpage?
@@ -21,7 +20,6 @@
 
 # MOBILE
 * [-] Button text is blue?
-* [-] Disable the extra drag and scroll in directions that shouldn't be scrollable
 * [-] Change ratio, since top and bottom of page are being cut off?
 
 # HOMEPAGE
