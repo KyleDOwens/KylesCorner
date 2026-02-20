@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Kyle's World</title>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/photobook.css">
+    <!-- REPLACEME_EXTRALINK -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <link rel="icon" href="images/favicons/photobook_favicon.gif">
+</head>
+
+<body>
+    <div id="excel-window">
+
+        <!-- ================================================ --->
+        <!--                     HEADER                       --->
+        <!-- ================================================ --->
+        <header>
+            <div class="title-bar" id="main-title">
+                <!-- Window title -->
+                <div id="main-title-left">
+                    <!-- <span>∟</span> -->
+                    <img id="title-img" src="images/world.gif">
+                    <span id="main-title-text">KYLE'S WORLD</span>
+                </div>
+
+                <!-- Window control buttons -->
+                <div class="window-controls">
+                    <button class="square-button minimize"></button>
+                    <button class="square-button maximize"></button>
+                    <button class="square-button close"></button>
+                </div>
+            </div>
+
+            <!-- Menu bar -->
+            <nav id="menu-bar">
+                <button class="menu-button" id="file-menu"><u>F</u>ile</button>
+                <button class="menu-button" id="edit-menu"><u>E</u>dit</button>
+                <button class="menu-button" id="view-menu"><u>V</u>iew</button>
+                <button class="menu-button" id="insert-menu"><u>I</u>nsert</button>
+                <button class="menu-button" id="help-menu"><u>H</u>elp</button>
+
+                <!-- Save button -->
+                <div class="horizontal-group">
+                    <button class="square-button" id="save-button"></button>
+                </div>
+
+                <!-- Undo redo buttons -->
+                <div class="horizontal-group">
+                    <button class="square-button unredo-button" id="undo-button" onclick="history.back()"><span id="undo-hook"></span></button>
+                    <button class="square-button unredo-button" id="redo-button" onclick="history.forward(1)"></button>
+                </div>
+
+                <!-- Cut, copy, paste -->
+                <div class="horizontal-group">
+                    <button class="square-button clipboard-button" id="cut-button"></button>
+                    <button class="square-button clipboard-button" id="copy-button"></button>
+                    <button class="square-button clipboard-button" id="paste-button">
+                        <div id="paste-button-2"></div>
+                    </button>
+                </div>
+
+                <!-- Theme selector -->
+                <div class="dropdown" id="theme-selector">
+                    <div class="dropdown-display">
+                        <!-- theme -->.
+                        <button class="square-button down-button"></button>
+                    </div>
+                    <div class="dropdown-options hidden">
+                        <div class="dropdown-item dropdown-selected"><i class="faint-text">coming soon</i></div>
+                        <!-- <div class="dropdown-item dropdown-selected">blue</div>
+                        <div class="dropdown-item">green</div>
+                        <div class="dropdown-item">red</div>
+                        <div class="dropdown-item">rainbow</div> -->
+                    </div>
+                </div>
+
+                <!-- Background selector -->
+                <div class="dropdown" id="background-selector">
+                    <div class="dropdown-display">
+                        <!-- background -->.
+                        <button class="square-button down-button"></button>
+                    </div>
+                    <div class="dropdown-options hidden">
+                        <div class="dropdown-item dropdown-selected"><i class="faint-text">coming soon</i></div>
+                        <!-- <div class="dropdown-item dropdown-selected">space (twinkle)</div>
+                        <div class="dropdown-item">space (static)</div>
+                        <div class="dropdown-item">background3</div> -->
+                    </div>
+                </div>
+
+                <!-- Cursor selector -->
+                <div class="dropdown" id="cursor-selector">
+                    <div class="dropdown-display">
+                        <!-- cursor -->.
+                        <button class="square-button down-button"></button>
+                    </div>
+                    <div class="dropdown-options hidden">
+                        <div class="dropdown-item dropdown-selected"><i class="faint-text">coming soon</i></div>
+                        <!-- <div class="dropdown-item dropdown-selected">cursor1</div>
+                        <div class="dropdown-item">cursor2</div>
+                        <div class="dropdown-item">cursor3</div> -->
+                    </div>
+                </div>
+
+                <!-- Bold, italic, underline -->
+                <div class="horizontal-group">
+                    <button class="square-button font-button" id="bold-button"><b>B</b></button>
+                    <button class="square-button font-button" id="italic-button"><i>I</i></button>
+                    <button class="square-button font-button" id="underline-button"><u>U</u></button>
+                </div>
+
+                <!-- Left, center, right align -->
+                <div class="horizontal-group">
+                    <button class="square-button align-button" id="left-align-button"></button>
+                    <button class="square-button align-button" id="center-align-button"></button>
+                    <button class="square-button align-button" id="right-align-button"></button>
+                </div>
+
+                <!-- Readonly -->
+                <div class="horizontal-group">
+                    <span class="faint-text" id="readonly-mode">*READONLY MODE*</span>
+                </div>
+            </nav>
+
+            <!-- Cell info / marquee bar -->
+            <nav id="marquee-bar" #>
+
+                <div class="dropdown">
+                    <div class="dropdown-display">
+                        photobook
+                        <button class="square-button down-button"></button>
+                    </div>
+                    <div class="dropdown-options hidden">
+                        <a class="sheet-link" href="/" data-title="homepage"><div class="dropdown-item dropdown-selected">homepage</div></a>
+                        <a class="sheet-link" href="about.html" data-title="about"><div class="dropdown-item">about</div></a>
+                        <a class="sheet-link" href="music.html" data-title="music"><div class="dropdown-item">music</div></a>
+                        <a class="sheet-link" href="restaurants.html" data-title="restaurants"><div class="dropdown-item">restaurants</div></a>
+                        <a class="sheet-link" href="recipes.html" data-title="recipes"><div class="dropdown-item">recipes</div></a>
+                        <a class="sheet-link" href="photobook.html" data-title="photobook"><div class="dropdown-item">photobook</div></a>
+                        <a class="sheet-link" href="art.html" data-title="art"><div class="dropdown-item">art</div></a>
+                        <a class="sheet-link" href="skating.html" data-title="skating"><div class="dropdown-item">skating</div></a>
+                        <a class="sheet-link" href="website.html" data-title="website"><div class="dropdown-item">website making</div></a>
+                    </div>
+                </div>
+
+                <input type="text" id="formula-input" placeholder="Insert formula...">
+                <div class="marquee-container">
+                    <div class="marquee-track" style="--item-count: 14">
+                        <div>
+                            <div class="marquee-item">welcome to my website :)</div>
+                            <div class="marquee-item">go to the 'about' page to learn more!</div>
+                            <div class="marquee-item">click the page tabs in the bottom left!</div>
+                            <div class="marquee-item">scroll around!</div>
+                            <div class="marquee-item">this isnt a real spreadsheet, sorry :(</div>
+                            <div class="marquee-item">made with love &lt;3</div>
+                            <div class="marquee-item">wheee!</div>
+                            <div class="marquee-item">i've got a mean cookie recipe</div>
+                            <div class="marquee-item">go make a personal website!</div>
+                            <div class="marquee-item">more coming soon</div>
+                            <div class="marquee-item">i wonder if there are any secrets here…</div>
+                            <div class="marquee-item">♪♬♪♬♪♬</div>
+                            <div class="marquee-item">☉ ‿ ☉</div>
+                            <!-- <div class="marquee-item">click the volume button to play music!</div> -->
+                            <!-- <div class="marquee-item"><a href="secret.html">secret page???</a></div> -->
+                        </div>
+                        <!-- Duplicate to make the loop seamless -->
+                        <div>
+                            <div class="marquee-item">welcome to my website :)</div>
+                            <div class="marquee-item">go to the 'about' page to learn more!</div>
+                            <div class="marquee-item">click the page tabs in the bottom left!</div>
+                            <div class="marquee-item">scroll around!</div>
+                            <div class="marquee-item">this isnt a real spreadsheet, sorry :(</div>
+                            <div class="marquee-item">made with love &lt;3</div>
+                            <div class="marquee-item">wheee!</div>
+                            <div class="marquee-item">i've got a mean cookie recipe</div>
+                            <div class="marquee-item">go make a personal website!</div>
+                            <div class="marquee-item">more coming soon</div>
+                            <div class="marquee-item">i wonder if there are any secrets here…</div>
+                            <div class="marquee-item">♪♬♪♬♪♬</div>
+                            <div class="marquee-item">☉ ‿ ☉</div>
+                            <!-- <div class="marquee-item">click the volume button to play music!</div> -->
+                            <!-- <div class="marquee-item"><a href="secret.html">secret page???</a></div> -->
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </header>
+
+        <!-- ================================================ --->
+        <!--                      SHEET                       --->
+        <!-- ================================================ --->
+        <main class="scroll-and-content">
+            <div id="corner-header"><!-- Corner header of the mock grid - needed on outside level so it can be absolutely positioned within container --></div> 
+            <div class="scroll-container" id="sheet-scroll-container">
+                <div id="sheet-canvas">
+                    <!-- Provides the mock spreadsheet background grid & headers -->
+                    <div id="mock-grid">
+                        <div id="mock-hheader"></div>
+                        <div id="mock-vheader"></div>
+                    </div>
+
+                    <!-- ================================================ --->
+                    <!--                 WEPAGE CONTENT                   --->
+                    <!-- ================================================ --->
+                    <div id="sheet-overlay">
+                        <!-- This is where the page-specific content is inserted -->
+                        <!-- 
+TODO: maybe put all this into a CSV file, and parse it into here?
+TODO: dynamically calculate the # of columns
+-->
+
+
+<div id="photobook-wrapper">
+    <!--  Newest
+            |
+            |
+            V
+          Oldest  -->
+    
+    <!-- #region TAIPEI -->
+    <div class="photo-window">
+        <div class="photo-title">Squid Games??!?</div>
+        <img src="/images/photobook/squid_games.JPEG" alt="Squid Games">
+        <div class="caption">squid game event happening outside the chiang kai-shek memorial</div>
+    </div>
+
+    <div class="photo-window">
+        <div class="photo-title">Chiang Kai-shek Memorial Hall</div>
+        <img src="/images/photobook/taipei_chiang_kai_shek.JPEG" alt="Chiang Kai-shek Memorial Hall">
+        <div class="caption">chiang kai-shek memorial hall</div>
+    </div>
+
+    <div class="photo-window">
+        <div class="photo-title">National Concert Hall</div>
+        <img src="/images/photobook/taipei_concert_hall.JPEG" alt="National Concert Hall">
+        <div class="caption">national concert hall of taiwan</div>
+    </div>
+
+    <div class="photo-window">
+        <div class="photo-title">Memorial Hall Gate</div>
+        <img src="/images/photobook/chiang_kai_shek_gate.JPEG" alt="Taipei Gate">
+        <div class="caption">gate surrounding the area of the chiang kai-shek memorial hall</div>
+    </div>
+
+    <div class="photo-window">
+        <div class="photo-title">Arcade</div>
+        <img src="/images/photobook/taipei_arcade.JPEG" alt="Arcade">
+        <div class="caption">claw game action in a taipei arcade (i did not win, even with the stance)</div>
+    </div>
+
+    <div class="photo-window">
+        <div class="photo-title">Taipei 101</div>
+        <img src="/images/photobook/taipei_101.JPEG" alt="Taipei 101">
+        <div class="caption">view of taipei 101 (the subway line came out right under it, but we did not go up)</div>
+    </div>
+
+    <div class="photo-window">
+        <div class="photo-title">Taipei Street</div>
+        <img src="/images/photobook/taipei_street_art.JPEG" alt="Taipei Street">
+        <div class="caption">street in taipei</div>
+    </div>
+
+    <div class="photo-window">
+        <div class="photo-title">Taipei Street</div>
+        <img src="/images/photobook/taipei_street_3.JPEG" alt="Taipei Street">
+        <div class="caption">street in taipei</div>
+    </div>
+
+    <div class="photo-window">
+        <div class="photo-title">Taipei Street</div>
+        <img src="/images/photobook/taipei_street_2.JPEG" alt="Taipei Street">
+        <div class="caption">street in taipei</div>
+    </div>
+
+    <div class="photo-window">
+        <div class="photo-title">7/11</div>
+        <img src="/images/photobook/711.JPEG" alt="7/11">
+        <div class="caption">the goat 7/11 right across the stree from our taipei hotel</div>
+    </div>
+
+    <div class="photo-window">
+        <div class="photo-title">Durian</div>
+        <img src="/images/photobook/taipei_durian.JPEG" alt="Durian">
+        <div class="caption">some durian i got to try fresh for the first time ever at the night market (i give it a thumbs up)</div>
+    </div>
+
+    <div class="photo-window">
+        <div class="photo-title">Taipei Night Market</div>
+        <img src="/images/photobook/taipei_night_market.JPEG" alt="Taipei Night Market">
+        <div class="caption">one of taipei's famous night markets</div>
+    </div>
+
+    <div class="photo-window">
+        <div class="photo-title">Taipei Night Market</div>
+        <img src="/images/photobook/taipei_night_market_2.JPEG" alt="Taipei Night Market">
+        <div class="caption">one of taipei's famous night markets</div>
+    </div>
+
+    <div class="photo-window">
+        <div class="photo-title">Taipei Night Market</div>
+        <img src="/images/photobook/taipei_night_market_gate.JPEG" alt="Taipei Night Market Gate">
+        <div class="caption">gate to one of taipei's famous night markets</div>
+    </div>
+
+    <div class="photo-window">
+        <div class="photo-title">Taipei Skyline Sunset</div>
+        <img src="/images/photobook/taipei_sunset.JPEG" alt="">
+        <div class="caption">view of the taipei skyline at sunset from near the top of elephant mountain</div>
+    </div>
+
+    <div class="photo-window">
+        <div class="photo-title">Elephant Mountain</div>
+        <img src="/images/photobook/taipei_elephant_mountain.JPEG" alt="Elephant Mountain">
+        <div class="caption">stone while climbing up elephant mountain in taipei</div>
+    </div>
+
+    <div class="photo-window">
+        <div class="photo-title">Taipei Street</div>
+        <img src="/images/photobook/taipei_street_1.JPEG" alt="Taipei Street">
+        <div class="caption">street in taipei leading up to elephant mountain</div>
+    </div>
+
+    <div class="photo-window">
+        <div class="photo-title">Pokemon Go</div>
+        <img src="/images/photobook/pokemon_go_to_taiwan.JPEG" alt="Pokemon Go">
+        <div class="caption">got caught playing pokemon go soon after arriving in taipei (i could not play in china)</div>
+    </div>
+
+    <div class="photo-window">
+        <div class="photo-title">Airplane</div>
+        <img src="/images/photobook/big_back.JPEG" alt="Airplane">
+        <div class="caption">big back sydney with two meals while grant is passed out</div>
+    </div>
+    <!-- #endregion TAIPEI -->
+
+    <!-- #region BEIJING -->
+    <div class="photo-window">
+        <div class="photo-title">Temple of Heaven</div>
+        <img src="/images/photobook/temple_of_heaven.JPEG" alt="Temple of Heaven">
+        <div class="caption">temple of heaven in beijing (visited by the emperor for prayer ceremonies)</div>
+    </div>
+    
+    <div class="photo-window">
+        <div class="photo-title">Summer Palace</div>
+        <img src="/images/photobook/summer_palace_roofs.JPEG" alt="Summer Palace">
+        <div class="caption">roofs of the summer palace in beijing</div>
+    </div>
+
+    <div class="photo-window">
+        <div class="photo-title">Summer Palace</div>
+        <img src="/images/photobook/summer_palace_bridge.JPEG" alt="Summer Palace">
+        <div class="caption">summer palace in beijing</div>
+    </div>
+    
+    <div class="photo-window">
+        <div class="photo-title">Summer Palace</div>
+        <img src="/images/photobook/summer_palace_hallway.JPEG" alt="Summer Palace Hallway">
+        <div class="caption">long hallway of art in the summer palace in beijing</div>
+    </div>
+
+    <div class="photo-window">
+        <div class="photo-title">Summer Palace</div>
+        <img src="/images/photobook/summer_palace.JPEG" alt="Summer Palace">
+        <div class="caption">summer palace in beijing</div>
+    </div>
+
+    <div class="photo-window">
+        <div class="photo-title">Forbidden City</div>
+        <img src="/images/photobook/forbidden_city_street.JPEG" alt="Forbidden City Street">
+        <div class="caption">side street in the forbidden city</div>
+    </div>
+
+    <div class="photo-window">
+        <div class="photo-title">Forbidden City Statue</div>
+        <img src="/images/photobook/forbidden_city_statue.JPEG" alt="Forbidden City Statue">
+        <div class="caption">statue in the forbidden city</div>
+    </div>
+
+    <div class="photo-window">
+        <div class="photo-title">Forbidden City</div>
+        <img src="/images/photobook/forbidden_palace.JPEG" alt="Forbidden City">
+        <div class="caption">forbidden city in beijing (the walled city where the emperor used to live)</div>
+    </div>
+
+    <div class="photo-window">
+        <div class="photo-title">Tiananmen Square</div>
+        <img src="/images/photobook/tiananmen_gate.JPEG" alt="Tiananmen Square">
+        <div class="caption">large gate bordering tiananmen square and the forbidden city</div>
+    </div>
+
+    <div class="photo-window">
+        <div class="photo-title">Alpine</div>
+        <img src="/images/photobook/great_wall_alpine_slide.JPEG" alt="Great Wall Alpine Slide">
+        <div class="caption">alpine slide we took to get down form the great wall of china</div>
+    </div>
+
+    <div class="photo-window">
+        <div class="photo-title">Great Wall Side</div>
+        <img src="/images/photobook/great_wall_ground.JPEG" alt="Great Wall Side">
+        <div class="caption">side of the great wall of china</div>
+    </div>
+
+    <div class="photo-window">
+        <div class="photo-title">Great Wall</div>
+        <img src="/images/photobook/great_wall_selfie.JPG" alt="Great Wall Selfie">
+        <div class="caption">us at the great wall of china</div>
+    </div>
+
+    <div class="photo-window">
+        <div class="photo-title">Great Wall</div>
+        <img src="/images/photobook/great_wall.JPEG" alt="Great Wall">
+        <div class="caption">great wall of china</div>
+    </div>
+
+    <div class="photo-window">
+        <div class="photo-title">Rained In</div>
+        <img src="/images/photobook/beijing_rained_in.JPEG" alt="Rained In">
+        <div class="caption">it started absolutely pouring while sydney and i were doing laundry in the teeny tiny outdoor laundry room the hotel had</div>
+    </div>
+
+    <div class="photo-window">
+        <div class="photo-title">Pudding Cat</div>
+        <img src="/images/photobook/beijing_pudding.JPEG" alt="Pudding Cat">
+        <div class="caption">the hotel owners' cat who wandered into our room (his name is pudding)</div>
+    </div>
+
+    <div class="photo-window">
+        <div class="photo-title">Beijing Building</div>
+        <img src="/images/photobook/beijing_building.JPEG" alt="Beijing Building">
+        <div class="caption">building in beijing</div>
+    </div>
+
+    <div class="photo-window">
+        <div class="photo-title">Beijing Street</div>
+        <img src="/images/photobook/beijing_street_3.JPEG" alt="Beijing Street">
+        <div class="caption">street in beijing</div>
+    </div>
+
+    <div class="photo-window">
+        <div class="photo-title">Beijing Street</div>
+        <img src="/images/photobook/beijing_street_2.JPEG" alt="Beijing Street">
+        <div class="caption">street in beijing</div>
+    </div>
+
+    <div class="photo-window">
+        <div class="photo-title">Beijing Street</div>
+        <img src="/images/photobook/beijing_street_1.JPEG" alt="Beijing Street">
+        <div class="caption">street in beijing</div>
+    </div>
+
+    <div class="photo-window">
+        <div class="photo-title">Beijing Cat</div>
+        <img src="/images/photobook/beijing_cat.JPEG" alt="Beijing Cat">
+        <div class="caption">sleeping cat on a car spotted on a beijing walk</div>
+    </div>
+
+    <div class="photo-window">
+        <div class="photo-title">Beijing Station</div>
+        <img src="/images/photobook/beijing_station.JPEG" alt="Beijing Station">
+        <div class="caption">station in beijing where we arrived by train</div>
+    </div>
+    <!-- #endregion BEIJING -->
+
+    <!-- #region SUZHOU -->
+     <div class="photo-window">
+        <div class="photo-title">Suzhou Street</div>
+        <img src="/images/photobook/suzhou_street_1.JPEG" alt="Suzhou Street">
+        <div class="caption">street in suzhou</div>
+    </div>
+
+    <div class="photo-window">
+        <div class="photo-title">Suzhou Street</div>
+        <img src="/images/photobook/suzhou_street_2.JPEG" alt="Suzhou Street">
+        <div class="caption">street in suzhou</div>
+    </div>
+
+    <div class="photo-window">
+        <div class="photo-title">Soup</div>
+        <img src="/images/photobook/soup_claw.JPG" alt="Soup">
+        <div class="caption">soup</div>
+    </div>
+
+    <div class="photo-window">
+        <div class="photo-title">Suzhou Polaroid</div>
+        <img src="/images/photobook/suzhou_polaroid.JPG" alt="Suzhou Polaroid">
+        <div class="caption">polaroid photo given to us by the boat couple</div>
+    </div>
+
+    <div class="photo-window">
+        <div class="photo-title">Suzhou Boat Couple</div>
+        <img src="/images/photobook/suzhou_boat_couple.JPEG" alt="Suzhou Boat Couple">
+        <div class="caption">nice couple we met on a boat tour in suzhou</div>
+    </div>
+
+    <div class="photo-window">
+        <div class="photo-title">Suzhou Boat</div>
+        <img src="/images/photobook/suzhou_boat.JPEG" alt="Suzhou Boat">
+        <div class="caption">boat ride through the canals of suzhou (not heard is romantic singing of an old chinese man)</div>
+    </div>
+
+    <div class="photo-window">
+        <div class="photo-title">Suzhou Shop</div>
+        <img src="/images/photobook/suzhou_shop.JPEG" alt="Suzhou Shop">
+        <div class="caption">pretty looking shop on a suzhou street</div>
+    </div>
+
+    <div class="photo-window">
+        <div class="photo-title">Suzhou Canal</div>
+        <img src="/images/photobook/suzhou_canal.JPEG" alt="Suzhou Canal">
+        <div class="caption">one of the many canals in suzhou</div>
+    </div>
+    <!-- #endregion SUZHOU -->
+
+    <!-- #region SHANGHAI -->
+    <div class="photo-window">
+        <div class="photo-title">Hot Pot</div>
+        <img src="/images/photobook/hot_pot.JPEG" alt="Hot Pot">
+        <div class="caption">very tasty and very cheap hot pot</div>
+    </div>
+
+    <div class="photo-window">
+        <div class="photo-title">Mr. Bubbles</div>
+        <img src="/images/photobook/mr_bubbles_group_pic.JPEG" alt="Mr. Bubbles Group Picture">
+        <div class="caption">group photo with mr bubbles</div>
+    </div>
+
+    <div class="photo-window">
+        <div class="photo-title">Peanut Fight</div>
+        <img src="/images/photobook/peanut_fight.JPEG" alt="Peanut Fight">
+        <div class="caption">grant and i fighting for the last peanuts</div>
+    </div>
+
+    <div class="photo-window">
+        <div class="photo-title">Juice Boxes</div>
+        <img src="/images/photobook/double_fist_juice_box.JPEG" alt="Juice Boxes">
+        <div class="caption">grant double fisting juice boxes in downtown shanghai</div>
+    </div>
+
+    <div class="photo-window">
+        <div class="photo-title">Shanghai Park</div>
+        <img src="/images/photobook/shanghai_park.JPEG" alt="Shanghai Park">
+        <div class="caption">park in shanghai</div>
+    </div>
+
+    <div class="photo-window">
+        <div class="photo-title">Jing'an Temple Group</div>
+        <img src="/images/photobook/jingan_temple_group_pic.JPEG" alt="Jing'an Temple Group Picture">
+        <div class="caption">group photo at jing'an temple</div>
+    </div>
+
+    <div class="photo-window">
+        <div class="photo-title">Jing'an Temple</div>
+        <img src="/images/photobook/jingan_temple_back.JPEG" alt="Jing'an Temple">
+        <div class="caption">at jing'an temple</div>
+    </div>
+
+    <div class="photo-window">
+        <div class="photo-title">Jing'an Temple</div>
+        <img src="/images/photobook/jingan_hallway.JPEG" alt="Jing'an Temple Hallway">
+        <div class="caption">jing'an temple hallway entrance</div>
+    </div>
+
+    <div class="photo-window">
+        <div class="photo-title">Jing'an Temple Buddha</div>
+        <img src="/images/photobook/jingan_temple_main_area.JPEG" alt="Jing'an Temple Buddha">
+        <div class="caption">jing'an temple buddha statue</div>
+    </div>
+
+    <div class="photo-window">
+        <div class="photo-title">Jing'an Temple</div>
+        <img src="/images/photobook/jingan_temple_front.JPEG" alt="Jing'an Temple">
+        <div class="caption">at jing'an temple</div>
+    </div>
+
+    <div class="photo-window">
+        <div class="photo-title">Jing'an Temple</div>
+        <img src="/images/photobook/jingan_temple_main_area.JPEG" alt="Jing'an Temple">
+        <div class="caption">jing'an buddhist temple in downtown shanghai</div>
+    </div>
+
+    <div class="photo-window">
+        <div class="photo-title">Minion Painting</div>
+        <img src="/images/photobook/minion_painting.JPEG" alt="Minion Painting">
+        <div class="caption">fine art on display in a shanghai subway tunnel</div>
+    </div>
+
+    <div class="photo-window">
+        <div class="photo-title">Shanghai Propaganda</div>
+        <img src="/images/photobook/shanghai_propaganda_poster.JPEG" alt="Shanghai Propaganda">
+        <div class="caption">propaganda poster in the propaganda art museum</div>
+    </div>
+
+    <div class="photo-window">
+        <div class="photo-title">Shanghai Propaganda</div>
+        <img src="/images/photobook/shanghai_propaganda.JPEG" alt="Shanghai Propaganda">
+        <div class="caption">collection of souvenir propaganda posters for sale</div>
+    </div>
+
+    <div class="photo-window">
+        <div class="photo-title">Mr. Bubbles</div>
+        <img src="/images/photobook/mr_bubbles.JPG" alt="Mr. Bubbles">
+        <div class="caption">posing with the mascot of our hotel (his name is mr bubbles)</div>
+    </div>
+
+    <div class="photo-window">
+        <div class="photo-title">French Concession</div>
+        <img src="/images/photobook/shanghai_street.JPEG" alt="French Concession">
+        <div class="caption">street in the french concession area in shanghai</div>
+    </div>
+
+    <div class="photo-window">
+        <div class="photo-title">French Concession</div>
+        <img src="/images/photobook/shanghai_french_concession.JPEG" alt="French Concession">
+        <div class="caption">street in the french concession area in shanghai</div>
+    </div>
+
+    <div class="photo-window">
+        <div class="photo-title">Shanghai Architecture</div>
+        <img src="/images/photobook/shanghai_architecture.JPEG" alt="Shanghai Architecture">
+        <div class="caption">some stereotypical communist architecture found in shanghai</div>
+    </div>
+
+    <div class="photo-window">
+        <div class="photo-title">Shanghai Street</div>
+        <img src="/images/photobook/shanghai_night_street.JPEG" alt="Shanghai Street">
+        <div class="caption">view of a shanghai street at night</div>
+    </div>
+
+    <div class="photo-window">
+        <div class="photo-title">Soup</div>
+        <img src="/images/photobook/shanghai_soup.JPEG" alt="Soup">
+        <div class="caption">soup</div>
+    </div>
+
+    <div class="photo-window">
+        <div class="photo-title">Shanghai Tower View</div>
+        <img src="/images/photobook/shanghai_tower_view.JPEG" alt="Shanghai Tower View">
+        <div class="caption">view from the top of shanghai tower (3rd tallest in the world)</div>
+    </div>
+
+    <div class="photo-window">
+        <div class="photo-title">Pearl Tower</div>
+        <img src="/images/photobook/pearl_tower_group_pic.JPEG" alt="Pearl Tower Group Picture">
+        <div class="caption">group picture with the famous pearl tower in the background (we unfortunately did not go up - we had to choose between it and shanghai tower, and chose the tower instead)</div>
+    </div>
+
+    <div class="photo-window">
+        <div class="photo-title">Shanghai Skyscrapers</div>
+        <img src="/images/photobook/shanghai_skyscrapers.JPEG" alt="Shanghai Skyscrapers">
+        <div class="caption">view walking up to the 3 main shanghai skyscrapers</div>
+    </div>
+
+    <div class="photo-window">
+        <div class="photo-title">Dim Sum</div>
+        <img src="/images/photobook/dim_sum.JPG" alt="Dim Sum">
+        <div class="caption">dim sum in the yuyuan bazaar</div>
+    </div>
+
+    <div class="photo-window">
+        <div class="photo-title">Yu Gardens</div>
+        <img src="/images/photobook/yu_gardens_3.JPEG" alt="Yu Gardens">
+        <div class="caption">inside the pretty yu gardens in shanghai</div>
+    </div>
+
+    <div class="photo-window">
+        <div class="photo-title">Yu Gardens</div>
+        <img src="/images/photobook/yu_gardens_2.JPEG" alt="Yu Gardens">
+        <div class="caption">inside the pretty yu gardens in shanghai</div>
+    </div>
+
+    <div class="photo-window">
+        <div class="photo-title">Yu Gardens</div>
+        <img src="/images/photobook/yu_gardens_1.JPEG" alt="Yu Gardens">
+        <div class="caption">inside the pretty yu gardens in shanghai</div>
+    </div>
+
+    <div class="photo-window">
+        <div class="photo-title">Scallion Pancake</div>
+        <img src="/images/photobook/shanghai_scallion_pancake.JPG" alt="Scallion Pancake">
+        <div class="caption">scallion pancake street food (tasty)</div>
+    </div>
+
+    <div class="photo-window">
+        <div class="photo-title">Yuyuan Bazaar Shops</div>
+        <img src="/images/photobook/yuyuan_bazaar_street.JPEG" alt="Yuyuan Bazaar Shops">
+        <div class="caption">shopping street in the yuyuan bazaar</div>
+    </div>
+
+    <div class="photo-window">
+        <div class="photo-title">Yuyuan Bazaar</div>
+        <img src="/images/photobook/yuyuan_bazaar_lake.JPEG" alt="Yuyuan Bazaar">
+        <div class="caption">yuyuan bazaar view from outside yu gardens</div>
+    </div>
+
+    <div class="photo-window">
+        <div class="photo-title">Bubble Tea</div>
+        <img src="/images/photobook/tea_claw.JPG" alt="Bubble Claw">
+        <div class="caption">bubble tea break</div>
+    </div>
+
+    <div class="photo-window">
+        <div class="photo-title">Shanghai Breakfast</div>
+        <img src="/images/photobook/shanghai_breakfast.JPEG" alt="Shanghai Breakfast">
+        <div class="caption">lovely breakfast from the bakery down the street for our shanghai hotel</div>
+    </div>
+
+    <div class="photo-window">
+        <div class="photo-title">Shanghai Skyline</div>
+        <img src="/images/photobook/shanghai_skyline.JPEG" alt="Shanghai Skyline">
+        <div class="caption">skyline of shanghai from the bund</div>
+    </div>
+
+    <div class="photo-window">
+        <div class="photo-title">Afraid Pillow</div>
+        <img src="/images/photobook/afraid_pillow.JPG" alt="Afraid Pillow">
+        <div class="caption">i'm afraid of what might happen if i relax...</div>
+    </div>
+    <!-- #endregion SHANGHAI -->
+</div>
+                    </div>
+                </div>
+            </div>
+            
+
+            <!-- Vertical scrollbar for the mock sheet -->
+            <div class="vertical-scrollbar" data-prefix="sheet" id="sheet-vertical-scrollbar">
+                <button class="square-button up-button" id="sheet-up-scroll-button"></button>
+                <div class="scroll-track" id="sheet-vertical-scroll-track">
+                    <div class="scroll-thumb" id="sheet-vertical-scroll-thumb"></div>
+                </div>
+                <button class="square-button down-button" id="sheet-down-scroll-button"></button>
+            </div>
+        </main>
+
+        <!-- ================================================ --->
+        <!--                     FOOTER                       --->
+        <!-- ================================================ --->
+        <footer>
+            <div id="sheets-and-scrollbar">
+                <!-- Sheet selection buttons -->
+                <button class="square-button left-button" id="first-sheet-button"></button>
+                <button class="square-button left-button" id="previous-sheet-button"></button>
+                <button class="square-button right-button" id="next-sheet-button"></button>
+                <button class="square-button right-button" id="last-sheet-button"></button>
+
+                <!-- Sheet tabs -->
+                <nav id="sheet-tabs">
+                    <div class="sheet-tab active-tab"><a class="sheet-link" href="/" data-title="homepage">homepage</a></div>
+                    <div class="sheet-tab"><a class="sheet-link" href="about.html" data-title="about">about</a></div>
+                    <div class="sheet-tab"><a class="sheet-link" href="music.html" data-title="music">music</a></div>
+                    <div class="sheet-tab"><a class="sheet-link" href="restaurants.html" data-title="restaurants">restaur…</a></div>
+                    <div class="sheet-tab"><a class="sheet-link" href="recipes.html" data-title="recipes">recipes</a></div>
+                    <div class="sheet-tab hidden"><a class="sheet-link" href="photobook.html" data-title="photobook">photobook</a></div>
+                    <div class="sheet-tab hidden"><a class="sheet-link" href="art.html" data-title="art">art</a></div>
+                    <div class="sheet-tab hidden"><a class="sheet-link" href="skating.html" data-title="skating">skating</a></div>
+                    <div class="sheet-tab hidden"><a class="sheet-link" href="website.html" data-title="website">website making</a></div>
+                </nav>
+
+                <!-- Horizontal scrollbar -->
+                <div class="horizontal-scrollbar" data-prefix="sheet" id="sheet-horizontal-scrollbar">
+                    <button class="square-button left-button" id="sheet-left-scroll-button"></button>
+                    <div class="scroll-track" id="sheet-horizontal-scroll-track">
+                        <div class="scroll-thumb" id="sheet-horizontal-scroll-thumb"></div>
+                    </div>
+                    <button class="square-button right-button" id="sheet-right-scroll-button"></button>
+                    <button class="square-button" disabled></button>
+                </div>
+            </div>
+        </footer>
+
+
+    </div>
+
+    <!-- <div class="update-notice" style="color: white; font-size: 8pt;">
+        These pages were last updated on the <u>18th of January 2025</u>
+    </div> -->
+
+    <script src="js/base.js"></script>
+    <script type="module" src="js/photobook.js"></script>
+    <!-- REPLACEME_EXTRASCRIPT -->
+</body>

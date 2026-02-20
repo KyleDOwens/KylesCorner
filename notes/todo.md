@@ -35,7 +35,10 @@
     * https://github.com/Leaflet/Leaflet.markercluster
 * [-] Create custom map viewer and remove LeafletJS
 
-
+# PHOTOBOOK
+* [-] Add more photos to photobook
+    * Camino
+    * 
 
 # RECIPES
 * [-] Add pictures for each recipe

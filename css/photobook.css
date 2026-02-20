@@ -1,0 +1,50 @@
+#photobook-wrapper {
+    column-count: 4;
+    column-gap: 20px;
+
+    width: calc(100% - 18px);
+    margin: 10px;
+    box-sizing: border-box;
+}
+
+.photo-window {
+    display: inline-block;
+    break-inside: avoid;
+    margin-bottom: 10px;
+
+    background-color: var(--background-beige);
+    border-top: 2px solid #e8f0ff;
+    border-left: 2px solid #e8f0ff;
+    border-right: 2px solid #2f4f6f;
+    border-bottom: 2px solid #2f4f6f;
+}
+.photo-title {
+    user-select: none;
+    gap: 1%;
+
+    height: fit-content;
+    padding: 0 10px;
+
+    border-style: outset; 
+    background: var(--title-blue);
+    color: var(--title-font-color);
+}
+.photo-window img{
+    max-width: 280px;
+    max-height: 480px;
+    padding: 10px;
+    user-select: none;
+}
+.caption {
+    width: 100%;
+    max-width: 280px;
+
+    padding: 10px;
+    margin-top: -20px;
+
+    white-space: break-word;
+    font-style: italic;
+    font-size: 10pt;
+    color: #606060;
+    text-align: center;
+}
