@@ -28,7 +28,9 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 100dvh
+    height: 100dvh;
+    margin: 0;
+    padding: 0;
 }
 
 #excel-window {
@@ -73,6 +75,10 @@ main {
     border-left: 2px solid #ffffff;
     border-right: 2px solid #404040;
     border-bottom: 2px solid #404040;
+}
+
+button {
+    color: black;
 }
 
 .inset98,
