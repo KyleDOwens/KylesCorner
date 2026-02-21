@@ -9,25 +9,29 @@ TODO: dynamically calculate the # of columns
     <div class="photo-window">
         <div class="photo-title">Guide</div>
         <div id="photobook-map">
-            page to include my photos (mostly from traveling)
+            page for me to put my photos (mostly from traveling)
             <br>
             <br>
-            scroll through, or jump to a section:
+            scroll through or jump to a section:
             <ul>
                 <li>china + taiwan</li>
                 <ul>
-                    <li><a href="#taipei">taipei</a></li>
-                    <li><a href="#beijing">beijing</a></li>
-                    <li><a href="#suzhou">suzhou</a></li>
-                    <li><a href="#shanghai">shanghai</a></li>
+                    <li><a href="#taipei-start">taipei</a></li>
+                    <li><a href="#beijing-start">beijing</a></li>
+                    <li><a href="#suzhou-start">suzhou</a></li>
+                    <li><a href="#shanghai-start">shanghai</a></li>
                 </ul>
                 <li>camino frances</li>
                 <ul>
                     <li><a href="#camino-middle">camino midpoint</a></li>
                     <li><a href="#camino-start">camino start</a></li>
-                    <li><a href="#geneva">geneva</a></li>
+                    <li><a href="#geneva-start">geneva</a></li>
                 </ul>
+                <!-- <li>greece <div class="faint-text">(coming soon)</div></li>
+                <li>spain <div class="faint-text">(coming soon)</div></li> -->
             </ul>
+
+            <div class="faint-text">(newest stuff is at the top)</div>
         </div>
     </div>
 
@@ -39,7 +43,7 @@ TODO: dynamically calculate the # of columns
 
     <!-- #region TAIPEI -->
     <div class="photo-window">
-        <div class="photo-title">Squid Games??!?</div>
+        <div class="photo-title" id="taipei-start">Squid Games??!?</div>
         <img src="/images/photobook/china/squid_games.JPEG" alt="Squid Games">
         <div class="caption">squid game event happening outside the chiang kai-shek memorial</div>
     </div>
@@ -146,7 +150,7 @@ TODO: dynamically calculate the # of columns
         <div class="caption">got caught playing pokemon go soon after arriving in taipei (i could not play in china)</div>
     </div>
 
-    <div class="photo-window" id="taipei">
+    <div class="photo-window" id="taipei-end">
         <div class="photo-title">Airplane</div>
         <img src="/images/photobook/china/big_back.JPEG" alt="Airplane">
         <div class="caption">sydney with two meals while grant is passed out</div>
@@ -154,7 +158,7 @@ TODO: dynamically calculate the # of columns
     <!-- #endregion TAIPEI -->
 
     <!-- #region BEIJING -->
-    <div class="photo-window">
+    <div class="photo-window" id="beijing-start">
         <div class="photo-title">Temple of Heaven</div>
         <img src="/images/photobook/china/temple_of_heaven.JPEG" alt="Temple of Heaven">
         <div class="caption">temple of heaven in beijing (visited by the emperor for prayer ceremonies)</div>
@@ -211,7 +215,7 @@ TODO: dynamically calculate the # of columns
     <div class="photo-window">
         <div class="photo-title">Alpine</div>
         <img src="/images/photobook/china/great_wall_alpine_slide.JPEG" alt="Great Wall Alpine Slide">
-        <div class="caption">alpine slide we took to get down form the great wall of china</div>
+        <div class="caption">alpine slide we took to get down from the great wall of china</div>
     </div>
 
     <div class="photo-window">
@@ -274,7 +278,7 @@ TODO: dynamically calculate the # of columns
         <div class="caption">sleeping cat on a car spotted on a beijing walk</div>
     </div>
 
-    <div class="photo-window" id="beijing">
+    <div class="photo-window" id="beijing-end">
         <div class="photo-title">Beijing Station</div>
         <img src="/images/photobook/china/beijing_station.JPEG" alt="Beijing Station">
         <div class="caption">station in beijing where we arrived by train</div>
@@ -282,7 +286,7 @@ TODO: dynamically calculate the # of columns
     <!-- #endregion BEIJING -->
 
     <!-- #region SUZHOU -->
-     <div class="photo-window">
+     <div class="photo-window" id="suzhou-start">
         <div class="photo-title">Suzhou Street</div>
         <img src="/images/photobook/china/suzhou_street_1.JPEG" alt="Suzhou Street">
         <div class="caption">street in suzhou</div>
@@ -324,7 +328,7 @@ TODO: dynamically calculate the # of columns
         <div class="caption">pretty looking shop on a suzhou street</div>
     </div>
 
-    <div class="photo-window" id="suzhou">
+    <div class="photo-window" id="suzhou-end">
         <div class="photo-title">Suzhou Canal</div>
         <img src="/images/photobook/china/suzhou_canal.JPEG" alt="Suzhou Canal">
         <div class="caption">one of the many canals in suzhou</div>
@@ -332,7 +336,7 @@ TODO: dynamically calculate the # of columns
     <!-- #endregion SUZHOU -->
 
     <!-- #region SHANGHAI -->
-    <div class="photo-window">
+    <div class="photo-window" id="shanghai-start">
         <div class="photo-title">Hot Pot</div>
         <img src="/images/photobook/china/hot_pot.JPEG" alt="Hot Pot">
         <div class="caption">very tasty and very cheap hot pot</div>
@@ -530,7 +534,7 @@ TODO: dynamically calculate the # of columns
         <div class="caption">skyline of shanghai from the bund</div>
     </div>
 
-    <div class="photo-window" id="shanghai">
+    <div class="photo-window" id="shanghai-end">
         <div class="photo-title">Afraid Pillow</div>
         <img src="/images/photobook/china/afraid_pillow.JPG" alt="Afraid Pillow">
         <div class="caption">i'm afraid of what might happen if i relax...</div>
@@ -539,7 +543,7 @@ TODO: dynamically calculate the # of columns
 
 
     <!-- #region CAMINO_DAY13 -->
-    <div class="photo-window">
+    <div class="photo-window" id="camino-start">
         <div class="photo-title">Performance</div>
         <img src="/images/photobook/camino/day13_performance.JPEG" alt="Performance">
         <div class="caption">performance we got to see inside the cathedral in conques</div>
@@ -683,12 +687,6 @@ TODO: dynamically calculate the # of columns
 
     <div class="photo-window">
         <div class="photo-title">Villecomtal</div>
-        <img src="/images/photobook/camino/day11_town_3.JPEG" alt="Villecomtal">
-        <div class="caption">view of villecomtal</div>
-    </div>
-
-    <div class="photo-window">
-        <div class="photo-title">Villecomtal</div>
         <img src="/images/photobook/camino/day11_town_2.JPEG" alt="Villecomtal">
         <div class="caption">view of villecomtal</div>
     </div>
@@ -813,12 +811,6 @@ TODO: dynamically calculate the # of columns
 
     <div class="photo-window">
         <div class="photo-title">Walking View</div>
-        <img src="/images/photobook/camino/day9_forest.JPEG" alt="Walking View">
-        <div class="caption">view while walking (day 6)</div>
-    </div>
-
-    <div class="photo-window">
-        <div class="photo-title">Walking View</div>
         <img src="/images/photobook/camino/day9_mossy_path.JPEG" alt="Walking View">
         <div class="caption">view while walking (day 6)</div>
     </div>
@@ -879,12 +871,6 @@ TODO: dynamically calculate the # of columns
         <div class="photo-title">Restaurant</div>
         <img src="/images/photobook/camino/day7_restaurant.JPEG" alt="Restaurant">
         <div class="caption">restaurant attached to a gîte where we ate (but did not stay)</div>
-    </div>
-
-    <div class="photo-window">
-        <div class="photo-title">Saint-Alban-sur-Limagnole</div>
-        <img src="/images/photobook/camino/day7_street_2.JPEG" alt="Saint-Alban-sur-Limagnole">
-        <div class="caption">view from walking around saint-alban-sur-limagnole</div>
     </div>
 
     <div class="photo-window">
@@ -1020,12 +1006,6 @@ TODO: dynamically calculate the # of columns
         <img src="/images/photobook/camino/day3_rooftops.JPEG" alt="City View">
         <div class="caption">view of le puy-en-velay from above</div>
     </div>
-    
-    <div class="photo-window">
-        <div class="photo-title">City View</div>
-        <img src="/images/photobook/camino/day3_rooftops.JPEG" alt="City View">
-        <div class="caption">view of le puy-en-velay from above</div>
-    </div>
 
     <div class="photo-window">
         <div class="photo-title">Statue</div>
@@ -1057,7 +1037,7 @@ TODO: dynamically calculate the # of columns
         <div class="caption">train ride from geneva to le puy-en-velay</div>
     </div>
 
-    <div class="photo-window" id="camino-start">
+    <div class="photo-window" id="camino-end">
         <div class="photo-title">Train</div>
         <img src="/images/photobook/camino/day3_train.JPEG" alt="Train">
         <div class="caption">train ride from geneva to le puy-en-velay</div>
@@ -1113,12 +1093,6 @@ TODO: dynamically calculate the # of columns
         <div class="photo-title">Merry-Go-Round</div>
         <img src="/images/photobook/camino/day1_merry_go_round.JPEG" alt="Merry-Go-Round">
         <div class="caption">merry-go-round in geneva</div>
-    </div>
-
-    <div class="photo-window">
-        <div class="photo-title">Cannon</div>
-        <img src="/images/photobook/camino/day1_cannon.JPEG" alt="Cannon">
-        <div class="caption">cannon in geneva</div>
     </div>
 
     <div class="photo-window">

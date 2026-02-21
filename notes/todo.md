@@ -37,8 +37,7 @@
 
 # PHOTOBOOK
 * [-] Add more photos to photobook
-    * Camino
-    * 
+* [-] Trip camino photos?
 
 # RECIPES
 * [-] Add pictures for each recipe
