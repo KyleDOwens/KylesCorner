@@ -17,16 +17,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     handlePageLoad();
     fitSheetToHeight();
-
-    // resize the sheet after a small delay just in case content still needs to load
-    window.dispatchEvent(new Event('resize'));
-    setTimeout(() => {
-        window.dispatchEvent(new Event('resize'));
-    }, 200);
-    setTimeout(() => {
-        window.dispatchEvent(new Event('resize'));
-    }, 500);
 });
+
+window.onload = function() {
+    // resize the excel sheet once all content is loaded (mostly needed for photobook)
+    window.dispatchEvent(new Event('resize'));
+};
 
 
 /**
