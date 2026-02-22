@@ -14,6 +14,9 @@
         * change cursor (e.g., alien spaceship, star)
         * change onclick function (firework, snow, bells, )
         * change mouse tail (stars, snow, )
+
+        * change theme, which includes background, cursor, colors, etc
+            * space, underwater, 
     * [-] Snowglobe button? Celebration button (with balloons and confetti?)
     * [-] Add MIDI music and replace button with volume control
 
@@ -27,7 +30,7 @@
 * [-] Listening to, site map, ascii art, midi song?
 
 ## MUSIC
-* [-] Add one line descriptions for favorites that pop up on click (maybe shake the album when you hover it?)
+* [x] Add one line descriptions for favorites that pop up on click (maybe shake the album when you hover it?)
 
 # RESTAURANTS
 * [-] Reduce # of markers on map or add marker clustering
@@ -37,8 +40,6 @@
 
 # PHOTOBOOK
 * [-] Add more photos to photobook
-* [-] Trip camino photos?
 
 # RECIPES
-* [-] Add pictures for each recipe
-* [-] Add chef photo
+* [-] Add pictures for missing recipes
