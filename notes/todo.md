@@ -18,9 +18,9 @@
     * [-] Add MIDI music and replace button with volume control
 
 * [-] allow scrollbars to be touched and dragged on mobile
+* [-] look back into if styling scrollbars is possible??? (https://romydemers.neocities.org/)
 
 # MOBILE
-* [-] Button text is blue?
 * [-] Change ratio, since top and bottom of page are being cut off?
 
 # HOMEPAGE

@@ -24,17 +24,18 @@ def compressDir(target_dir, quality):
 
 # Keep track of quality used for each dir
 dirs = [
-    ("images/music/2018", 13),
-    ("images/music/2019", 13),
-    ("images/music/2020", 13),
-    ("images/music/2021", 13),
-    ("images/music/2022", 13),
-    ("images/music/2023", 13),
-    ("images/music/2024", 13),
-    ("images/music/2025", 13),
-    ("images/music/favorites", 13),
+    # ("images/music/2018", 13),
+    # ("images/music/2019", 13),
+    # ("images/music/2020", 13),
+    # ("images/music/2021", 13),
+    # ("images/music/2022", 13), 
+    # ("images/music/2023", 13),
+    # ("images/music/2024", 13),
+    # ("images/music/2025", 13),
+    # ("images/music/favorites", 13),
     # ("images/photobook/china", 8),
     # ("images/photobook/camino", 8),
+    ("images/recipes", 8),
 ]
 
 for d, q in dirs:
