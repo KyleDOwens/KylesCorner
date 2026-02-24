@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", () => {
+window.addEventListener("load", () => {
     reorganizeMasonry();
     randomizeMargins();
 });
@@ -20,9 +20,6 @@ function randomizeMargins() {
         photo.style.margin = `${vmargin}px ${hmargin}px`;
     });
 }
-
-
-
 
 /**
  * Reorganizes the photo grid to fill by rows, rather than by columns
