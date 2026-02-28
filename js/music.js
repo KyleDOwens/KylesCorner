@@ -58,7 +58,6 @@ function updateDisplay() {
     if (currentList == "Search") {
         document.getElementById("search-results").classList.remove("hidden");
         document.getElementById("music-window-title").innerHTML = `Search Results`;
-        resizeScrollThumbs();
         grayOutYearButtons();
         grayOutListButtons();
         return;
@@ -74,8 +73,6 @@ function updateDisplay() {
     else if (currentList == "Songs") {
         document.getElementById(`song-table-${currentYear}`).classList.remove("hidden");
     }
-
-    resizeScrollThumbs();
 
     // Set the scrollbar back to the top
     let scrollContainer = document.getElementById("music-scroll-container");

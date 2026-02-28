@@ -63,8 +63,6 @@ function updateBookHeight() {
         let newHeight = Math.max(recipeHeight / 2 + 25, 470) ;
         recipe.style.height = `${newHeight}px`;
     }
-
-    resizeScrollThumbs();
 }
 
 /**
@@ -86,7 +84,6 @@ function flipBook(newIndex, animationPath) {
         recipeIndex = newIndex;
         updatePageButtons();
         window.dispatchEvent(new Event('resize')); // dispatch to resize the mock grid
-        resizeScrollThumbs();
         return;
     }
 

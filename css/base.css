@@ -927,10 +927,12 @@ nav#sheet-tabs {
     position: relative;
     /* must also define a fixed height in the specific element's CSS */
 }
+
 .scroll-container {
     overflow-x: hidden;
     overflow-y: scroll;
 }
+
 
 .scroll-container::-webkit-scrollbar {
     width: 18px;
@@ -940,9 +942,7 @@ nav#sheet-tabs {
 .scroll-container::-webkit-scrollbar-button {
     width: 18px;
     height: 18px;
-    box-sizing: border-box;
     background-color: #c0c0c0;
-
     box-shadow: inset 1px 1px 0 1px #ffffff,
                 inset -1px -1px 0 1px #404040;
 }
@@ -958,7 +958,6 @@ nav#sheet-tabs {
 }
 ::-webkit-scrollbar-track {
     background-color: #e0e0e0;
-
     box-shadow: inset 1px 1px 0 1px #808080,
                 inset -1px -1px 0 1px #ffffff;
 }
@@ -969,6 +968,10 @@ nav#sheet-tabs {
         linear-gradient(0deg, #c0c0c0 30%, rgba(0, 0, 0, 0) 31%);
     background-color: black; /* arrow color */
 }
+::-webkit-scrollbar-button:vertical:decrement:active {
+    box-shadow: inset 1px 1px 0 1px #404040,
+                inset -1px -1px 0 1px #ffffff;
+}
 
 ::-webkit-scrollbar-button:vertical:increment {
     background:
@@ -977,6 +980,11 @@ nav#sheet-tabs {
         linear-gradient(180deg, #c0c0c0 30%, rgba(0, 0, 0, 0) 31%);
     background-color: black; /* arrow color */
 }
+::-webkit-scrollbar-button:vertical:increment:active {
+    box-shadow: inset 1px 1px 0 1px #404040,
+                inset -1px -1px 0 1px #ffffff;
+}
+
 
 /* Old custom scrollbar CSS - kept for the mock horizontal scrollbar */
 #horizontal-scrollbar {
