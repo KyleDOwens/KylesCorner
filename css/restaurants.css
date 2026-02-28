@@ -4,18 +4,21 @@
 /*#region CONSTANTS */
 /* Rather than have different colored markers, just transform a single black marker into any color I want */
 .visited-low {
+    /* background-color: #A8C95B; */
     color: #A8C95B;
     /* background: #A8C95B; */
     filter: invert(90%) sepia(66%) saturate(511%) hue-rotate(18deg) brightness(88%) contrast(76%)
         drop-shadow(1px 0 0 black) drop-shadow(0 1px 0 black) drop-shadow(-1px 0 0 black) drop-shadow(0 -1px 0 black);
 }
 .visited-medium {
+    /* background-color: #69984E; */
     color: #69984E;
     /* background: #69984E; */
     filter: invert(51%) sepia(56%) saturate(363%) hue-rotate(54deg) brightness(95%) contrast(86%)
         drop-shadow(1px 0 0 black) drop-shadow(0 1px 0 black) drop-shadow(-1px 0 0 black) drop-shadow(0 -1px 0 black);
 }
 .visited-high {
+    /* background-color: #135E26; */
     color: #135E26;
     /* background: #135E26; */
     filter: invert(26%) sepia(15%) saturate(2489%) hue-rotate(83deg) brightness(98%) contrast(88%)
@@ -23,12 +26,14 @@
 }
 
 .unvisited-low {
+    /* background-color: #92CAF9; */
     color: #92CAF9;
     /* background: #92CAF9; */
     filter: invert(71%) sepia(57%) saturate(490%) hue-rotate(180deg) brightness(102%) contrast(95%)
         drop-shadow(1px 0 0 black) drop-shadow(0 1px 0 black) drop-shadow(-1px 0 0 black) drop-shadow(0 -1px 0 black);
 }
 .unvisited-medium {
+    /* background-color: #2196F2; */
     color: #2196F2;
     /* background: #2196F2; */
     filter: invert(46%) sepia(66%) saturate(2186%) hue-rotate(184deg) brightness(99%) contrast(92%)
@@ -36,6 +41,7 @@
         
 }
 .unvisited-high {
+    /* background-color: #1668BF; */
     color: #1668BF;
     /* background: #1668BF; */
     filter: invert(31%) sepia(84%) saturate(1094%) hue-rotate(186deg) brightness(91%) contrast(98%)
@@ -188,11 +194,12 @@ button:disabled {
 /*#region FILTER_PANEL */
 #filter-window {
     width: 100%;
-    height: 32%;
-    height: fit-content;
+    height: 48%;
+    min-height: fit-content;
 }
 
 #filter-container {
+    padding: 10px;
     box-sizing: border-box;
 }
 
@@ -207,51 +214,9 @@ button:disabled {
 
 
 /*-- ================================================ --->
-<---                  DISTANCE FILTER                 --->
-<--- ================================================ --*/
-/*#region DISTANCE_FILTER */
-#distance-filter {
-    margin: 5px;
-    padding: 10px;
-    border: inset;
-}
-
-#distance-filter input {
-    padding: 3px;
-    border: inset;
-    width: 175px;
-}
-
-#distance-filter button {
-    padding: 3px;
-    border: outset;
-    background-color: #B9B6BB;
-}
-#distance-filter button:active,
-#distance-filter button:disabled,
-#distance-filter .active  {
-    border: inset;
-}
-
-#distance-info {
-    margin-top: 5px;
-    color: gray;
-    font-size: 10pt;
-    vertical-align: top;
-}
-/*#endregion DISTANCE_FILTER */
-
-
-/*-- ================================================ --->
 <---                  ATTRIBUTE FILTER                --->
 <--- ================================================ --*/
 /*#region ATTRIBUTE_FILTER */
-#attributes-container {
-    margin: 5px;
-    padding: 10px;
-    border: inset;
-}
-
 #filter-menus {
     display: grid;
     grid-template-areas: "visited cuisine rating";
@@ -274,7 +239,7 @@ button:disabled {
     flex: 1;
     overflow-y: scroll;
     position: relative;
-    max-height: 200px;
+    max-height: 250px;
 }
 #rating-filter {
     grid-area: rating;

@@ -31,46 +31,34 @@
 
         <!-- Filtering Options -->
         <div id="filter-container">
-            <!-- Isochrone filtering -->
-            <div id="distance-filter">
-                <div class="filter-header">Distance filter!</div>
-                <div class="filter-subheader faint-text">(Places within X minutes from clicked location)</div>
-                <input id="distance-filter-input" placeholder="Time (minutes)">
-                <button class="outset" id="distance-filter-add-button">Add isochrone</button>
-                <button class="outset" id="distance-filter-remove-button" disabled>Remove isochrone</button>
-                <div class="faint-text" id="distance-info">&nbsp;</div>
-            </div>
-
             <!-- Attribute filter menus -->
-            <div id="attributes-container">
-                <div id="filter-header">Attribute filters!</div>
-                <div class="filter-subheader faint-text">(Select from restaurant qualities)</div>
-                <div id="filter-menus">
-                    <!-- Visited filter -->
-                    <div class="multi-select" id="visited-filter">
-                        <div class="multi-option-header">Visited</div>
-                        <div class="multi-option multi-any"><label><input type="checkbox">Any</label></div>
-                        <div class="multi-option"><label><input type="checkbox">Visited</label></div>
-                        <div class="multi-option"><label><input type="checkbox">Unvisited</label></div>
-                    </div>
-                    <!-- Cuisine filter -->
-                    <div class="scroll-and-content">
-                        <div class="scroll-container multi-select" id="cuisine-scroll-container">
-                            <div id="cuisine-filter">
-                                <div class="multi-option-header">Cuisine</div>
-                                <div class="multi-option multi-any"><label><input type="checkbox">Any</label></div>
-                                REPLACEME_CUISINEROWS
-                            </div>
+            <div id="filter-header">Attribute filters!</div>
+            <div class="filter-subheader faint-text">Click checkboxes to select restaurant qualities</div>
+            <div id="filter-menus">
+                <!-- Visited filter -->
+                <div class="multi-select" id="visited-filter">
+                    <div class="multi-option-header">Visited</div>
+                    <div class="multi-option multi-any"><label><input type="checkbox">Any</label></div>
+                    <div class="multi-option"><label><input type="checkbox">Visited</label></div>
+                    <div class="multi-option"><label><input type="checkbox">Unvisited</label></div>
+                </div>
+                <!-- Cuisine filter -->
+                <div class="scroll-and-content">
+                    <div class="scroll-container multi-select" id="cuisine-scroll-container">
+                        <div id="cuisine-filter">
+                            <div class="multi-option-header">Cuisine</div>
+                            <div class="multi-option multi-any"><label><input type="checkbox">Any</label></div>
+                            REPLACEME_CUISINEROWS
                         </div>
                     </div>
-                    <!-- Rating filter -->
-                    <div class="multi-select" id="rating-filter">
-                        <div class="multi-option-header">Rating</div>
-                        <div class="multi-option multi-any"><label><input type="checkbox">Any</label></div>
-                        <div class="multi-option"><label><input type="checkbox">Low</label></div>
-                        <div class="multi-option"><label><input type="checkbox">Medium</label></div>
-                        <div class="multi-option"><label><input type="checkbox">High</label></div>
-                    </div>
+                </div>
+                <!-- Rating filter -->
+                <div class="multi-select" id="rating-filter">
+                    <div class="multi-option-header">Rating</div>
+                    <div class="multi-option multi-any"><label><input type="checkbox">Any</label></div>
+                    <div class="multi-option"><label><input type="checkbox">Low</label></div>
+                    <div class="multi-option"><label><input type="checkbox">Medium</label></div>
+                    <div class="multi-option"><label><input type="checkbox">High</label></div>
                 </div>
             </div>
         </div>
@@ -161,14 +149,16 @@
                 There is a <b>Map View</b> which shows the physical locations of each restaurant, and a <b>Table View</b> which lists out each restaurant individually.
             </p>
             <p>
-                Each marker on the map represents a restaurant!
-                Clicking a marker will bring up more information about the restaurant, including a link to it on Google!
-                Places I have visited are colored <span class="visited-high" style="filter: none">green</span>,
+                Each marker on the map represents a restaurant in the table!
+                Clicking a marker will bring up more information about the restaurant, including a link to it on Google.
+            </p>
+            <p>
+                Places I have visited use markers colored <span class="visited-high" style="filter: none">green</span>,
                     with the shade determining how much I enjoyed it:
                     <span class="visited-low" style="filter: none">low</span> ->
                     <span class="visited-medium" style="filter: none">medium</span> ->
                     <span class="visited-high" style="filter: none">high</span>.
-                Places I want to go are colored <span class="unvisited-high" style="filter: none">blue</span>,
+                Places I want to go use markers colored <span class="unvisited-high" style="filter: none">blue</span>,
                     with the shade determining how badly I want to go:
                     <span class="unvisited-low" style="filter: none">low</span> ->
                     <span class="unvisited-medium" style="filter: none">medium</span> ->
@@ -176,12 +166,8 @@
             </p>
             <p>
                 Select filters to limit which restaurants are shown!
-                You can add a <b>Distance Filter</b> to only show restaurants that are within a certain distance (of time) from a starting point
-                (fun fact, the map drawn by doing this is called an <i>isochrone</i>). To do this,
-                (1) enter in the the max travel time in minutes
-                (2) click the <b>Add Isochrone</b> button
-                (3) click on the map at your starting location.
-            </p>
+                Click the checkboxes to select which qualities you want the shown restaurants to have.
+                You can also click the checkbox in the "Show" column of the table to manually toggle specific restaurants on the map.
             <p>
                 Clicking the <b>Share Selections</b> button will create a custom URL that leads to your exact map!
                 It will be automatically copied to your clipboard.
