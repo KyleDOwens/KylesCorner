@@ -2,7 +2,7 @@ const BUBBLE_GRAPHIC = `
 // <![CDATA[
 var colours=new Array("#a6f", "#60f", "#60f", "#a6f", "#ccc"); // colours for top, right, bottom and left borders and background of bubbles
 var colours=new Array("#66aaff", "#0066ff", "#0066ff", "#66aaff", "#cce6ff"); // colours for top, right, bottom and left borders and background of bubbles
-var bubbles=66; // how many bubbles are moving at any given time
+var bubbles=55; // how many bubbles are moving at any given time
 var over_or_under="over"; // set to "over" for bubbles to always be on top, or "under" to allow them to float behind other objects
 
 /****************************
@@ -147,6 +147,172 @@ function createDiv(height, width) {
   return (div);
 }
 // ]]>`;
+
+const SNOW_GRAPHIC = `
+// <![CDATA[
+var speed=40; // lower number for faster
+var flakes=33; // number of flakes falling at a time
+var sizes=36; // maximum size of flakes in pixels
+var colour='#B3DBFF'; // colour of the snowflakes
+
+/****************************\
+*Winter Snow Flakes Effect #3*
+*  (c)2013 mf2fm web-design  *
+*  http://www.mf2fm.com/rv   *
+* DO NOT EDIT BELOW THIS BOX *
+\****************************/
+
+var boddie;
+var dx=new Array();
+var xp=new Array();
+var yp=new Array();
+var am=new Array();
+var dy=new Array();
+var le=new Array();
+var fs=new Array();
+var flaky=new Array();
+var swide=480;
+var shigh=320;
+var sleft=0;
+var starty=0;
+var offset=0;
+var deeex=0;
+var has_focus=true;
+var snowflakes=new Array(8727, 10016, 10033, 10035, 10036, 10037, 10038, 10042, 10043, 10044, 10045, 10046, 10051, 10052, 10053, 10054, 10055, 10056, 10057, 10058, 10059);
+var ie_version=(navigator.appVersion.indexOf("MSIE")!=-1)?parseFloat(navigator.appVersion.split("MSIE")[1]):false;
+
+december_21();
+
+function december_21() { if (document.getElementById) {
+  var i;
+  if (ie_version) {
+    document.onfocusin=function(){has_focus=true;};
+    document.onfocusout=function(){has_focus=false;sleft=0;};
+  } 
+  else {
+    window.onfocus=function(){has_focus=true;};
+    window.onblur=function(){has_focus=false;sleft=0;};
+  }
+  window.onscroll=set_scroll;
+  window.onresize=set_width;
+  document.onmousemove=mouse;
+  boddie=document.createElement("div");
+  boddie.style.position="fixed";
+  boddie.style.bottom="0px";
+  boddie.style.left="0px";
+  boddie.style.width="100%";
+  boddie.style.overflow="hidden";
+  boddie.style.backgroundColor="transparent";
+  boddie.style.pointerEvents="none";
+  boddie.style.zIndex="9999";
+  boddie.classList.add("graphic");
+  document.body.insertBefore(boddie, document.body.firstChild); 
+  set_width();
+  for (i=0; i<flakes; i++) freeze_ice(Math.random()*shigh*3/4);
+  offset=0;
+  setInterval("winter_flakes()", speed);
+}}
+
+function freeze_ice(whyp) {
+  starty++;
+  offset++;
+  var f, t;
+  start_fall(starty, whyp);
+  f=document.createElement("div");
+  t=document.createTextNode(String.fromCharCode(snowflakes[starty%snowflakes.length]));
+  f.appendChild(t);
+  t=f.style;
+  t.color=colour;
+  if (ie_version && ie_version<10) t.filter="glow(color="+colour+",strength=1)";
+  else if (ie_version) t.boxShadow="0px 0px 2x 2px "+colour;
+  else t.textShadow=colour+' 0px 0px 2px';
+  t.font=fs[starty]+"px sans-serif";
+  t.position="absolute";
+  t.zIndex=1000+starty;
+  t.top=yp[starty]+"px";
+  t.left=xp[starty]+"px";
+  t.lineHeight=fs[starty]+"px";
+  flaky[starty]=f;
+  boddie.appendChild(f);
+}
+  
+function start_fall(i, whyp) {
+  fs[i]=Math.floor(sizes*(.25+.75*Math.random()));
+  dx[i]=Math.random();
+  am[i]=8+Math.random()*sizes*.75;
+  dy[i]=1+Math.random()*2;
+  xp[i]=Math.random()*(swide-fs[i]);
+  yp[i]=whyp-fs[i];
+  le[i]='falling';
+}
+
+function set_width() {
+  var sw, sh;
+  if (typeof(window.innerWidth)=='number' && window.innerWidth) {
+    sw=window.innerWidth;
+    sh=window.innerHeight;
+  }
+  else if (document.compatMode=="CSS1Compat" && document.documentElement && document.documentElement.clientWidth) {
+    sw=document.documentElement.clientWidth;
+    sh=document.documentElement.clientHeight; 
+  }
+  else {
+    sw=document.body.clientWidth;
+	sh=document.body.clientHeight;
+  }
+  if (sw && sh && has_focus) {
+    swide=sw;
+    shigh=sh;
+  }
+  boddie.style.height=shigh+"px";
+}
+
+function winter_flakes() {
+  var i;
+  var c=0;
+  for (i=0; i<starty; i++) {
+    if (flaky[i] && le[i]!='tidying') {
+		if (yp[i]>shigh || xp[i]>swide || xp[i]<-fs[i]) {
+		  if (offset>0) offset--;
+		  boddie.removeChild(flaky[i]);
+		  flaky[i]=false;
+		}
+		else if (yp[i]+offset/flakes<shigh-0.7*fs[i]) {
+		  yp[i]+=dy[i];
+		  dx[i]+=0.02+Math.random()/20;
+		  xp[i]+=deeex;
+		  flaky[i].style.top=yp[i]+"px";
+		  flaky[i].style.left=(xp[i]+am[i]*Math.sin(dx[i]))+"px";
+		}
+		else {
+          boddie.removeChild(flaky[i]);
+          flaky[i] = false;
+          if (offset > 0) offset--;
+        }
+	}
+	if (flaky[i] && le[i]=='falling') c++;
+  }
+  if (c<flakes) freeze_ice(0);
+}
+
+function set_scroll() {
+  if (typeof(self.pageXOffset)=='number' && self.pageXoffset) sleft=self.pageXOffset;
+  else if (document.body && document.body.scrollLeft) sleft=document.body.scrollLeft;
+  else if (document.documentElement && document.documentElement.scrollLeft) sleft=document.documentElement.scrollLeft;
+  else sleft=0;
+}
+
+function mouse(e) {
+  var x;
+  if (e) x=e.pageX;
+  else {
+	x=event.x;
+    set_scroll();
+    x+=sleft;
+  }
+  deeex=has_focus?Math.floor(-1+3*(x-sleft)/swide):0;
+}
+// ]]>`
 
 /*-- ================================================ --->
 <---                   INITIALIZATION                 --->
@@ -541,24 +707,39 @@ function updateDropdownDisplay(dropdown, toDisplay) {
 
 let THEMES = {
     "space" : {
+        "background": "../images/background_space.gif",
         "cursor" : null,
+        "pointer" : null,
         "graphic" : null,
-        "extras" : null
     },
     "underwater" : {
-        "cursor" : "../images/cursor_fish.png",
+        "background": "../images/background_underwater.gif",
+        "cursor" : "../images/cursor_fish.gif",
+        "pointer" : "../images/cursor_fish_pointer.cur",
         "graphic" : BUBBLE_GRAPHIC,
-        "extras" : null,
+    },
+    "snow" : {
+        "background": "../images/background_snow.png",
+        "cursor" : "../images/cursor_snow.cur",
+        "pointer" : "../images/cursor_snow_pointer.cur",
+        "graphic" : SNOW_GRAPHIC,
     },
 }
 function updateTheme(postfix) {
     // change background
-    document.body.style.backgroundImage = `url("../images/background_${postfix}.gif")`;
+    document.body.style.backgroundImage = `url(${THEMES[postfix]["background"]})`;
 
     // (optional) update cursor
     document.body.style.cursor = `auto`
     if (THEMES[postfix]["cursor"]) {
         document.body.style.cursor = `url(${THEMES[postfix]["cursor"]}), auto`;
+    }
+
+    // (optional) update cursor pointer
+    let pointerElements = document.querySelectorAll('a, button, input[type="button"], .square-button, #main-title-left, .sheet-tab, .scroll-thumb, .dropdown');
+    pointerElements.forEach(element => { element.style.cursor = "pointer"; });
+    if(THEMES[postfix]["pointer"]) {
+        pointerElements.forEach(element => { element.style.cursor = `url(${THEMES[postfix]["pointer"]}), pointer`; });
     }
 
     // remove old graphic(s)
@@ -574,14 +755,6 @@ function updateTheme(postfix) {
         newScript.id = "graphic-script";
         newScript.textContent = THEMES[postfix]["graphic"];
         document.head.appendChild(newScript);
-    }
-
-    // remove old extra content
-    document.querySelectorAll(".theme-extra").forEach(extra => extra.style.display = "none");
-
-    // (optional) add extra content
-    if (THEMES[postfix]["extras"]) {
-        document.getElementById(`${THEMES[postfix]["extras"]}`).style.display = "block";
     }
 }
 
