@@ -30,9 +30,9 @@
 
                 <!-- Window control buttons -->
                 <div class="window-controls">
-                    <button class="square-button minimize"></button>
+                    <button class="square-button minimize" id="minimize-button"></button>
                     <button class="square-button maximize"></button>
-                    <button class="square-button close"></button>
+                    <button class="square-button close" id="close-button"></button>
                 </div>
             </div>
 
@@ -139,17 +139,21 @@
                         <div>
                             <div class="marquee-item">welcome to my website :)</div>
                             <div class="marquee-item">go to the 'about' page to learn more!</div>
-                            <div class="marquee-item">click the page tabs in the bottom left!</div>
+                            <div class="marquee-item">click the tabs in the bottom left to change pages!</div>
                             <div class="marquee-item">scroll around!</div>
                             <div class="marquee-item">this isnt a real spreadsheet, sorry :(</div>
                             <div class="marquee-item">made with love &lt;3</div>
                             <div class="marquee-item">wheee!</div>
-                            <div class="marquee-item">i've got a mean cookie recipe</div>
+                            <div class="marquee-item">i've some mean baking recipes</div>
                             <div class="marquee-item">go make a personal website!</div>
                             <div class="marquee-item">more coming soon</div>
                             <div class="marquee-item">i wonder if there are any secrets here…</div>
                             <div class="marquee-item">♪♬♪♬♪♬</div>
-                            <div class="marquee-item">☉ ‿ ☉</div>
+                            <div class="marquee-item" style="max-height: 20px; position: relative; width: 200px;">
+                                <img src="images/pokemon_bulbasaur.gif" style="position: absolute; top: 2px; left: 100px; max-height: 20px;">
+                                <img src="images/pokemon_charmander.gif" style="position: absolute; top: 2px; left: 125px; max-height: 20px;">
+                                <img src="images/pokemon_squirtle.gif" style="position: absolute; top: 2px; left: 150px; max-height: 20px;">
+                                <img src="images/pokemon_pikachu.gif" style="position: absolute; top: 1px; left: 175px; max-height: 20px;"></div>
                             <!-- <div class="marquee-item">click the volume button to play music!</div> -->
                             <!-- <div class="marquee-item"><a href="secret.html">secret page???</a></div> -->
                         </div>
@@ -162,12 +166,16 @@
                             <div class="marquee-item">this isnt a real spreadsheet, sorry :(</div>
                             <div class="marquee-item">made with love &lt;3</div>
                             <div class="marquee-item">wheee!</div>
-                            <div class="marquee-item">i've got a mean cookie recipe</div>
+                            <div class="marquee-item">i've some mean baking recipes</div>
                             <div class="marquee-item">go make a personal website!</div>
                             <div class="marquee-item">more coming soon</div>
                             <div class="marquee-item">i wonder if there are any secrets here…</div>
                             <div class="marquee-item">♪♬♪♬♪♬</div>
-                            <div class="marquee-item">☉ ‿ ☉</div>
+                            <div class="marquee-item" style="max-height: 20px; position: relative; width: 200px;">
+                                <img src="images/pokemon_bulbasaur.gif" style="position: absolute; top: 2px; left: 100px; max-height: 20px;">
+                                <img src="images/pokemon_charmander.gif" style="position: absolute; top: 2px; left: 125px; max-height: 20px;">
+                                <img src="images/pokemon_squirtle.gif" style="position: absolute; top: 2px; left: 150px; max-height: 20px;">
+                                <img src="images/pokemon_pikachu.gif" style="position: absolute; top: 1px; left: 175px; max-height: 20px;"></div>
                             <!-- <div class="marquee-item">click the volume button to play music!</div> -->
                             <!-- <div class="marquee-item"><a href="secret.html">secret page???</a></div> -->
                         </div>
@@ -952,6 +960,19 @@
             </div>
         </footer>
     </div>
+
+
+
+    <!-- ================================================ --->
+    <!--                  DESKTOP ICON                    --->
+    <!-- ================================================ --->
+    <!-- Displayed when the user clicks the minimize or X button -->
+    <div id="desktop-icon">
+        <div id="desktop-img-container"><img src="images/homepage/world.gif"></div>
+        <div style="padding-top: 10px;">Kyle's World</div>
+    </div>
+
+
 
     <!-- <div class="update-notice" style="color: white; font-size: 8pt;">
         These pages were last updated on the <u>18th of January 2025</u>

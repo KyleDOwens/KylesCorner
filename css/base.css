@@ -45,6 +45,15 @@ body {
   min-width: 0;
 }
 
+@keyframes minimizeAnimation {
+    from { min-height: 95%; max-height: 95%; width: 70%; overflow: hidden; }
+    to { min-height: 138px; max-height: 138px; width: 132px; overflow: hidden; }
+}
+@keyframes openAnimation {
+    from { min-height: 138px; max-height: 138px; width: 132px; overflow: hidden; }
+    to { min-height: 95%; max-height: 95%; width: 70%; overflow: hidden; }
+}
+
 header, footer {
     height: fit-content;
 }
@@ -1020,6 +1029,31 @@ nav#sheet-tabs {
     width: 100%;
 }
 /*#endregion SCROLLBARS*/
+
+
+/*-- ================================================ --->
+<---                  DESKTOP ICON                    --->
+<--- ================================================ --*/
+/*#region DESKTOP_ICON*/
+#desktop-icon {
+    padding: 10px;
+    color: white;
+    text-shadow: 1px 1px 1px black,
+    -1px -1px 1px black;
+    font-size: 14pt;
+    display: none;
+}
+#desktop-img-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+#desktop-icon:hover {
+    cursor: pointer;
+    background-color: rgba(128, 128, 128, 0.25);
+    border: 1px solid rgba(128, 128, 128, 0.5);
+}
+/*#endregion DESKTOP_ICON*/
 
 
 /*-- ================================================ --->

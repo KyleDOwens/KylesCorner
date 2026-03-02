@@ -327,6 +327,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     handlePageLoad();
     fitSheetToHeight();
+
+    updateTheme("space");
 });
 
 window.addEventListener("load", () =>
@@ -708,8 +710,8 @@ function updateDropdownDisplay(dropdown, toDisplay) {
 let THEMES = {
     "space" : {
         "background": "../images/background_space.gif",
-        "cursor" : null,
-        "pointer" : null,
+        "cursor" : "../images/cursor_normal.cur",
+        "pointer" : "../images/cursor_normal_pointer.cur",
         "graphic" : null,
     },
     "underwater" : {
@@ -776,4 +778,32 @@ document.getElementById("main-title-left").addEventListener("click", () => {
     window.location.href = "/";
 });
 
+/**
+ * Perform CSS animations to minimize (when the minimize or close button are pushed) and open the website (when the desktop icon is clicked)
+ */
+function minimizeWebsite() {
+    document.getElementById("excel-window").style.animationName = "minimizeAnimation";
+    document.getElementById("excel-window").style.animationDuration = "0.1s";
+    setTimeout(() => {
+        document.getElementById("excel-window").style.animationName = "none";
+        document.getElementById("excel-window").style.animationDuration = "none";
+        document.getElementById("excel-window").style.display = "none";
+        document.getElementById("desktop-icon").style.display = "block";
+    }, 100);
+}
+function openWebsite() {
+    document.getElementById("excel-window").style.display = "flex";
+    document.getElementById("desktop-icon").style.display = "none";
+    
+    document.getElementById("excel-window").style.animationName = "openAnimation";
+    document.getElementById("excel-window").style.animationDuration = "0.1s";
 
+    setTimeout(() => {
+        document.getElementById("excel-window").style.animationName = "none";
+        document.getElementById("excel-window").style.animationDuration = "none";
+    }, 100);
+}
+
+document.getElementById("minimize-button").addEventListener("click", minimizeWebsite);
+document.getElementById("close-button").addEventListener("click", minimizeWebsite);
+document.getElementById("desktop-icon").addEventListener("click", openWebsite);
