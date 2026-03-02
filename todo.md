@@ -4,7 +4,6 @@
     * use the excel thick cross cursor! maybe add a trail of green sparks or something?
 
 * [-] Replace generic excel titlebar buttons with fun functions:
-    * [-] X out/close window - close webpage?
     * [-] 'Help' - link to about page?
     * [+] Font selector with a theme selector:
         * change background (e.g., space, fire, lightning)
@@ -18,11 +17,7 @@
     * [-] Add MIDI music and replace button with volume control
     * ASCII art generator? collage maker? cryptography algorithms?
 
-# MOBILE
-* [-] Change ratio, since top and bottom of page are being cut off?
-
-# HOMEPAGE
-* [-] Listening to, site map, ascii art, midi song?
+* [-] can select tag replace my custom dropdowns?
 
 ## MUSIC
 * [x] Add one line descriptions for favorites that pop up on click (maybe shake the album when you hover it?)

@@ -1081,8 +1081,6 @@ nav#sheet-tabs {
 .dropdown-options {
     position: absolute; /* makes them not flex the menu bar */
 
-    padding-left: 3px;
-
     z-index: 20;
     width: calc(100% - 18px);
 
