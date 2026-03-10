@@ -52,7 +52,6 @@ document.addEventListener("DOMContentLoaded", () => {
     addListenerToFilters();
     initializeFilters();
     parseUrl();
-    applyFilters(true);
 
     // Sort the table in ascending alphabetical order (by simulating a click on the table sort button)
     document.getElementById("sort-name-button").dispatchEvent(new Event("click"));
